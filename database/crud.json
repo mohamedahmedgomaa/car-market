@@ -1,0 +1,159 @@
+{
+    "Admin": {
+        "fillables": {
+            "id": "bigIncrements",
+            "name": "string",
+            "email": "string|unique",
+            "password": "string",
+            "phone": "string|nullable",
+            "is_active": "boolean|default:true",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "User": {
+        "fillables": {
+            "id": "bigIncrements",
+            "name": "string",
+            "email": "string|unique",
+            "password": "string",
+            "phone": "string|nullable",
+            "is_active": "boolean|default:true",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "Seller": {
+        "fillables": {
+            "id": "bigIncrements",
+            "name": "string",
+            "email": "string|unique",
+            "password": "string",
+            "phone": "string|nullable",
+            "store_name": "json",
+            "store_description": "json|nullable",
+            "store_logo": "string|nullable",
+            "business_license": "string|nullable",
+            "bank_account": "string|nullable",
+            "is_verified": "boolean",
+            "is_active": "boolean|default:true",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "Country": {
+        "fillables": {
+            "id": "bigIncrements",
+            "name": "json",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "City": {
+        "fillables": {
+            "id": "bigIncrements",
+            "country_id": "unsignedBigInteger",
+            "name": "json",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "Brand": {
+        "fillables": {
+            "id": "bigIncrements",
+            "name": "json",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "Model": {
+        "fillables": {
+            "id": "bigIncrements",
+            "brand_id": "unsignedBigInteger",
+            "name": "json",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "Car": {
+        "fillables": {
+            "id": "bigIncrements",
+            "seller_id": "unsignedBigInteger",
+            "brand_id": "unsignedBigInteger",
+            "model_id": "unsignedBigInteger",
+            "country_id": "unsignedBigInteger",
+            "city_id": "unsignedBigInteger",
+            "title": "json",
+            "description": "json",
+            "price": "decimal(10,2)",
+            "year": "year",
+            "mileage": "integer",
+            "transmission": "enum[manual,automatic]",
+            "fuel_type": "enum[petrol,diesel,electric,hybrid]",
+            "drivetrain": "enum[fwd,rwd,awd,4wd]",
+            "color": "string|nullable",
+            "condition": "enum[new,used]",
+            "status": "enum[pending,approved,rejected]",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "CarFeature": {
+        "fillables": {
+            "id": "bigIncrements",
+            "name": "json",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "CarFeaturePivot": {
+        "fillables": {
+            "id": "bigIncrements",
+            "car_id": "unsignedBigInteger",
+            "car_feature_id": "unsignedBigInteger",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "CarImage": {
+        "fillables": {
+            "id": "bigIncrements",
+            "car_id": "unsignedBigInteger",
+            "path": "string",
+            "is_main": "boolean|default:false",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    },
+
+    "FavoriteCars": {
+        "fillables": {
+            "id": "bigIncrements",
+            "user_id": "unsignedBigInteger",
+            "car_id": "unsignedBigInteger",
+            "created_at": "timestamp"
+        }
+    },
+
+    "Notification": {
+        "fillables": {
+            "id": "bigIncrements",
+            "user_id": "unsignedBigInteger",
+            "title": "json",
+            "body": "json",
+            "is_read": "boolean|default:false",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    }
+}
