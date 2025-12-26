@@ -125,3 +125,11 @@ Route::prefix('user/auth')->group(function () {
         Route::post('me', [\App\Http\Modules\Users\Controllers\UserController::class, 'me']);
     });
 });
+
+
+use App\Http\Controllers\AiSearchController;
+
+Route::middleware('throttle:10,1')->get(
+    '/ai/search',
+    [AiSearchController::class, 'search']
+);
