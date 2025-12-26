@@ -10,6 +10,7 @@ use App\Http\Modules\Cities\Models\City;
 use App\Http\Modules\Models\Models\Model;
 use App\Http\Modules\Brands\Models\Brand;
 use App\Http\Modules\Sellers\Models\Seller;
+use App\Http\Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -26,6 +27,15 @@ class Car extends BaseModel
     protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'status', 'created_at', 'updated_at'];
 
     public $translatable = ['title', 'description'];
+
+    public static function getAllowedSorts(): array
+    {
+        return [
+            'price',
+            'created_at',
+            'favorites_count',
+        ];
+    }
 
     public static function getAllowedFilters(): array
     {
@@ -49,18 +59,23 @@ class Car extends BaseModel
             AllowedFilter::exact('condition'),
             AllowedFilter::exact('status'),
             AllowedFilter::exact('created_at'),
-            AllowedFilter::exact('updated_at')
+            AllowedFilter::exact('updated_at'),
+            AllowedFilter::scope('year_between'),
+            AllowedFilter::scope('price_between'),
+            AllowedFilter::scope('mileage_between'),
+            AllowedFilter::scope('top_expensive'),
+            AllowedFilter::scope('user_id'),
         ];
+    }
+
+    public static function getDefaultIncludedRelationsCount(): array
+    {
+        return ['favorites'];
     }
 
     public static function getDefaultSort()
     {
         return '-created_at';
-    }
-
-    public function scopeGlobal(Builder $query, $date): Builder
-    {
-        return $query->where("title", 'like', "%$date%");
     }
 
     public function seller()
@@ -103,8 +118,67 @@ class Car extends BaseModel
         return $this->hasMany(CarImage::class);
     }
 
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorite_cars', 'car_id', 'user_id');
+    }
+
     public function favoriteCars()
     {
         return $this->hasMany(FavoriteCar::class, 'car_id');
+    }
+
+    public function scopeGlobal(Builder $query, $date): Builder
+    {
+        return $query->where("title", 'like', "%$date%");
+    }
+
+    public function scopeYearBetween(Builder $query, $value): Builder
+    {
+        $from = data_get($value, 'from');
+        $to   = data_get($value, 'to');
+
+        return $query
+            ->when($from !== null && $from !== '', fn ($q) => $q->where('year', '>=', (int) $from))
+            ->when($to   !== null && $to   !== '', fn ($q) => $q->where('year', '<=', (int) $to));
+    }
+
+    public function scopePriceBetween(Builder $query, $value): Builder
+    {
+        $from = data_get($value, 'from');
+        $to   = data_get($value, 'to');
+
+        return $query
+            ->when($from !== null && $from !== '', fn ($q) => $q->where('price', '>=', (float) $from))
+            ->when($to   !== null && $to   !== '', fn ($q) => $q->where('price', '<=', (float) $to));
+    }
+
+    public function scopeMileageBetween(Builder $query, $value): Builder
+    {
+        $from = data_get($value, 'from');
+        $to   = data_get($value, 'to');
+
+        return $query
+            ->when($from !== null && $from !== '', fn ($q) => $q->where('mileage', '>=', (int) $from))
+            ->when($to   !== null && $to   !== '', fn ($q) => $q->where('mileage', '<=', (int) $to));
+    }
+
+    public function scopeTopExpensive(Builder $query, $value): Builder
+    {
+        // لو الفلتر اتبعت بأي قيمة truthy
+        if (!filter_var($value, FILTER_VALIDATE_BOOLEAN) && $value != 1 && $value !== '1') {
+            return $query;
+        }
+
+        return $query->orderByDesc('price');
+    }
+
+    public function scopeUserId($query, $userId)
+    {
+        if (empty($userId)) return $query;
+
+        return $query->whereHas('favorites', function ($q) use ($userId) {
+            $q->where('users.id', (int) $userId);
+        });
     }
 }

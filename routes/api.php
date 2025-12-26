@@ -103,12 +103,17 @@ Route::prefix('seller/auth')->group(function () {
  * ------------------------*/
 $userModules = [
     'Users',
+    'Brands',
+    'Models',
+    'Countries',
+    'CarFeatures',
+    'Cities',
     'FavoriteCars',
     'Notifications',
     'Cars',
 ];
 
-$loadModuleRoutes($userModules, 'user', 'auth:api');
+$loadModuleRoutes($userModules, 'user');
 
 // User Auth Routes
 Route::prefix('user/auth')->group(function () {
@@ -117,6 +122,6 @@ Route::prefix('user/auth')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::post('logout', [\App\Http\Modules\Users\Controllers\UserController::class, 'logout']);
-        // Route::get('me', ...); // لو عندك
+        Route::post('me', [\App\Http\Modules\Users\Controllers\UserController::class, 'me']);
     });
 });

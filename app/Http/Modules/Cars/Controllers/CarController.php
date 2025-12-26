@@ -35,4 +35,9 @@ class CarController extends BaseApiController
     {
         return $this->service->updateStatus($request, $car);
     }
+
+    public function toggleFavoriteCar(ShowCarRequest $request, Car $car)
+    {
+        return $this->service->toggleFavoriteCar($request, $car);
+    }
 }

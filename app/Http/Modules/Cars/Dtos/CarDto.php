@@ -28,6 +28,7 @@ class CarDto implements \JsonSerializable
     private $status;
     private ?array $images = [];
     private ?array $features = [];
+    private ?array $favorites = [];
     private $created_at;
     private $updated_at;
 
@@ -332,6 +333,22 @@ class CarDto implements \JsonSerializable
     public function setFeatures(?array $features): void
     {
         $this->features = $features;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getFavorites(): ?array
+    {
+        return $this->favorites;
+    }
+
+    /**
+     * @param array|null $favorites
+     */
+    public function setFavorites(?array $favorites): void
+    {
+        $this->favorites = $favorites;
     }
 
     public function jsonSerialize(): array

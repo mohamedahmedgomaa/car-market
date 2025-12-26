@@ -45,4 +45,9 @@ class UserController extends BaseApiController
         return $this->service->logout($request);
     }
 
+    public function me(ShowUserRequest $request)
+    {
+        return $this->service->me($request);
+    }
+
 }
