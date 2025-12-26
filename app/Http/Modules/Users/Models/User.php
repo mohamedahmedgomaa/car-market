@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Modules\Users\Models;
+use App\Http\Modules\Cars\Models\Car;
 use App\Http\Modules\Notifications\Models\Notification;
 use App\Http\Modules\FavoriteCars\Models\FavoriteCar;
 use Gomaa\Base\Base\Models\BaseAuthModel;
@@ -43,9 +44,8 @@ class User extends BaseAuthModel
 
     public function favoriteCars()
     {
-        return $this->hasMany(FavoriteCar::class, 'user_id');
+        return $this->belongsToMany(Car::class, 'favorites', 'user_id', 'car_id');
     }
-
     public function notifications()
     {
         return $this->hasMany(Notification::class, 'user_id');

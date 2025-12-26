@@ -4,8 +4,10 @@ namespace App\Http\Modules\Cars\Services;
 
 use App\Http\Modules\Cars\Models\Car;
 use App\Http\Modules\Cars\Requests\CreateCarRequest;
+use App\Http\Modules\Cars\Requests\ShowCarRequest;
 use App\Http\Modules\Cars\Requests\UpdateCarRequest;
 use App\Http\Modules\Cars\Requests\UpdateCarStatusRequest;
+use App\Http\Modules\FavoriteCars\Models\FavoriteCar;
 use Gomaa\Base\Base\Requests\BaseRequest;
 use Gomaa\Base\Base\Services\BaseApiService;
 use App\Http\Modules\Cars\Repositories\CarRepository;
@@ -145,5 +147,36 @@ class CarService extends BaseApiService
         ]);
 
         return $this->responseWithData($this->toDto($car->fresh()), 200);
+    }
+
+    public function toggleFavoriteCar(ShowCarRequest $request, Car $car)
+    {
+        $userId = $request->user()->id;
+
+        $fav = FavoriteCar::where('user_id', $userId)
+            ->where('car_id', $car->id)
+            ->first();
+
+        if ($fav) {
+            $fav->delete();
+            $isFavorite = false;
+        } else {
+            FavoriteCar::create([
+                'user_id' => $userId,
+                'car_id'  => $car->id,
+            ]);
+            $isFavorite = true;
+        }
+
+        $favoritesCount = FavoriteCar::where('car_id', $car->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'car_id' => $car->id,
+                'is_favorited' => $isFavorite,
+                'favorites_count' => $favoritesCount,
+            ],
+        ]);
     }
 }

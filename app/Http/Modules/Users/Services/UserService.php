@@ -58,4 +58,9 @@ class UserService extends BaseApiService
         $request->user()->token()->revoke();
         return $this->responseWithMessage('Logged out successfully', 200);
     }
+
+    public function me(ShowUserRequest $request)
+    {
+        return $this->responseWithData($this->toDto($request->user()), 200);
+    }
 }

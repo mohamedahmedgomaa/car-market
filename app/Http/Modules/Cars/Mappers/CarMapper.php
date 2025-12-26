@@ -38,6 +38,7 @@ class CarMapper
         $dto->setStatus($model->status);
         $dto->setImages($model->images->toArray());
         $dto->setFeatures($model->features->toArray());
+        $dto->setFavorites($model->favorites->toArray());
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
