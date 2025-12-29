@@ -90,6 +90,7 @@
             "model_id": "unsignedBigInteger",
             "country_id": "unsignedBigInteger",
             "city_id": "unsignedBigInteger",
+            "type": "enum[car,motorcycle]",
             "title": "json",
             "description": "json",
             "price": "decimal(10,2)",

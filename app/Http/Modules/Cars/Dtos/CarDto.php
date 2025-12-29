@@ -15,6 +15,7 @@ class CarDto implements \JsonSerializable
     private ?object $city = null;
     private $country_id;
     private ?object $country = null;
+    private $type;
     private $title;
     private $description;
     private $price;
@@ -91,6 +92,16 @@ class CarDto implements \JsonSerializable
     public function setCountryId($value): void
     {
         $this->country_id = $value;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($value): void
+    {
+        $this->type = $value;
     }
 
     public function getTitle()

@@ -25,6 +25,7 @@ class CarMapper
         $dto->setCity($model->city);
         $dto->setCountryId($model->country_id);
         $dto->setCountry($model->country);
+        $dto->setType($model->type);
         $dto->setTitle($model->getTranslations('title'));
         $dto->setDescription($model->getTranslations('description'));
         $dto->setPrice($model->price);
@@ -58,6 +59,7 @@ class CarMapper
         $model->model_id = $dto->getModelId();
         $model->city_id = $dto->getCityId();
         $model->country_id = $dto->getCountryId();
+        $model->type = $dto->getType();
         $model->title = $dto->getTitle();
         $model->description = $dto->getDescription();
         $model->price = $dto->getPrice();
@@ -104,6 +106,7 @@ class CarMapper
             'model_id' => $dto->getModelId(),
             'city_id' => $dto->getCityId(),
             'country_id' => $dto->getCountryId(),
+            'type' => $dto->getType(),
             'title' => $dto->getTitle(),
             'description' => $dto->getDescription(),
             'price' => $dto->getPrice(),

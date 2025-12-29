@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Modules\Cars\Models;
+
 use App\Http\Modules\CarFeatures\Models\CarFeature;
 use App\Http\Modules\Countries\Models\Country;
 use App\Http\Modules\FavoriteCars\Models\FavoriteCar;
@@ -24,7 +25,7 @@ class Car extends BaseModel
 
     protected $table = 'cars';
 
-    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'status', 'created_at', 'updated_at'];
 
     public $translatable = ['title', 'description'];
 
@@ -47,6 +48,7 @@ class Car extends BaseModel
             AllowedFilter::exact('model_id'),
             AllowedFilter::exact('city_id'),
             AllowedFilter::exact('country_id'),
+            AllowedFilter::exact('type'),
             AllowedFilter::exact('title'),
             AllowedFilter::exact('description'),
             AllowedFilter::exact('price'),
@@ -110,7 +112,7 @@ class Car extends BaseModel
 
     public function features()
     {
-        return $this->belongsToMany(CarFeature::class,'car_feature_pivots');
+        return $this->belongsToMany(CarFeature::class, 'car_feature_pivots');
     }
 
     public function images()
@@ -135,32 +137,28 @@ class Car extends BaseModel
 
     public function scopeYearBetween(Builder $query, $value): Builder
     {
-        $from = data_get($value, 'from');
-        $to   = data_get($value, 'to');
 
+        [$from, $to] = array_pad(explode('.', (string)$value, 2), 2, null);
         return $query
-            ->when($from !== null && $from !== '', fn ($q) => $q->where('year', '>=', (int) $from))
-            ->when($to   !== null && $to   !== '', fn ($q) => $q->where('year', '<=', (int) $to));
+            ->when($from !== null && $from !== '', fn($q) => $q->where('year', '>=', (int)$from))
+            ->when($to !== null && $to !== '', fn($q) => $q->where('year', '<=', (int)$to));
     }
 
     public function scopePriceBetween(Builder $query, $value): Builder
     {
-        $from = data_get($value, 'from');
-        $to   = data_get($value, 'to');
-
+        [$from, $to] = array_pad(explode('.', (string)$value, 2), 2, null);
         return $query
-            ->when($from !== null && $from !== '', fn ($q) => $q->where('price', '>=', (float) $from))
-            ->when($to   !== null && $to   !== '', fn ($q) => $q->where('price', '<=', (float) $to));
+            ->when($from !== null && $from !== '', fn($q) => $q->where('price', '>=', (float)$from))
+            ->when($to !== null && $to !== '', fn($q) => $q->where('price', '<=', (float)$to));
     }
 
     public function scopeMileageBetween(Builder $query, $value): Builder
     {
-        $from = data_get($value, 'from');
-        $to   = data_get($value, 'to');
+        [$from, $to] = array_pad(explode('.', (string)$value, 2), 2, null);
 
         return $query
-            ->when($from !== null && $from !== '', fn ($q) => $q->where('mileage', '>=', (int) $from))
-            ->when($to   !== null && $to   !== '', fn ($q) => $q->where('mileage', '<=', (int) $to));
+            ->when($from !== null && $from !== '', fn($q) => $q->where('mileage', '>=', (int)$from))
+            ->when($to !== null && $to !== '', fn($q) => $q->where('mileage', '<=', (int)$to));
     }
 
     public function scopeTopExpensive(Builder $query, $value): Builder
@@ -178,7 +176,7 @@ class Car extends BaseModel
         if (empty($userId)) return $query;
 
         return $query->whereHas('favorites', function ($q) use ($userId) {
-            $q->where('users.id', (int) $userId);
+            $q->where('users.id', (int)$userId);
         });
     }
 }

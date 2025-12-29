@@ -21,6 +21,8 @@ class CreateCarRequest extends BaseRequest
             'country_id' => 'required|exists:countries,id',
             'city_id' => 'required|exists:cities,id',
 
+            'type' => 'required|in:car,motorcycle',
+
             'title_ar' => 'required|string|max:255',
             'title_en' => 'required|string|max:255',
 
