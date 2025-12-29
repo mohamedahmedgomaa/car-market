@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('country_id');
+            $table->enum('type', ['car','motorcycle'])->default('car');
             $table->json('title');
             $table->json('description');
             $table->decimal('price', 10, 2);
