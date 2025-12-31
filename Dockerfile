@@ -17,10 +17,12 @@ COPY . .
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Ensure Laravel writable directories exist
+RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
+ && chmod -R 775 storage bootstrap/cache || true
+
 # Start (Free plan: no shell, so run needed commands here)
 CMD php artisan migrate --force || true \
  && php artisan config:clear || true \
- && php artisan cache:clear || true \
  && php artisan route:clear || true \
  && php -S 0.0.0.0:${PORT:-10000} -t public
-
