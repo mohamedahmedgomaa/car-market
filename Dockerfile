@@ -24,4 +24,5 @@ RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cac
 # Start (Free plan: no shell, so run needed commands here)
 CMD php artisan migrate --force || true \
  && php artisan passport:keys --force || true \
+ && php artisan passport:client --personal --name="Car Market Personal Access Client" --provider=users || true \
  && php -S 0.0.0.0:${PORT:-10000} -t public
