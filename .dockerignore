@@ -1,0 +1,11 @@
+/node_modules
+/vendor
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+.env
+.git
+.gitignore
+README.md
+tests
