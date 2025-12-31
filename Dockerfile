@@ -11,15 +11,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copy application first (so artisan exists)
+# Copy application
 COPY . .
 
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Cache (optional)
-RUN php artisan config:cache || true \
- && php artisan route:cache || true \
- && php artisan view:cache || true
-
-CMD php -S 0.0.0.0:${PORT:-10000} -t public
+# Start (Free plan: no shell, so run needed commands here)
+CMD php artisan migrate --force || true \
+ && php artisan optimize:clear \
+ && php -S 0.0.0.0:${PORT:-10000} -t public
