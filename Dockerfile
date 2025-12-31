@@ -19,5 +19,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Start (Free plan: no shell, so run needed commands here)
 CMD php artisan migrate --force || true \
- && php artisan optimize:clear \
+ && php artisan config:clear || true \
+ && php artisan cache:clear || true \
+ && php artisan route:clear || true \
  && php -S 0.0.0.0:${PORT:-10000} -t public
+
