@@ -11,17 +11,15 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Install dependencies first (better caching)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Copy application
+# Copy application first (so artisan exists)
 COPY . .
 
-# Cache (optional – لو فشل مش هيكسر البيلد)
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Cache (optional)
 RUN php artisan config:cache || true \
  && php artisan route:cache || true \
  && php artisan view:cache || true
 
-# Render uses $PORT
 CMD php -S 0.0.0.0:${PORT:-10000} -t public
