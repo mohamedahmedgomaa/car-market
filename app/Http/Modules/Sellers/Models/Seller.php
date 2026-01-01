@@ -24,6 +24,14 @@ class Seller extends BaseAuthModel
         'remember_token',
     ];
 
+    public static function getAllowedSorts(): array
+    {
+        return [
+            'created_at',
+            'cars_count',
+        ];
+    }
+
     public static function getAllowedFilters(): array
     {
         return [
@@ -40,6 +48,7 @@ class Seller extends BaseAuthModel
             AllowedFilter::exact('bank_account'),
             AllowedFilter::exact('is_verified'),
             AllowedFilter::exact('is_active'),
+            AllowedFilter::exact('cars.status'),
             AllowedFilter::exact('created_at'),
             AllowedFilter::exact('updated_at')
         ];
@@ -53,6 +62,10 @@ class Seller extends BaseAuthModel
     public function cars()
     {
         return $this->hasMany(Car::class, 'seller_id');
+    }
+    public static function getDefaultIncludedRelationsCount(): array
+    {
+        return ['cars'];
     }
 
     public function scopeGlobal(Builder $query, $date): Builder

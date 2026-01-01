@@ -102,6 +102,7 @@ Route::prefix('seller/auth')->group(function () {
  * User Modules
  * ------------------------*/
 $userModules = [
+    'Sellers',
     'Users',
     'Brands',
     'Models',
