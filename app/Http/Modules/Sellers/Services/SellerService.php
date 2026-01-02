@@ -15,17 +15,12 @@ use Gomaa\Base\Base\Requests\BaseRequest;
 use Gomaa\Base\Base\Services\BaseApiService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class SellerService extends BaseApiService
 {
     protected string $dtoClass = SellerDto::class;
     protected string $mapperClass = SellerMapper::class;
 
-    /**
-     * @param SellerRepository $repository
-     */
     public function __construct(SellerRepository $repository)
     {
         parent::__construct($repository);
@@ -36,9 +31,20 @@ class SellerService extends BaseApiService
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $uploaded = $request->file('store_logo')->storeOnCloudinary('store_logos');
-            $data['store_logo'] = $uploaded->getSecurePath();
-            // 'store_logo_public_id' => $uploaded->getPublicId(); // لو عندك عمود
+            $file = $request->file('store_logo');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'store_logos',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['store_logo'] = $result['secure_url'] ?? null;
+
+            // لو عندك عمود:
+            // $data['store_logo_public_id'] = $result['public_id'] ?? null;
         }
 
         $seller = Seller::create($data);
@@ -46,15 +52,25 @@ class SellerService extends BaseApiService
         return $this->responseWithData($this->toDto($seller), 201);
     }
 
-
     public function register(RegisterSellerRequest $request)
     {
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $uploaded = $request->file('store_logo')->storeOnCloudinary('store_logos');
-            $data['store_logo'] = $uploaded->getSecurePath();
-            // $data['store_logo_public_id'] = $uploaded->getPublicId();
+            $file = $request->file('store_logo');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'store_logos',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['store_logo'] = $result['secure_url'] ?? null;
+
+            // لو عندك عمود:
+            // $data['store_logo_public_id'] = $result['public_id'] ?? null;
         }
 
         $data['is_verified'] = false;
@@ -65,8 +81,8 @@ class SellerService extends BaseApiService
         $token = $seller->createToken('Api Token')->accessToken;
 
         return $this->responseWithData([
-            'seller'=> $this->toDto($seller),
-            'token'=> $token,
+            'seller' => $this->toDto($seller),
+            'token'  => $token,
         ], 201);
     }
 
@@ -79,30 +95,46 @@ class SellerService extends BaseApiService
 
         if ($request->hasFile('store_logo')) {
 
-            // ✅ delete old from cloudinary if you store public id
+            // ✅ احذف القديم من Cloudinary لو مخزن public_id
             if (!empty($seller->store_logo_public_id ?? null)) {
-                Cloudinary::destroy($seller->store_logo_public_id);
+                try {
+                    cloudinary()->uploadApi()->destroy($seller->store_logo_public_id);
+                } catch (\Throwable $e) {
+                    // تجاهل لو فشل الحذف
+                }
             }
 
-            $uploaded = $request->file('store_logo')->storeOnCloudinary('store_logos');
-            $data['store_logo'] = $uploaded->getSecurePath();
-            // $data['store_logo_public_id'] = $uploaded->getPublicId();
+            $file = $request->file('store_logo');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'store_logos',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['store_logo'] = $result['secure_url'] ?? null;
+
+            // لو عندك عمود:
+            // $data['store_logo_public_id'] = $result['public_id'] ?? null;
         }
 
         return $seller->update($data)
-            ? $this->responseWithData($this->toDto($seller), 200)
+            ? $this->responseWithData($this->toDto($seller->fresh()), 200)
             : $this->responseWithError('Failed to update seller', 500);
     }
 
-    public function login(LoginSellerRequest $request) {
+    public function login(LoginSellerRequest $request)
+    {
         $seller = Seller::where('email', $request->email)->first();
 
         if ($seller && Hash::check($request->password, $seller->password)) {
             $token = $seller->createToken('Api Token')->accessToken;
 
             return $this->responseWithData([
-                'seller'=> $this->toDto($seller),
-                'token'=> $token,
+                'seller' => $this->toDto($seller),
+                'token'  => $token,
             ], 200);
         }
 
@@ -114,5 +146,4 @@ class SellerService extends BaseApiService
         $request->user()->token()->revoke();
         return $this->responseWithMessage('Logged out successfully', 200);
     }
-
 }
