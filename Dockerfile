@@ -27,4 +27,5 @@ CMD php artisan migrate --force \
  && php artisan passport:client --personal --name="PAC (users)" --provider=users \
  && php artisan passport:client --personal --name="PAC (sellers)" --provider=sellers \
  && php artisan passport:client --personal --name="PAC (admins)" --provider=admins \
+ && php artisan storage:link || true \
  && php -S 0.0.0.0:${PORT:-10000} -t public
