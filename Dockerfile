@@ -22,10 +22,11 @@ RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cac
  && chmod -R 775 storage bootstrap/cache || true
 
 # Start (Free plan: no shell, so run needed commands here)
-CMD php artisan migrate --force \
+CMD php artisan config:clear || true \
+ && php artisan cache:clear || true \
+ && php artisan migrate --force \
  && php artisan passport:keys --force \
  && php artisan passport:client --personal --name="PAC (users)" --provider=users \
  && php artisan passport:client --personal --name="PAC (sellers)" --provider=sellers \
  && php artisan passport:client --personal --name="PAC (admins)" --provider=admins \
- && php artisan storage:link || true \
  && php -S 0.0.0.0:${PORT:-10000} -t public
