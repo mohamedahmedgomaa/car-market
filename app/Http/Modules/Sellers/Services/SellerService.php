@@ -36,13 +36,13 @@ class SellerService extends BaseApiService
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $file = $request->file('store_logo');
+            $uploaded = Cloudinary::upload(
+                $request->file('store_logo')->getRealPath(),
+                ['folder' => 'store_logos']
+            );
 
-            $uploaded = Cloudinary::upload($file->getRealPath(), [
-                'folder' => 'store_logos',
-            ]);
-
-            $data['store_logo'] = $uploaded->getSecurePath(); // https URL
+            $data['store_logo'] = $uploaded->getSecurePath();
+            // 'store_logo_public_id' => $uploaded->getPublicId()  (لو حابب)
         }
 
         $seller = Seller::create($data);
@@ -55,26 +55,46 @@ class SellerService extends BaseApiService
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $file = $request->file('store_logo');
+            $uploaded = Cloudinary::upload(
+                $request->file('store_logo')->getRealPath(),
+                ['folder' => 'store_logos']
+            );
 
-            $uploaded = Cloudinary::upload($file->getRealPath(), [
-                'folder' => 'store_logos',
-            ]);
-
-            $data['store_logo'] = $uploaded->getSecurePath(); // https URL
+            $data['store_logo'] = $uploaded->getSecurePath();
         }
 
         $data['is_verified'] = false;
         $data['is_active'] = true;
 
         $seller = $this->repository->save($data);
-
         $token = $seller->createToken('Api Token')->accessToken;
 
         return $this->responseWithData([
-            'seller' => $this->toDto($seller),
-            'token'  => $token,
+            'seller'=> $this->toDto($seller),
+            'token'=> $token,
         ], 201);
+    }
+
+    public function update(BaseRequest|UpdateSellerRequest $request, int $id, bool $restore = false): JsonResponse
+    {
+        $seller = Seller::find($id);
+        if (!$seller) return $this->responseWithError('Seller not found', 404);
+
+        $data = $request->all();
+
+        if ($request->hasFile('store_logo')) {
+            // لو عندك public_id قديم امسحه هنا
+            $uploaded = Cloudinary::upload(
+                $request->file('store_logo')->getRealPath(),
+                ['folder' => 'store_logos']
+            );
+
+            $data['store_logo'] = $uploaded->getSecurePath();
+        }
+
+        return $seller->update($data)
+            ? $this->responseWithData($this->toDto($seller), 200)
+            : $this->responseWithError('Failed to update seller', 500);
     }
 
     public function login(LoginSellerRequest $request) {
@@ -98,27 +118,4 @@ class SellerService extends BaseApiService
         return $this->responseWithMessage('Logged out successfully', 200);
     }
 
-    public function update(BaseRequest|UpdateSellerRequest $request, int $id, bool $restore = false): JsonResponse
-    {
-        $data = $request->all();
-
-        $seller = Seller::find($id);
-        if (! $seller) {
-            return $this->responseWithError('Seller not found', 404);
-        }
-
-        if ($request->hasFile('store_logo')) {
-            $file = $request->file('store_logo');
-
-            $uploaded = Cloudinary::upload($file->getRealPath(), [
-                'folder' => 'store_logos',
-            ]);
-
-            $data['store_logo'] = $uploaded->getSecurePath(); // https URL
-        }
-
-        return $seller->update($data)
-            ? $this->responseWithData($this->toDto($seller), 200)
-            : $this->responseWithError('Failed to update seller', 500);
-    }
 }

@@ -35,116 +35,102 @@ class CarService extends BaseApiService
     {
         return DB::transaction(function () use ($request) {
 
-            // 1️⃣ Create Car
             $car = $this->repository->save($request->all());
 
-            // 2️⃣ Attach Features
             if ($request->filled('features')) {
                 $car->features()->sync($request->features);
             }
 
-            // 3️⃣ Upload Images (Cloudinary)
             if ($request->hasFile('images')) {
-
                 foreach ($request->file('images') as $index => $image) {
 
-                    $uploaded = Cloudinary::upload($image->getRealPath(), [
-                        'folder' => 'cars',
-                    ]);
-
-                    $imageUrl = $uploaded->getSecurePath(); // https URL
+                    $uploaded = Cloudinary::upload(
+                        $image->getRealPath(),
+                        ['folder' => 'cars']
+                    );
 
                     $car->images()->create([
-                        'path' => $imageUrl,
-                        'is_main' => (string) $request->main_image === (string) $index,
+                        'path' => $uploaded->getSecurePath(),     // URL مباشر
+                        // 'public_id' => $uploaded->getPublicId(), // لو ضفت عمود public_id
+                        'is_main' => (string)$request->main_image === (string)$index,
                     ]);
                 }
             }
 
+            $car->load(['images', 'features']);
             return $this->responseWithData($this->toDto($car), 201);
         });
     }
+
 
     public function update(BaseRequest|UpdateCarRequest $request, int $id, bool $restore = false): JsonResponse
     {
         return DB::transaction(function () use ($id, $request) {
 
-            // 1) get car
             $car = $this->repository->getById($id);
 
-            // 2) update car fields (exclude files/arrays we handle manually)
             $data = $request->except([
-                'features',
-                'images',
-                'keep_images',
-                'main_image_id',
-                'main_image_new_index',
-                'title_ar', 'title_en', 'description_ar', 'description_en',
+                'features','images','keep_images','main_image_id','main_image_new_index',
+                'title_ar','title_en','description_ar','description_en',
             ]);
 
             $car = $this->repository->updateById($id, $data);
 
-            // 3) sync features
             $car->features()->sync($request->input('features', []));
 
-            // 4) handle old images keep/delete (DB only)
             $keepIds = collect($request->input('keep_images', []))
                 ->filter()
                 ->map(fn ($v) => (int) $v)
                 ->values();
 
-            // ensure kept images belong to this car
             $keepIds = $car->images()->whereIn('id', $keepIds)->pluck('id');
 
             $toDelete = $car->images()->whereNotIn('id', $keepIds)->get();
             foreach ($toDelete as $img) {
-                // Cloudinary: delete from DB only (keep file in Cloudinary)
+                // لو عندك public_id:
+                // if ($img->public_id) Cloudinary::destroy($img->public_id);
                 $img->delete();
             }
 
-            // 5) upload new images (Cloudinary)
             $newImageIds = [];
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
 
-                    $uploaded = Cloudinary::upload($image->getRealPath(), [
-                        'folder' => 'cars',
-                    ]);
-
-                    $imageUrl = $uploaded->getSecurePath();
+                    $uploaded = Cloudinary::upload(
+                        $image->getRealPath(),
+                        ['folder' => 'cars']
+                    );
 
                     $created = $car->images()->create([
-                        'path' => $imageUrl,
-                        'is_main' => false, // هنظبطها بعدين
+                        'path' => $uploaded->getSecurePath(),
+                        // 'public_id' => $uploaded->getPublicId(),
+                        'is_main' => false,
                     ]);
 
-                    $newImageIds[$index] = $created->id; // map index -> id
+                    $newImageIds[$index] = $created->id;
                 }
             }
 
-            // 6) set main image
             $car->images()->update(['is_main' => false]);
 
             $mainOldId = $request->input('main_image_id');
             $mainNewIndex = $request->input('main_image_new_index');
 
             if ($mainOldId) {
-                $car->images()->where('id', (int)$mainOldId)->update(['is_main' => true]);
+                $car->images()->where('id', $mainOldId)->update(['is_main' => true]);
             } elseif ($mainNewIndex !== null && array_key_exists((int)$mainNewIndex, $newImageIds)) {
                 $car->images()->where('id', $newImageIds[(int)$mainNewIndex])->update(['is_main' => true]);
             } else {
                 $first = $car->images()->orderBy('id')->first();
-                if ($first) {
-                    $first->update(['is_main' => true]);
-                }
+                if ($first) $first->update(['is_main' => true]);
             }
 
-            // refresh relations
-            $car->load(['seller', 'brand', 'model', 'country', 'city', 'features', 'images']);
+            $car->load(['seller','brand','model','country','city','features','images']);
 
             return $this->responseWithData($this->toDto($car), 200);
         });
     }
+
 
     public function updateStatus(UpdateCarStatusRequest $request, Car $car): JsonResponse
     {
