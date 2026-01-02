@@ -8,6 +8,7 @@ use App\Http\Modules\Cars\Requests\ShowCarRequest;
 use App\Http\Modules\Cars\Requests\UpdateCarRequest;
 use App\Http\Modules\Cars\Requests\UpdateCarStatusRequest;
 use App\Http\Modules\FavoriteCars\Models\FavoriteCar;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Gomaa\Base\Base\Requests\BaseRequest;
 use Gomaa\Base\Base\Services\BaseApiService;
 use App\Http\Modules\Cars\Repositories\CarRepository;
@@ -42,16 +43,20 @@ class CarService extends BaseApiService
                 $car->features()->sync($request->features);
             }
 
-            // 3️⃣ Upload Images
+            // 3️⃣ Upload Images (Cloudinary)
             if ($request->hasFile('images')) {
 
                 foreach ($request->file('images') as $index => $image) {
 
-                    $path = $image->store('cars', 'public');
+                    $uploaded = Cloudinary::upload($image->getRealPath(), [
+                        'folder' => 'cars',
+                    ]);
+
+                    $imageUrl = $uploaded->getSecurePath(); // https URL
 
                     $car->images()->create([
-                        'path' => $path,
-                        'is_main' => $request->main_image == $index,
+                        'path' => $imageUrl,
+                        'is_main' => (string) $request->main_image === (string) $index,
                     ]);
                 }
             }
@@ -82,7 +87,7 @@ class CarService extends BaseApiService
             // 3) sync features
             $car->features()->sync($request->input('features', []));
 
-            // 4) handle old images keep/delete
+            // 4) handle old images keep/delete (DB only)
             $keepIds = collect($request->input('keep_images', []))
                 ->filter()
                 ->map(fn ($v) => (int) $v)
@@ -93,19 +98,23 @@ class CarService extends BaseApiService
 
             $toDelete = $car->images()->whereNotIn('id', $keepIds)->get();
             foreach ($toDelete as $img) {
-                // delete file from storage
-                Storage::disk('public')->delete($img->path);
+                // Cloudinary: delete from DB only (keep file in Cloudinary)
                 $img->delete();
             }
 
-            // 5) upload new images
+            // 5) upload new images (Cloudinary)
             $newImageIds = [];
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
-                    $path = $image->store('cars', 'public');
+
+                    $uploaded = Cloudinary::upload($image->getRealPath(), [
+                        'folder' => 'cars',
+                    ]);
+
+                    $imageUrl = $uploaded->getSecurePath();
 
                     $created = $car->images()->create([
-                        'path' => $path,
+                        'path' => $imageUrl,
                         'is_main' => false, // هنظبطها بعدين
                     ]);
 
@@ -114,20 +123,17 @@ class CarService extends BaseApiService
             }
 
             // 6) set main image
-            // reset all to false first
             $car->images()->update(['is_main' => false]);
 
             $mainOldId = $request->input('main_image_id');
             $mainNewIndex = $request->input('main_image_new_index');
 
             if ($mainOldId) {
-                // only if belongs to car
-                $car->images()->where('id', $mainOldId)->update(['is_main' => true]);
+                $car->images()->where('id', (int)$mainOldId)->update(['is_main' => true]);
             } elseif ($mainNewIndex !== null && array_key_exists((int)$mainNewIndex, $newImageIds)) {
                 $car->images()->where('id', $newImageIds[(int)$mainNewIndex])->update(['is_main' => true]);
             } else {
-                // fallback: first image as main if exists
-                $first = $car->images()->orderByDesc('is_main')->orderBy('id')->first();
+                $first = $car->images()->orderBy('id')->first();
                 if ($first) {
                     $first->update(['is_main' => true]);
                 }

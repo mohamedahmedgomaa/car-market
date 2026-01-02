@@ -16,6 +16,7 @@ use Gomaa\Base\Base\Services\BaseApiService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class SellerService extends BaseApiService
 {
@@ -36,16 +37,12 @@ class SellerService extends BaseApiService
 
         if ($request->hasFile('store_logo')) {
             $file = $request->file('store_logo');
-            $destinationPath = public_path('uploads/store_logos');
-            if (!file_exists($destinationPath)) {
-                if (!mkdir($destinationPath, 0777, true) && !is_dir($destinationPath)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $destinationPath));
-                }
-            }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move($destinationPath, $filename);
-            $data['store_logo'] = url('uploads/store_logos/' . $filename);
+            $uploaded = Cloudinary::upload($file->getRealPath(), [
+                'folder' => 'store_logos',
+            ]);
+
+            $data['store_logo'] = $uploaded->getSecurePath(); // https URL
         }
 
         $seller = Seller::create($data);
@@ -58,9 +55,15 @@ class SellerService extends BaseApiService
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $path = $request->file('store_logo')->store('store_logos', 'public');
-            $data['store_logo'] = asset('storage/' . $path);
+            $file = $request->file('store_logo');
+
+            $uploaded = Cloudinary::upload($file->getRealPath(), [
+                'folder' => 'store_logos',
+            ]);
+
+            $data['store_logo'] = $uploaded->getSecurePath(); // https URL
         }
+
         $data['is_verified'] = false;
         $data['is_active'] = true;
 
@@ -69,11 +72,10 @@ class SellerService extends BaseApiService
         $token = $seller->createToken('Api Token')->accessToken;
 
         return $this->responseWithData([
-            'seller'=> $this->toDto($seller),
-            'token'=> $token,
+            'seller' => $this->toDto($seller),
+            'token'  => $token,
         ], 201);
     }
-
 
     public function login(LoginSellerRequest $request) {
         $seller = Seller::where('email', $request->email)->first();
@@ -99,29 +101,22 @@ class SellerService extends BaseApiService
     public function update(BaseRequest|UpdateSellerRequest $request, int $id, bool $restore = false): JsonResponse
     {
         $data = $request->all();
+
         $seller = Seller::find($id);
-        if (!$seller) {
+        if (! $seller) {
             return $this->responseWithError('Seller not found', 404);
         }
-        if ($request->hasFile('store_logo')) {
-            if ($seller->store_logo) {
-                $oldPath = str_replace(asset('storage/') . '/', '', $seller->store_logo);
-                if (Storage::disk('public')->exists($oldPath)) {
-                    Storage::disk('public')->delete($oldPath);
-                }
-            }
-            $file = $request->file('store_logo');
-            $destinationPath = public_path('uploads/store_logos');
-            if (!file_exists($destinationPath)) {
-                if (!mkdir($destinationPath, 0777, true) && !is_dir($destinationPath)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $destinationPath));
-                }
-            }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move($destinationPath, $filename);
-            $data['store_logo'] = url('uploads/store_logos/' . $filename);
+        if ($request->hasFile('store_logo')) {
+            $file = $request->file('store_logo');
+
+            $uploaded = Cloudinary::upload($file->getRealPath(), [
+                'folder' => 'store_logos',
+            ]);
+
+            $data['store_logo'] = $uploaded->getSecurePath(); // https URL
         }
+
         return $seller->update($data)
             ? $this->responseWithData($this->toDto($seller), 200)
             : $this->responseWithError('Failed to update seller', 500);
