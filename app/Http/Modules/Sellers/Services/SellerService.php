@@ -36,13 +36,9 @@ class SellerService extends BaseApiService
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $uploaded = Cloudinary::upload(
-                $request->file('store_logo')->getRealPath(),
-                ['folder' => 'store_logos']
-            );
-
+            $uploaded = $request->file('store_logo')->storeOnCloudinary('store_logos');
             $data['store_logo'] = $uploaded->getSecurePath();
-            // 'store_logo_public_id' => $uploaded->getPublicId()  (لو حابب)
+            // 'store_logo_public_id' => $uploaded->getPublicId(); // لو عندك عمود
         }
 
         $seller = Seller::create($data);
@@ -50,23 +46,22 @@ class SellerService extends BaseApiService
         return $this->responseWithData($this->toDto($seller), 201);
     }
 
+
     public function register(RegisterSellerRequest $request)
     {
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            $uploaded = Cloudinary::upload(
-                $request->file('store_logo')->getRealPath(),
-                ['folder' => 'store_logos']
-            );
-
+            $uploaded = $request->file('store_logo')->storeOnCloudinary('store_logos');
             $data['store_logo'] = $uploaded->getSecurePath();
+            // $data['store_logo_public_id'] = $uploaded->getPublicId();
         }
 
         $data['is_verified'] = false;
         $data['is_active'] = true;
 
         $seller = $this->repository->save($data);
+
         $token = $seller->createToken('Api Token')->accessToken;
 
         return $this->responseWithData([
@@ -83,13 +78,15 @@ class SellerService extends BaseApiService
         $data = $request->all();
 
         if ($request->hasFile('store_logo')) {
-            // لو عندك public_id قديم امسحه هنا
-            $uploaded = Cloudinary::upload(
-                $request->file('store_logo')->getRealPath(),
-                ['folder' => 'store_logos']
-            );
 
+            // ✅ delete old from cloudinary if you store public id
+            if (!empty($seller->store_logo_public_id ?? null)) {
+                Cloudinary::destroy($seller->store_logo_public_id);
+            }
+
+            $uploaded = $request->file('store_logo')->storeOnCloudinary('store_logos');
             $data['store_logo'] = $uploaded->getSecurePath();
+            // $data['store_logo_public_id'] = $uploaded->getPublicId();
         }
 
         return $seller->update($data)

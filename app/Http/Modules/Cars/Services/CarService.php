@@ -44,24 +44,22 @@ class CarService extends BaseApiService
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
 
-                    $uploaded = Cloudinary::upload(
-                        $image->getRealPath(),
-                        ['folder' => 'cars']
-                    );
+                    // ✅ Upload to Cloudinary
+                    $uploaded = $image->storeOnCloudinary('cars'); // folder = cars
+                    $url = $uploaded->getSecurePath(); // https url
 
                     $car->images()->create([
-                        'path' => $uploaded->getSecurePath(),     // URL مباشر
-                        // 'public_id' => $uploaded->getPublicId(), // لو ضفت عمود public_id
-                        'is_main' => (string)$request->main_image === (string)$index,
+                        'path' => $url,
+                        'is_main' => $request->main_image == $index,
+                        // لو عندك عمود public_id ضيفه:
+                        // 'public_id' => $uploaded->getPublicId(),
                     ]);
                 }
             }
 
-            $car->load(['images', 'features']);
             return $this->responseWithData($this->toDto($car), 201);
         });
     }
-
 
     public function update(BaseRequest|UpdateCarRequest $request, int $id, bool $restore = false): JsonResponse
     {
@@ -87,8 +85,10 @@ class CarService extends BaseApiService
 
             $toDelete = $car->images()->whereNotIn('id', $keepIds)->get();
             foreach ($toDelete as $img) {
-                // لو عندك public_id:
-                // if ($img->public_id) Cloudinary::destroy($img->public_id);
+                // ✅ delete from cloudinary if public_id exists
+                if (!empty($img->public_id ?? null)) {
+                    Cloudinary::destroy($img->public_id);
+                }
                 $img->delete();
             }
 
@@ -96,15 +96,13 @@ class CarService extends BaseApiService
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
 
-                    $uploaded = Cloudinary::upload(
-                        $image->getRealPath(),
-                        ['folder' => 'cars']
-                    );
+                    $uploaded = $image->storeOnCloudinary('cars');
+                    $url = $uploaded->getSecurePath();
 
                     $created = $car->images()->create([
-                        'path' => $uploaded->getSecurePath(),
-                        // 'public_id' => $uploaded->getPublicId(),
+                        'path' => $url,
                         'is_main' => false,
+                        // 'public_id' => $uploaded->getPublicId(),
                     ]);
 
                     $newImageIds[$index] = $created->id;
@@ -130,7 +128,6 @@ class CarService extends BaseApiService
             return $this->responseWithData($this->toDto($car), 200);
         });
     }
-
 
     public function updateStatus(UpdateCarStatusRequest $request, Car $car): JsonResponse
     {
