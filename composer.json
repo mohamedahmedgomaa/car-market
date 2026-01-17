@@ -20,8 +20,7 @@
         "spatie/laravel-translatable": "^6.11"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
-        ,
+        "roave/security-advisories": "dev-latest",
         "fakerphp/faker": "^1.23",
         "knuckleswtf/scribe": "^5.3",
         "laravel/pail": "^1.2.2",
