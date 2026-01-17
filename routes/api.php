@@ -134,3 +134,24 @@ Route::middleware('throttle:10,1')->get(
     '/ai/search',
     [AiSearchController::class, 'search']
 );
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/__migrate_pgsql_to_sqlite', static function () {
+
+    // 🔒 حماية بسيطة (اختياري بس مهم)
+    if (request('key') !== env('MIGRATION_KEY')) {
+        abort(403);
+    }
+
+    // 🛑 منع التكرار
+    if (DB::connection('sqlite')->table('users')->count() > 0) {
+        return '❌ Migration already done';
+    }
+
+    // ▶️ تشغيل Command
+    Artisan::call('db:migrate-pgsql-to-sqlite');
+
+    return nl2br(Artisan::output());
+});
