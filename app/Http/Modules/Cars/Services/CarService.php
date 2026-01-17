@@ -159,6 +159,7 @@ class CarService extends BaseApiService
         return $this->responseWithData($this->toDto($car->fresh()), 200);
     }
 
+
     public function toggleFavoriteCar(ShowCarRequest $request, Car $car)
     {
         $userId = $request->user()->id;
