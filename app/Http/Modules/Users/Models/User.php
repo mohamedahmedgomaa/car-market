@@ -39,5 +39,4 @@ class User extends BaseAuthModel
         'password',
         'remember_token',
     ];
-
 }
