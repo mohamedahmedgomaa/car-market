@@ -14,11 +14,6 @@ WORKDIR /var/www
 # Copy application
 COPY . .
 
-# Create SQLite database file
-RUN mkdir -p database \
- && touch database/database.sqlite \
- && chmod -R 775 database
-
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
