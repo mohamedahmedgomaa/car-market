@@ -55,8 +55,9 @@ class InitialDataSeeder extends Seeder
             );
         }
 
-        // 3. Car Brands & Models (Comprehensive List with Chinese Brands)
+        // 3. Car Brands & Models (Comprehensive List)
         $carBrands = [
+            "Acura" => ["ILX", "TLX", "RLX", "RDX", "MDX", "NSX", "ZDX", "Integra Type R"],
             "Alfa Romeo" => ["Giulia", "Stelvio", "4C", "8C", "Spider", "GTV", "Giulia Quadrifoglio"],
             "Aston Martin" => ["DB11", "Vantage", "DBX", "DB9", "Rapide", "Valkyrie", "Vanquish"],
             "Audi" => ["A3", "A4", "A6", "Q3", "Q5", "Q7", "A5", "A8", "Q8", "R8", "TT", "RS6", "RS7"],
@@ -127,9 +128,32 @@ class InitialDataSeeder extends Seeder
             "DFSK" => ["Glory 580", "Eagle Pro", "Glory 330"],
             "Lada" => ["Granta", "Niva"],
             "Brilliance" => ["V3", "V5", "V6", "V7"],
-            "Bugatti" => ["Chiron", "Veyron", "Divo"],
-            "McLaren" => ["720S", "570S", "P1"],
-            "Lotus" => ["Evora", "Elise", "Emira"],
+            "Bugatti" => ["Chiron", "Veyron", "Divo", "Centodieci", "La Voiture Noire"],
+            "McLaren" => ["720S", "570S", "P1", "Senna", "GT", "600LT", "765LT", "Artura"],
+            "Koenigsegg" => ["Jesko", "Regera", "Agera RS", "Gemera", "CCX", "CCXR"],
+            "Pagani" => ["Huayra", "Zonda", "Huayra BC", "Huayra Roadster", "Imola"],
+            "Rimac" => ["C_Two", "Concept One"],
+            "Lotus" => ["Evora", "Elise", "Exige", "Emira", "Evija"],
+            "Spyker" => ["C8", "C12", "D12"],
+            "W Motors" => ["Fenyr SuperSport", "Lykan HyperSport"],
+            "Noble" => ["M600", "M400", "M12"],
+            "Zenvo" => ["TS1", "TSR", "ST1"],
+            "Gumpert" => ["Apollo", "Tornante"],
+            "Arrinera" => ["Hussarya", "Venocara"],
+            "Drako" => ["GTE"],
+            "Faraday Future" => ["FF91"],
+            "Lucid Motors" => ["Air"],
+            "Rivian" => ["R1T", "R1S"],
+            "Bollinger" => ["B1", "B2"],
+            "Czinger" => ["21C"],
+            "De Tomaso" => ["P72", "Pantera"],
+            "Hennessey" => ["Venom F5", "Venom GT"],
+            "Italdesign" => ["Zerouno", "Davinci"],
+            "Pininfarina" => ["Battista"],
+            "Radical" => ["RXC", "SR3"],
+            "SSC" => ["Tuatara", "Aero"],
+            "Vencer" => ["Sarthe", "Dodge"],
+            "Wiesmann" => ["GT", "MF5"],
         ];
 
         foreach ($carBrands as $brandName => $models) {
@@ -194,7 +218,7 @@ class InitialDataSeeder extends Seeder
             }
         }
 
-        // 5. Car/Bike Features (Expanded)
+        // 5. Car/Bike Features
         $features = [
             ['ar' => 'تكييف', 'en' => 'Air Conditioning'],
             ['ar' => 'نوافذ كهربائية', 'en' => 'Power Windows'],
