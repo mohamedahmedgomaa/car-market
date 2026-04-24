@@ -16,7 +16,7 @@ class Model extends BaseModel
 
     protected $table = 'models';
 
-    protected $fillable = ['id', 'brand_id', 'name', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'brand_id', 'name', 'type', 'created_at', 'updated_at'];
     public $translatable = ['name'];
 
     public static function getAllowedFilters(): array
@@ -26,6 +26,7 @@ class Model extends BaseModel
             AllowedFilter::exact('id'),
             AllowedFilter::exact('brand_id'),
             AllowedFilter::exact('name'),
+            AllowedFilter::exact('type'),
             AllowedFilter::exact('created_at'),
             AllowedFilter::exact('updated_at')
         ];
