@@ -25,6 +25,7 @@ RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cac
 CMD php artisan config:clear || true \
  && php artisan cache:clear || true \
  && php artisan migrate --force \
+ && php artisan db:seed --class=InitialDataSeeder --force \
  && php artisan passport:keys --force \
  && php artisan passport:client --personal --name="PAC (users)" --provider=users \
  && php artisan passport:client --personal --name="PAC (sellers)" --provider=sellers \
