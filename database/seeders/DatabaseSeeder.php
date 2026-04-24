@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(PassportClientsSeeder::class);
+        $this->call(InitialDataSeeder::class);
     }
 }
