@@ -39,6 +39,12 @@ class BannerController extends Controller
                 [
                     'folder' => 'banners',
                     'resource_type' => 'image',
+                    'transformation' => [
+                        'width' => 800,
+                        'height' => 500,
+                        'crop' => 'fill',
+                        'gravity' => 'center'
+                    ]
                 ]
             );
             $url = $result['secure_url'] ?? null;
