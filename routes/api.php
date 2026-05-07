@@ -57,6 +57,7 @@ $adminModules = [
     'Cities',
     'CarFeatures',
     'Models',
+    'Banners',
 ];
 
 $loadModuleRoutes($adminModules, 'admin', 'auth:api_admin');
@@ -112,6 +113,7 @@ $userModules = [
     'FavoriteCars',
     'Notifications',
     'Cars',
+    'Banners',
 ];
 
 $loadModuleRoutes($userModules, 'user');
