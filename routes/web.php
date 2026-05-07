@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return response()->json([
-        'message' => 'Car Market API is running 🚗',
+        'message' => 'NegmCars API is running 🚗',
         'status' => 'ok'
     ]);
 });
