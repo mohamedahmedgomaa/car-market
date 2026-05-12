@@ -33,6 +33,14 @@ class CarDto implements \JsonSerializable
     private $created_at;
     private $updated_at;
 
+    private $is_best_deal;
+    private $is_import;
+    private $is_featured;
+    private $show_on_home;
+    private $is_global_ad;
+    private $ad_expiry;
+    private $featured_fee;
+
 
     public function getId()
     {
@@ -361,6 +369,27 @@ class CarDto implements \JsonSerializable
     {
         $this->favorites = $favorites;
     }
+
+    public function getIsBestDeal() { return $this->is_best_deal; }
+    public function setIsBestDeal($v) { $this->is_best_deal = $v; }
+
+    public function getIsImport() { return $this->is_import; }
+    public function setIsImport($v) { $this->is_import = $v; }
+
+    public function getIsFeatured() { return $this->is_featured; }
+    public function setIsFeatured($v) { $this->is_featured = $v; }
+
+    public function getShowOnHome() { return $this->show_on_home; }
+    public function setShowOnHome($v) { $this->show_on_home = $v; }
+
+    public function getIsGlobalAd() { return $this->is_global_ad; }
+    public function setIsGlobalAd($v) { $this->is_global_ad = $v; }
+
+    public function getAdExpiry() { return $this->ad_expiry; }
+    public function setAdExpiry($v) { $this->ad_expiry = $v; }
+
+    public function getFeaturedFee() { return $this->featured_fee; }
+    public function setFeaturedFee($v) { $this->featured_fee = $v; }
 
     public function jsonSerialize(): array
     {

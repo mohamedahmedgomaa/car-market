@@ -58,6 +58,7 @@ $adminModules = [
     'CarFeatures',
     'Models',
     'Banners',
+    'Dashboard',
 ];
 
 $loadModuleRoutes($adminModules, 'admin', 'auth:api_admin');
