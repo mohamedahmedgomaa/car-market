@@ -41,6 +41,12 @@ class CarDto implements \JsonSerializable
     private $ad_expiry;
     private $featured_fee;
 
+    private $horsepower;
+    private $torque;
+    private $engine_capacity;
+    private $phone_number;
+    private $whatsapp_number;
+
 
     public function getId()
     {
@@ -390,6 +396,21 @@ class CarDto implements \JsonSerializable
 
     public function getFeaturedFee() { return $this->featured_fee; }
     public function setFeaturedFee($v) { $this->featured_fee = $v; }
+
+    public function getHorsepower() { return $this->horsepower; }
+    public function setHorsepower($v) { $this->horsepower = $v; }
+
+    public function getTorque() { return $this->torque; }
+    public function setTorque($v) { $this->torque = $v; }
+
+    public function getEngineCapacity() { return $this->engine_capacity; }
+    public function setEngineCapacity($v) { $this->engine_capacity = $v; }
+
+    public function getPhoneNumber() { return $this->phone_number; }
+    public function setPhoneNumber($v) { $this->phone_number = $v; }
+
+    public function getWhatsappNumber() { return $this->whatsapp_number; }
+    public function setWhatsappNumber($v) { $this->whatsapp_number = $v; }
 
     public function jsonSerialize(): array
     {

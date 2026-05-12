@@ -51,6 +51,12 @@ class CarMapper
         $dto->setAdExpiry($model->ad_expiry);
         $dto->setFeaturedFee($model->featured_fee);
 
+        $dto->setHorsepower($model->horsepower);
+        $dto->setTorque($model->torque);
+        $dto->setEngineCapacity($model->engine_capacity);
+        $dto->setPhoneNumber($model->phone_number);
+        $dto->setWhatsappNumber($model->whatsapp_number);
+
         return $dto;
     }
 
@@ -89,6 +95,12 @@ class CarMapper
         $model->is_global_ad = $dto->getIsGlobalAd();
         $model->ad_expiry = $dto->getAdExpiry();
         $model->featured_fee = $dto->getFeaturedFee();
+
+        $model->horsepower = $dto->getHorsepower();
+        $model->torque = $dto->getTorque();
+        $model->engine_capacity = $dto->getEngineCapacity();
+        $model->phone_number = $dto->getPhoneNumber();
+        $model->whatsapp_number = $dto->getWhatsappNumber();
 
         return $model;
     }
@@ -143,6 +155,11 @@ class CarMapper
             'is_global_ad' => $dto->getIsGlobalAd(),
             'ad_expiry' => $dto->getAdExpiry(),
             'featured_fee' => $dto->getFeaturedFee(),
+            'horsepower' => $dto->getHorsepower(),
+            'torque' => $dto->getTorque(),
+            'engine_capacity' => $dto->getEngineCapacity(),
+            'phone_number' => $dto->getPhoneNumber(),
+            'whatsapp_number' => $dto->getWhatsappNumber(),
 
         ];
     }
