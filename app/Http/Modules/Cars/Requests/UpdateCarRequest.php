@@ -54,6 +54,8 @@ class UpdateCarRequest extends BaseRequest
             'is_import' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'show_on_home' => 'nullable|boolean',
+            'is_global_ad' => 'nullable|boolean',
+            'ad_expiry' => 'nullable|date',
             'featured_fee' => 'nullable|numeric|min:0',
 
             // Features

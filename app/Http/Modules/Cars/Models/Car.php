@@ -38,6 +38,19 @@ class Car extends BaseModel
         ];
     }
 
+    public static function getAllowedIncludes(): array
+    {
+        return [
+            'seller',
+            'brand',
+            'model',
+            'city',
+            'country',
+            'images',
+            'features',
+        ];
+    }
+
     public static function getAllowedFilters(): array
     {
         return [
