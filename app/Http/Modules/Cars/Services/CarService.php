@@ -154,7 +154,7 @@ class CarService extends BaseApiService
 
     public function updateStatus(UpdateCarStatusRequest $request, Car $car): JsonResponse
     {
-        $car->update(['status' => $request->status]);
+        $car->update($request->validated());
 
         return $this->responseWithData($this->toDto($car->fresh()), 200);
     }

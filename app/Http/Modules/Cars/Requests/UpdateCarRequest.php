@@ -50,6 +50,12 @@ class UpdateCarRequest extends BaseRequest
             'phone_number' => 'nullable|string|max:20',
             'whatsapp_number' => 'nullable|string|max:20',
 
+            'is_best_deal' => 'nullable|boolean',
+            'is_import' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
+            'show_on_home' => 'nullable|boolean',
+            'featured_fee' => 'nullable|numeric|min:0',
+
             // Features
             'features' => 'nullable|array',
             'features.*' => 'exists:car_features,id',

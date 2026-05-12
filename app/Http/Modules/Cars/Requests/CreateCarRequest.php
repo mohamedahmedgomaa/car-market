@@ -39,13 +39,19 @@ class CreateCarRequest extends BaseRequest
 
             'color' => 'nullable|string|max:50',
             'condition' => 'required|in:new,used',
-            
+
             'horsepower' => 'nullable|string|max:50',
             'torque' => 'nullable|string|max:50',
             'engine_capacity' => 'nullable|string|max:50',
 
             'phone_number' => 'nullable|string|max:20',
             'whatsapp_number' => 'nullable|string|max:20',
+
+            'is_best_deal' => 'nullable|boolean',
+            'is_import' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
+            'show_on_home' => 'nullable|boolean',
+            'featured_fee' => 'nullable|numeric|min:0',
 
             // 🔥 Features
             'features' => 'nullable|array',
