@@ -43,6 +43,14 @@ class CarMapper
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
+        $dto->setIsBestDeal($model->is_best_deal);
+        $dto->setIsImport($model->is_import);
+        $dto->setIsFeatured($model->is_featured);
+        $dto->setShowOnHome($model->show_on_home);
+        $dto->setIsGlobalAd($model->is_global_ad);
+        $dto->setAdExpiry($model->ad_expiry);
+        $dto->setFeaturedFee($model->featured_fee);
+
         return $dto;
     }
 
@@ -73,6 +81,14 @@ class CarMapper
         $model->status = $dto->getStatus();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
+
+        $model->is_best_deal = $dto->getIsBestDeal();
+        $model->is_import = $dto->getIsImport();
+        $model->is_featured = $dto->getIsFeatured();
+        $model->show_on_home = $dto->getShowOnHome();
+        $model->is_global_ad = $dto->getIsGlobalAd();
+        $model->ad_expiry = $dto->getAdExpiry();
+        $model->featured_fee = $dto->getFeaturedFee();
 
         return $model;
     }
@@ -120,6 +136,13 @@ class CarMapper
             'status' => $dto->getStatus(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
+            'is_best_deal' => $dto->getIsBestDeal(),
+            'is_import' => $dto->getIsImport(),
+            'is_featured' => $dto->getIsFeatured(),
+            'show_on_home' => $dto->getShowOnHome(),
+            'is_global_ad' => $dto->getIsGlobalAd(),
+            'ad_expiry' => $dto->getAdExpiry(),
+            'featured_fee' => $dto->getFeaturedFee(),
 
         ];
     }
