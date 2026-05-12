@@ -12,9 +12,9 @@ class BannerController extends Controller
     {
         // If it's an admin, we show all banners. If user/public, we only show active banners.
         $isAdmin = $request->route()->getPrefix() === 'api/admin' || str_contains($request->route()->getPrefix(), 'admin');
-        
+
         $query = Banner::query()->orderBy('created_at', 'desc');
-        
+
         if (!$isAdmin) {
             $query->where('is_active', true);
         }
@@ -28,7 +28,7 @@ class BannerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', // max 5MB
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240', // max 10MB to support 2K quality
         ]);
 
         $url = null;
@@ -40,8 +40,8 @@ class BannerController extends Controller
                     'folder' => 'banners',
                     'resource_type' => 'image',
                     'transformation' => [
-                        'width' => 800,
-                        'height' => 500,
+                        'width' => 2560, // رفع الجودة لـ 2K
+                        'height' => 1600,
                         'crop' => 'fill',
                         'gravity' => 'center'
                     ]
@@ -90,7 +90,7 @@ class BannerController extends Controller
     public function destroy($id)
     {
         $banner = Banner::findOrFail($id);
-        
+
         // Optional: delete from Cloudinary if needed, based on public_id
         // We are just deleting the record for simplicity
         $banner->delete();

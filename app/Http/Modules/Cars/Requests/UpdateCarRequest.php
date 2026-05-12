@@ -35,13 +35,20 @@ class UpdateCarRequest extends BaseRequest
             'mileage' => 'required|integer|min:0',
 
             'transmission' => ['required', Rule::in(['manual', 'automatic'])],
-            'fuel_type' => ['required', Rule::in(['petrol', 'diesel', 'electric', 'hybrid'])],
+            'fuel_type' => ['required', Rule::in(['petrol', 'diesel', 'electric', 'hybrid', 'mild_hybrid', 'reev'])],
             'drivetrain' => ['required', Rule::in(['fwd', 'rwd', 'awd', '4wd'])],
 
             // اللون هيجي من الفرونت كـ "#RRGGBB" (نخليه string)
             'color' => 'nullable|string|max:50',
 
             'condition' => ['required', Rule::in(['new', 'used'])],
+
+            'horsepower' => 'nullable|string|max:50',
+            'torque' => 'nullable|string|max:50',
+            'engine_capacity' => 'nullable|string|max:50',
+
+            'phone_number' => 'nullable|string|max:20',
+            'whatsapp_number' => 'nullable|string|max:20',
 
             // Features
             'features' => 'nullable|array',

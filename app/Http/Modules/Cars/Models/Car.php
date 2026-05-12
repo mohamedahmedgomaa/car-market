@@ -25,7 +25,7 @@ class Car extends BaseModel
 
     protected $table = 'cars';
 
-    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'horsepower', 'torque', 'engine_capacity', 'phone_number', 'whatsapp_number', 'status', 'created_at', 'updated_at'];
 
     public $translatable = ['title', 'description'];
 
@@ -59,6 +59,11 @@ class Car extends BaseModel
             AllowedFilter::exact('drivetrain'),
             AllowedFilter::exact('color'),
             AllowedFilter::exact('condition'),
+            AllowedFilter::exact('horsepower'),
+            AllowedFilter::exact('torque'),
+            AllowedFilter::exact('engine_capacity'),
+            AllowedFilter::exact('phone_number'),
+            AllowedFilter::exact('whatsapp_number'),
             AllowedFilter::exact('status'),
             AllowedFilter::exact('created_at'),
             AllowedFilter::exact('updated_at'),

@@ -34,11 +34,18 @@ class CreateCarRequest extends BaseRequest
             'mileage' => 'required|integer|min:0',
 
             'transmission' => 'required|in:manual,automatic',
-            'fuel_type' => 'required|in:petrol,diesel,electric,hybrid',
+            'fuel_type' => 'required|in:petrol,diesel,electric,hybrid,mild_hybrid,reev',
             'drivetrain' => 'required|in:fwd,rwd,awd,4wd',
 
             'color' => 'nullable|string|max:50',
             'condition' => 'required|in:new,used',
+            
+            'horsepower' => 'nullable|string|max:50',
+            'torque' => 'nullable|string|max:50',
+            'engine_capacity' => 'nullable|string|max:50',
+
+            'phone_number' => 'nullable|string|max:20',
+            'whatsapp_number' => 'nullable|string|max:20',
 
             // 🔥 Features
             'features' => 'nullable|array',
