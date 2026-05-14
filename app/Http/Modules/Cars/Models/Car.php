@@ -25,7 +25,7 @@ class Car extends BaseModel
 
     protected $table = 'cars';
 
-    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'horsepower', 'torque', 'engine_capacity', 'phone_number', 'whatsapp_number', 'is_best_deal', 'is_import', 'is_featured', 'show_on_home', 'is_global_ad', 'ad_expiry', 'featured_fee', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'horsepower', 'torque', 'engine_capacity', 'cylinders', 'phone_number', 'whatsapp_number', 'is_best_deal', 'is_import', 'is_featured', 'show_on_home', 'is_global_ad', 'ad_expiry', 'featured_fee', 'status', 'created_at', 'updated_at'];
 
     public $translatable = ['title', 'description'];
 
@@ -75,6 +75,7 @@ class Car extends BaseModel
             AllowedFilter::exact('horsepower'),
             AllowedFilter::exact('torque'),
             AllowedFilter::exact('engine_capacity'),
+            AllowedFilter::exact('cylinders'),
             AllowedFilter::exact('phone_number'),
             AllowedFilter::exact('whatsapp_number'),
             AllowedFilter::exact('is_best_deal'),
