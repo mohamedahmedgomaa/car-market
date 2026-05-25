@@ -47,6 +47,20 @@ class SellerService extends BaseApiService
             // $data['store_logo_public_id'] = $result['public_id'] ?? null;
         }
 
+        if ($request->hasFile('tax_card_image')) {
+            $file = $request->file('tax_card_image');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'tax_card_images',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['tax_card_image'] = $result['secure_url'] ?? null;
+        }
+
         $seller = Seller::create($data);
 
         return $this->responseWithData($this->toDto($seller), 201);
@@ -71,6 +85,20 @@ class SellerService extends BaseApiService
 
             // لو عندك عمود:
             // $data['store_logo_public_id'] = $result['public_id'] ?? null;
+        }
+
+        if ($request->hasFile('tax_card_image')) {
+            $file = $request->file('tax_card_image');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'tax_card_images',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['tax_card_image'] = $result['secure_url'] ?? null;
         }
 
         $data['is_verified'] = false;
@@ -118,6 +146,20 @@ class SellerService extends BaseApiService
 
             // لو عندك عمود:
             // $data['store_logo_public_id'] = $result['public_id'] ?? null;
+        }
+
+        if ($request->hasFile('tax_card_image')) {
+            $file = $request->file('tax_card_image');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'tax_card_images',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['tax_card_image'] = $result['secure_url'] ?? null;
         }
 
         return $seller->update($data)
