@@ -54,6 +54,7 @@ class CarMapper
         $dto->setHorsepower($model->horsepower);
         $dto->setTorque($model->torque);
         $dto->setEngineCapacity($model->engine_capacity);
+        $dto->setCylinders($model->cylinders);
         $dto->setPhoneNumber($model->phone_number);
         $dto->setWhatsappNumber($model->whatsapp_number);
 
@@ -99,6 +100,7 @@ class CarMapper
         $model->horsepower = $dto->getHorsepower();
         $model->torque = $dto->getTorque();
         $model->engine_capacity = $dto->getEngineCapacity();
+        $model->cylinders = $dto->getCylinders();
         $model->phone_number = $dto->getPhoneNumber();
         $model->whatsapp_number = $dto->getWhatsappNumber();
 
@@ -158,6 +160,7 @@ class CarMapper
             'horsepower' => $dto->getHorsepower(),
             'torque' => $dto->getTorque(),
             'engine_capacity' => $dto->getEngineCapacity(),
+            'cylinders' => $dto->getCylinders(),
             'phone_number' => $dto->getPhoneNumber(),
             'whatsapp_number' => $dto->getWhatsappNumber(),
 
