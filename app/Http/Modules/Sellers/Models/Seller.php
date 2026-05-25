@@ -17,8 +17,8 @@ class Seller extends BaseAuthModel
 
     protected $table = 'sellers';
 
-    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'store_name', 'store_description', 'store_logo', 'business_license', 'bank_account', 'is_verified', 'is_active', 'created_at', 'updated_at'];
-    public $translatable = ['store_name', 'store_description'];
+    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'created_at', 'updated_at'];
+    public $translatable = ['store_name', 'store_description', 'address'];
     protected $hidden = [
         'password',
         'remember_token',
@@ -41,11 +41,14 @@ class Seller extends BaseAuthModel
             AllowedFilter::exact('email'),
             AllowedFilter::exact('password'),
             AllowedFilter::exact('phone'),
+            AllowedFilter::exact('address'),
             AllowedFilter::exact('store_name'),
             AllowedFilter::exact('store_description'),
             AllowedFilter::exact('store_logo'),
             AllowedFilter::exact('business_license'),
             AllowedFilter::exact('bank_account'),
+            AllowedFilter::exact('tax_number'),
+            AllowedFilter::exact('tax_card_image'),
             AllowedFilter::exact('is_verified'),
             AllowedFilter::exact('is_active'),
             AllowedFilter::exact('cars.status'),

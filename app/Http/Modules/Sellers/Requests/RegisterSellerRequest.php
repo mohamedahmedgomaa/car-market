@@ -26,6 +26,10 @@ class RegisterSellerRequest extends BaseRequest
             'store_logo' => 'nullable|image|max:2048',
             'business_license' => 'nullable|string|max:255',
             'bank_account' => 'nullable|string|max:255',
+            'address_en' => 'nullable|string|max:255',
+            'address_ar' => 'nullable|string|max:255',
+            'tax_number' => 'nullable|string|max:255',
+            'tax_card_image' => 'nullable|image|max:4096',
             'is_verified' => 'nullable|boolean',
         ];
     }
@@ -41,6 +45,10 @@ class RegisterSellerRequest extends BaseRequest
             'store_description' => [
                 'en' => $this->store_description_en,
                 'ar' => $this->store_description_ar,
+            ],
+            'address' => [
+                'en' => $this->address_en,
+                'ar' => $this->address_ar,
             ]
         ]);
     }
