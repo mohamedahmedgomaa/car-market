@@ -15,6 +15,10 @@ class BannerController extends Controller
 
         $query = Banner::query()->orderBy('created_at', 'desc');
 
+        if ($request->has('type')) {
+            $query->where('type', $request->query('type'));
+        }
+
         if (!$isAdmin) {
             $query->where('is_active', true);
         }
@@ -29,22 +33,34 @@ class BannerController extends Controller
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240', // max 10MB to support 2K quality
+            'type' => 'nullable|string|in:hero,sidebar',
         ]);
 
+        $type = $request->input('type', 'hero');
         $url = null;
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
+            
+            $transformation = [
+                'crop' => 'fill',
+                'gravity' => 'center'
+            ];
+
+            if ($type === 'sidebar') {
+                $transformation['width'] = 640;
+                $transformation['height'] = 420;
+            } else {
+                $transformation['width'] = 2560;
+                $transformation['height'] = 1600;
+            }
+
             $result = cloudinary()->uploadApi()->upload(
                 $image->getRealPath(),
                 [
                     'folder' => 'banners',
                     'resource_type' => 'image',
-                    'transformation' => [
-                        'width' => 2560, // رفع الجودة لـ 2K
-                        'height' => 1600,
-                        'crop' => 'fill',
-                        'gravity' => 'center'
-                    ]
+                    'transformation' => $transformation
                 ]
             );
             $url = $result['secure_url'] ?? null;
@@ -60,6 +76,7 @@ class BannerController extends Controller
         $banner = Banner::create([
             'image_path' => $url,
             'is_active' => true,
+            'type' => $type,
         ]);
 
         return response()->json([
