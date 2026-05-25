@@ -44,6 +44,7 @@ class CarDto implements \JsonSerializable
     private $horsepower;
     private $torque;
     private $engine_capacity;
+    private $cylinders;
     private $phone_number;
     private $whatsapp_number;
 
@@ -405,6 +406,9 @@ class CarDto implements \JsonSerializable
 
     public function getEngineCapacity() { return $this->engine_capacity; }
     public function setEngineCapacity($v) { $this->engine_capacity = $v; }
+
+    public function getCylinders() { return $this->cylinders; }
+    public function setCylinders($v) { $this->cylinders = $v; }
 
     public function getPhoneNumber() { return $this->phone_number; }
     public function setPhoneNumber($v) { $this->phone_number = $v; }
