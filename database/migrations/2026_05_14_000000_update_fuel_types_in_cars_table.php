@@ -14,9 +14,10 @@ return new class extends Migration
     {
         // For PostgreSQL, we need to update the check constraint for the fuel_type enum mapping.
         // Laravel's enum columns in Postgres are actually varchar columns with a CHECK constraint.
-        
-        DB::statement("ALTER TABLE cars DROP CONSTRAINT IF EXISTS cars_fuel_type_check");
-        DB::statement("ALTER TABLE cars ADD CONSTRAINT cars_fuel_type_check CHECK (fuel_type IN ('petrol', 'diesel', 'electric', 'hybrid', 'mild_hybrid', 'reev'))");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE cars DROP CONSTRAINT IF EXISTS cars_fuel_type_check");
+            DB::statement("ALTER TABLE cars ADD CONSTRAINT cars_fuel_type_check CHECK (fuel_type IN ('petrol', 'diesel', 'electric', 'hybrid', 'mild_hybrid', 'reev'))");
+        }
     }
 
     /**
@@ -24,7 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE cars DROP CONSTRAINT IF EXISTS cars_fuel_type_check");
-        DB::statement("ALTER TABLE cars ADD CONSTRAINT cars_fuel_type_check CHECK (fuel_type IN ('petrol', 'diesel', 'electric', 'hybrid'))");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE cars DROP CONSTRAINT IF EXISTS cars_fuel_type_check");
+            DB::statement("ALTER TABLE cars ADD CONSTRAINT cars_fuel_type_check CHECK (fuel_type IN ('petrol', 'diesel', 'electric', 'hybrid'))");
+        }
     }
 };

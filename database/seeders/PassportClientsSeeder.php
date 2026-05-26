@@ -21,10 +21,8 @@ class PassportClientsSeeder extends Seeder
                 ->exists();
 
             if (! $exists) {
-                $repo->createPersonalAccessClient(
-                    null,
+                $repo->createPersonalAccessGrantClient(
                     "Personal Access Client ({$provider})",
-                    config('app.url'),
                     $provider
                 );
             }
