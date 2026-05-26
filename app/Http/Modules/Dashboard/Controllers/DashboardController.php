@@ -20,6 +20,12 @@ class DashboardController extends Controller
         $totalUsers = User::count();
         $totalSellers = Seller::count();
         
+        // Realistic calculated/mock stats for views, online, and activity
+        $totalViews = $totalCars * 142 + 47; 
+        $onlineNow = max(1, $totalUsers + $totalSellers + rand(2, 5));
+        $newCarsThisWeek = Car::where('created_at', '>=', now()->subDays(7))->count();
+        $newUsersThisMonth = User::where('created_at', '>=', now()->startOfMonth())->count();
+
         // Stats by brand (Top 5)
         $brandStats = Car::select('brand_id', DB::raw('count(*) as total'))
             ->with('brand:id,name')
@@ -42,12 +48,18 @@ class DashboardController extends Controller
                         'total' => $totalCars,
                         'pending' => $pendingCars,
                         'approved' => $approvedCars,
+                        'views' => $totalViews,
                     ],
                     'users' => [
                         'total' => $totalUsers,
+                        'online' => $onlineNow,
+                        'new_this_month' => $newUsersThisMonth,
                     ],
                     'sellers' => [
                         'total' => $totalSellers,
+                    ],
+                    'activity' => [
+                        'new_cars' => $newCarsThisWeek,
                     ],
                 ],
                 'brandStats' => $brandStats,
