@@ -17,7 +17,7 @@ class Seller extends BaseAuthModel
 
     protected $table = 'sellers';
 
-    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'city_id', 'governorate_id', 'created_at', 'updated_at'];
     public $translatable = ['store_name', 'store_description', 'address'];
     protected $hidden = [
         'password',
@@ -51,6 +51,8 @@ class Seller extends BaseAuthModel
             AllowedFilter::exact('tax_card_image'),
             AllowedFilter::exact('is_verified'),
             AllowedFilter::exact('is_active'),
+            AllowedFilter::exact('city_id'),
+            AllowedFilter::exact('governorate_id'),
             AllowedFilter::exact('cars.status'),
             AllowedFilter::exact('created_at'),
             AllowedFilter::exact('updated_at')
@@ -66,6 +68,17 @@ class Seller extends BaseAuthModel
     {
         return $this->hasMany(Car::class, 'seller_id');
     }
+
+    public function city()
+    {
+        return $this->belongsTo(\App\Http\Modules\Cities\Models\City::class, 'city_id');
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(\App\Http\Modules\Governorates\Models\Governorate::class, 'governorate_id');
+    }
+
     public static function getDefaultIncludedRelationsCount(): array
     {
         return ['cars'];

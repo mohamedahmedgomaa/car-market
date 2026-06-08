@@ -19,6 +19,7 @@ class CreateCarRequest extends BaseRequest
             'model_id' => 'required|exists:models,id',
 
             'country_id' => 'required|exists:countries,id',
+            'governorate_id' => 'required|exists:governorates,id',
             'city_id' => 'required|exists:cities,id',
 
             'type' => 'required|in:car,motorcycle',

@@ -17,7 +17,50 @@ class SellerDto implements \JsonSerializable
     private $is_verified;
     private $is_active;
     private $created_at;
-    private $updated_at;
+    private $city_id;
+    private $governorate_id;
+    private $city;
+    private $governorate;
+
+    public function getCityId()
+    {
+        return $this->city_id;
+    }
+
+    public function setCityId($value): void
+    {
+        $this->city_id = $value;
+    }
+
+    public function getGovernorateId()
+    {
+        return $this->governorate_id;
+    }
+
+    public function setGovernorateId($value): void
+    {
+        $this->governorate_id = $value;
+    }
+
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    public function setCity($value): void
+    {
+        $this->city = $value;
+    }
+
+    public function getGovernorate()
+    {
+        return $this->governorate;
+    }
+
+    public function setGovernorate($value): void
+    {
+        $this->governorate = $value;
+    }
 
 
     public function getId()

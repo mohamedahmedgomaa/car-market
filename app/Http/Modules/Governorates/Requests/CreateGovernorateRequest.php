@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Modules\Cities\Requests;
+namespace App\Http\Modules\Governorates\Requests;
 
 use Gomaa\Base\Base\Requests\BaseRequest;
 
-class CreateCityRequest extends BaseRequest
+class CreateGovernorateRequest extends BaseRequest
 {
     public function authorize(): bool
     {
@@ -15,11 +15,11 @@ class CreateCityRequest extends BaseRequest
     {
         return [
             'country_id' => 'required|exists:countries,id',
-            'governorate_id' => 'required|exists:governorates,id',
-            'name_ar' => 'required',
-            'name_en' => 'required',
+            'name_ar' => 'required|string',
+            'name_en' => 'required|string',
         ];
     }
+
     public function passedValidation()
     {
         $this->merge([
