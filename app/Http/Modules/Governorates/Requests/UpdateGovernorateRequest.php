@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Modules\Cities\Requests;
+namespace App\Http\Modules\Governorates\Requests;
 
 use Gomaa\Base\Base\Requests\BaseRequest;
 
-class UpdateCityRequest extends BaseRequest
+class UpdateGovernorateRequest extends BaseRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +15,8 @@ class UpdateCityRequest extends BaseRequest
     {
         return [
             'country_id' => 'required|exists:countries,id',
-            'governorate_id' => 'nullable|exists:governorates,id',
-            'name_ar' => 'nullable',
-            'name_en' => 'nullable',
+            'name_ar' => 'nullable|string',
+            'name_en' => 'nullable|string',
         ];
     }
 

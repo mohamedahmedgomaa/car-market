@@ -13,6 +13,8 @@ class CarDto implements \JsonSerializable
     private ?object $model = null;
     private $city_id;
     private ?object $city = null;
+    private $governorate_id;
+    private ?object $governorate = null;
     private $country_id;
     private ?object $country = null;
     private $type;
@@ -97,6 +99,16 @@ class CarDto implements \JsonSerializable
     public function setCityId($value): void
     {
         $this->city_id = $value;
+    }
+
+    public function getGovernorateId()
+    {
+        return $this->governorate_id;
+    }
+
+    public function setGovernorateId($value): void
+    {
+        $this->governorate_id = $value;
     }
 
     public function getCountryId()
@@ -265,6 +277,11 @@ class CarDto implements \JsonSerializable
         $this->city = $city;
     }
 
+    public function setGovernorate(?object $governorate): void
+    {
+        $this->governorate = $governorate;
+    }
+
     /**
      * @param object|null $country
      */
@@ -311,6 +328,11 @@ class CarDto implements \JsonSerializable
     public function getCity(): ?object
     {
         return $this->city;
+    }
+
+    public function getGovernorate(): ?object
+    {
+        return $this->governorate;
     }
 
     /**

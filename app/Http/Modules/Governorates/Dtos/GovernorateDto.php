@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Http\Modules\Cities\Dtos;
+namespace App\Http\Modules\Governorates\Dtos;
 
-class CityDto implements \JsonSerializable
+class GovernorateDto implements \JsonSerializable
 {
     private int $id;
     private int $country_id;
-    private ?int $governorate_id = null;
     private $name;
     private string $created_at;
     private string $updated_at;
     private ?object $country = null;
-    private ?object $governorate = null;
-
 
     public function getId()
     {
@@ -32,16 +29,6 @@ class CityDto implements \JsonSerializable
     public function setCountryId($value): void
     {
         $this->country_id = $value;
-    }
-
-    public function getGovernorateId()
-    {
-        return $this->governorate_id;
-    }
-
-    public function setGovernorateId($value): void
-    {
-        $this->governorate_id = $value;
     }
 
     public function getName()
@@ -82,16 +69,6 @@ class CityDto implements \JsonSerializable
     public function setCountry(?object $value): void
     {
         $this->country = $value;
-    }
-
-    public function getGovernorate(): ?object
-    {
-        return $this->governorate;
-    }
-
-    public function setGovernorate(?object $value): void
-    {
-        $this->governorate = $value;
     }
 
     public function jsonSerialize(): array

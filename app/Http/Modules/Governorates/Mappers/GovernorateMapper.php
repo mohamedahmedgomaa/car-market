@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Http\Modules\Cities\Mappers;
+namespace App\Http\Modules\Governorates\Mappers;
 
-use App\Http\Modules\Cities\Models\City;
-use App\Http\Modules\Cities\Dtos\CityDto;
+use App\Http\Modules\Governorates\Models\Governorate;
+use App\Http\Modules\Governorates\Dtos\GovernorateDto;
 
-class CityMapper
+class GovernorateMapper
 {
     /**
      * Convert Model → DTO
      */
-    public function modelToDto(City $model, ?CityDto $dto = null): CityDto
+    public function modelToDto(Governorate $model, ?GovernorateDto $dto = null): GovernorateDto
     {
-        $dto = $dto ?? new CityDto();
+        $dto = $dto ?? new GovernorateDto();
 
         $dto->setId($model->id);
         $dto->setCountryId($model->country_id);
         $dto->setCountry($model->country);
-        $dto->setGovernorateId($model->governorate_id);
-        $dto->setGovernorate($model->governorate);
         $dto->setName($model->getTranslations('name'));
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
@@ -29,13 +27,12 @@ class CityMapper
     /**
      * Convert DTO → Model
      */
-    public function dtoToModel(CityDto $dto, ?City $model = null): City
+    public function dtoToModel(GovernorateDto $dto, ?Governorate $model = null): Governorate
     {
-        $model = $model ?? new City();
+        $model = $model ?? new Governorate();
 
         $model->id = $dto->getId();
         $model->country_id = $dto->getCountryId();
-        $model->governorate_id = $dto->getGovernorateId();
         $model->name = $dto->getName();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
@@ -46,9 +43,9 @@ class CityMapper
     /**
      * Convert Array → DTO
      */
-    public function arrayToDto(array $data): CityDto
+    public function arrayToDto(array $data): GovernorateDto
     {
-        $dto = new CityDto();
+        $dto = new GovernorateDto();
 
         foreach ($data as $key => $value) {
             $method = 'set' . \Illuminate\Support\Str::studly($key);
@@ -63,12 +60,11 @@ class CityMapper
     /**
      * Convert DTO → Array
      */
-    public function dtoToArray(CityDto $dto): array
+    public function dtoToArray(GovernorateDto $dto): array
     {
         return [
             'id' => $dto->getId(),
             'country_id' => $dto->getCountryId(),
-            'governorate_id' => $dto->getGovernorateId(),
             'name' => $dto->getName(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),

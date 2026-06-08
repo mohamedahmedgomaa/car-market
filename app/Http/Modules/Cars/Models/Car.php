@@ -25,7 +25,7 @@ class Car extends BaseModel
 
     protected $table = 'cars';
 
-    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'horsepower', 'torque', 'engine_capacity', 'cylinders', 'phone_number', 'whatsapp_number', 'is_best_deal', 'is_import', 'is_featured', 'show_on_home', 'is_global_ad', 'ad_expiry', 'featured_fee', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'governorate_id', 'country_id', 'type', 'title', 'description', 'price', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'horsepower', 'torque', 'engine_capacity', 'cylinders', 'phone_number', 'whatsapp_number', 'is_best_deal', 'is_import', 'is_featured', 'show_on_home', 'is_global_ad', 'ad_expiry', 'featured_fee', 'status', 'created_at', 'updated_at'];
 
     public $translatable = ['title', 'description'];
 
@@ -45,6 +45,7 @@ class Car extends BaseModel
             'brand',
             'model',
             'city',
+            'governorate',
             'country',
             'images',
             'features',
@@ -60,6 +61,7 @@ class Car extends BaseModel
             AllowedFilter::exact('brand_id'),
             AllowedFilter::exact('model_id'),
             AllowedFilter::exact('city_id'),
+            AllowedFilter::exact('governorate_id'),
             AllowedFilter::exact('country_id'),
             AllowedFilter::exact('type'),
             AllowedFilter::exact('title'),
@@ -122,6 +124,11 @@ class Car extends BaseModel
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(\App\Http\Modules\Governorates\Models\Governorate::class, 'governorate_id');
     }
 
     public function country()

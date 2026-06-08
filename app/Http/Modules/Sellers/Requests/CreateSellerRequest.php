@@ -26,6 +26,8 @@ class CreateSellerRequest extends BaseRequest
             'store_logo' => 'nullable|image|max:2048',
             'business_license' => 'nullable|string',
             'bank_account' => 'nullable|string',
+            'city_id' => 'nullable|exists:cities,id',
+            'governorate_id' => 'nullable|exists:governorates,id',
             'is_verified' => 'nullable|boolean',
         ];
     }

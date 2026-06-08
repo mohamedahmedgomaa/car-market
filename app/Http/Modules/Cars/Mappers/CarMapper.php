@@ -23,6 +23,8 @@ class CarMapper
         $dto->setModel($model->model);
         $dto->setCityId($model->city_id);
         $dto->setCity($model->city);
+        $dto->setGovernorateId($model->governorate_id);
+        $dto->setGovernorate($model->governorate);
         $dto->setCountryId($model->country_id);
         $dto->setCountry($model->country);
         $dto->setType($model->type);
@@ -73,6 +75,7 @@ class CarMapper
         $model->brand_id = $dto->getBrandId();
         $model->model_id = $dto->getModelId();
         $model->city_id = $dto->getCityId();
+        $model->governorate_id = $dto->getGovernorateId();
         $model->country_id = $dto->getCountryId();
         $model->type = $dto->getType();
         $model->title = $dto->getTitle();
@@ -135,6 +138,7 @@ class CarMapper
             'brand_id' => $dto->getBrandId(),
             'model_id' => $dto->getModelId(),
             'city_id' => $dto->getCityId(),
+            'governorate_id' => $dto->getGovernorateId(),
             'country_id' => $dto->getCountryId(),
             'type' => $dto->getType(),
             'title' => $dto->getTitle(),
@@ -163,7 +167,6 @@ class CarMapper
             'cylinders' => $dto->getCylinders(),
             'phone_number' => $dto->getPhoneNumber(),
             'whatsapp_number' => $dto->getWhatsappNumber(),
-
         ];
     }
 }

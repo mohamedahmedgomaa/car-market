@@ -26,6 +26,10 @@ class SellerMapper
         $dto->setBankAccount($model->bank_account);
         $dto->setIsVerified($model->is_verified);
         $dto->setIsActive($model->is_active);
+        $dto->setCityId($model->city_id);
+        $dto->setGovernorateId($model->governorate_id);
+        $dto->setCity($model->city);
+        $dto->setGovernorate($model->governorate);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
@@ -51,6 +55,8 @@ class SellerMapper
         $model->bank_account = $dto->getBankAccount();
         $model->is_verified = $dto->getIsVerified();
         $model->is_active = $dto->getIsActive();
+        $model->city_id = $dto->getCityId();
+        $model->governorate_id = $dto->getGovernorateId();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
 
@@ -92,9 +98,10 @@ class SellerMapper
             'bank_account' => $dto->getBankAccount(),
             'is_verified' => $dto->getIsVerified(),
             'is_active' => $dto->getIsActive(),
+            'city_id' => $dto->getCityId(),
+            'governorate_id' => $dto->getGovernorateId(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
-
         ];
     }
 }
