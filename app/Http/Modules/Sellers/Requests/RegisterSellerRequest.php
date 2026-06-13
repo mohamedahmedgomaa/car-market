@@ -30,6 +30,7 @@ class RegisterSellerRequest extends BaseRequest
             'address_ar' => 'nullable|string|max:255',
             'city_id' => 'nullable|exists:cities,id',
             'governorate_id' => 'nullable|exists:governorates,id',
+            'map_url' => 'nullable|string|max:2048',
             'tax_number' => 'nullable|string|max:255',
             'tax_card_image' => 'nullable|image|max:4096',
             'is_verified' => 'nullable|boolean',

@@ -21,6 +21,28 @@ class SellerDto implements \JsonSerializable
     private $governorate_id;
     private $city;
     private $governorate;
+    private $address;
+    private $map_url;
+
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    public function setAddress($value): void
+    {
+        $this->address = $value;
+    }
+
+    public function getMapUrl()
+    {
+        return $this->map_url;
+    }
+
+    public function setMapUrl($value): void
+    {
+        $this->map_url = $value;
+    }
 
     public function getCityId()
     {
