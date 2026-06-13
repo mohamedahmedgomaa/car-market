@@ -30,6 +30,8 @@ class SellerMapper
         $dto->setGovernorateId($model->governorate_id);
         $dto->setCity($model->city);
         $dto->setGovernorate($model->governorate);
+        $dto->setAddress($model->getTranslations('address'));
+        $dto->setMapUrl($model->map_url);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
@@ -57,6 +59,8 @@ class SellerMapper
         $model->is_active = $dto->getIsActive();
         $model->city_id = $dto->getCityId();
         $model->governorate_id = $dto->getGovernorateId();
+        $model->address = $dto->getAddress();
+        $model->map_url = $dto->getMapUrl();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
 
@@ -100,6 +104,10 @@ class SellerMapper
             'is_active' => $dto->getIsActive(),
             'city_id' => $dto->getCityId(),
             'governorate_id' => $dto->getGovernorateId(),
+            'city' => $dto->getCity(),
+            'governorate' => $dto->getGovernorate(),
+            'address' => $dto->getAddress(),
+            'map_url' => $dto->getMapUrl(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
         ];

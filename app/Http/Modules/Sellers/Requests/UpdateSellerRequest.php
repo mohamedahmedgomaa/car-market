@@ -28,6 +28,9 @@ class UpdateSellerRequest extends BaseRequest
             'bank_account' => 'nullable|string|max:255',
             'city_id' => 'nullable|exists:cities,id',
             'governorate_id' => 'nullable|exists:governorates,id',
+            'address_ar' => 'nullable|string|max:255',
+            'address_en' => 'nullable|string|max:255',
+            'map_url' => 'nullable|string|max:2048',
         ];
     }
 
@@ -55,6 +58,17 @@ class UpdateSellerRequest extends BaseRequest
         }
         if (!empty($storeDescription)) {
             $data['store_description'] = $storeDescription;
+        }
+
+        $address = [];
+        if (!is_null($this->address_en)) {
+            $address['en'] = $this->address_en;
+        }
+        if (!is_null($this->address_ar)) {
+            $address['ar'] = $this->address_ar;
+        }
+        if (!empty($address)) {
+            $data['address'] = $address;
         }
 
         $this->merge($data);

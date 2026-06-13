@@ -17,7 +17,9 @@ class Seller extends BaseAuthModel
 
     protected $table = 'sellers';
 
-    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'city_id', 'governorate_id', 'created_at', 'updated_at'];
+    protected $with = ['city', 'governorate'];
+
+    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'city_id', 'governorate_id', 'map_url', 'created_at', 'updated_at'];
     public $translatable = ['store_name', 'store_description', 'address'];
     protected $hidden = [
         'password',

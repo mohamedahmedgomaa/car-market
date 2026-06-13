@@ -16,6 +16,9 @@ class CarMapper
 
         $dto->setId($model->id);
         $dto->setSellerId($model->seller_id);
+        if ($model->seller) {
+            $model->seller->loadMissing(['city', 'governorate']);
+        }
         $dto->setSeller($model->seller);
         $dto->setBrandId($model->brand_id);
         $dto->setBrand($model->brand);
