@@ -28,8 +28,23 @@ class CreateSellerRequest extends BaseRequest
             'bank_account' => 'nullable|string',
             'city_id' => 'nullable|exists:cities,id',
             'governorate_id' => 'nullable|exists:governorates,id',
+            'address_en' => 'nullable|string|max:255',
+            'address_ar' => 'nullable|string|max:255',
+            'map_url' => 'nullable|string|max:2048',
+            'sort_order' => 'nullable|integer',
             'is_verified' => 'nullable|boolean',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $inputs = $this->all();
+        foreach ($inputs as $key => $value) {
+            if ($value === 'null' || $value === 'undefined') {
+                $inputs[$key] = null;
+            }
+        }
+        $this->replace($inputs);
     }
 
     public function passedValidation()
@@ -43,6 +58,10 @@ class CreateSellerRequest extends BaseRequest
             'store_description' => [
                 'en' => $this->store_description_en,
                 'ar' => $this->store_description_ar,
+            ],
+            'address' => [
+                'en' => $this->address_en,
+                'ar' => $this->address_ar,
             ]
         ]);
     }

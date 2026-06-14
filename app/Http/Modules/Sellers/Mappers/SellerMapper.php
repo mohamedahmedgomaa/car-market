@@ -32,6 +32,7 @@ class SellerMapper
         $dto->setGovernorate($model->governorate);
         $dto->setAddress($model->getTranslations('address'));
         $dto->setMapUrl($model->map_url);
+        $dto->setSortOrder($model->sort_order);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
@@ -61,6 +62,7 @@ class SellerMapper
         $model->governorate_id = $dto->getGovernorateId();
         $model->address = $dto->getAddress();
         $model->map_url = $dto->getMapUrl();
+        $model->sort_order = $dto->getSortOrder();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
 
@@ -108,6 +110,7 @@ class SellerMapper
             'governorate' => $dto->getGovernorate(),
             'address' => $dto->getAddress(),
             'map_url' => $dto->getMapUrl(),
+            'sort_order' => $dto->getSortOrder(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
         ];

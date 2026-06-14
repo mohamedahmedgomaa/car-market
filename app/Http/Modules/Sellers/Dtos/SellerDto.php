@@ -23,6 +23,17 @@ class SellerDto implements \JsonSerializable
     private $governorate;
     private $address;
     private $map_url;
+    private $sort_order;
+
+    public function getSortOrder()
+    {
+        return $this->sort_order;
+    }
+
+    public function setSortOrder($value): void
+    {
+        $this->sort_order = $value;
+    }
 
     public function getAddress()
     {
