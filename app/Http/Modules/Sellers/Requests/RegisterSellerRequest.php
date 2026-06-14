@@ -12,6 +12,17 @@ class RegisterSellerRequest extends BaseRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $inputs = $this->all();
+        foreach ($inputs as $key => $value) {
+            if ($value === 'null' || $value === 'undefined') {
+                $inputs[$key] = null;
+            }
+        }
+        $this->replace($inputs);
+    }
+
     public function rules(): array
     {
         return [

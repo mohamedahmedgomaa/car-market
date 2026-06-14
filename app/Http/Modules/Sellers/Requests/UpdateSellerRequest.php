@@ -31,7 +31,19 @@ class UpdateSellerRequest extends BaseRequest
             'address_ar' => 'nullable|string|max:255',
             'address_en' => 'nullable|string|max:255',
             'map_url' => 'nullable|string|max:2048',
+            'sort_order' => 'nullable|integer',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $inputs = $this->all();
+        foreach ($inputs as $key => $value) {
+            if ($value === 'null' || $value === 'undefined') {
+                $inputs[$key] = null;
+            }
+        }
+        $this->replace($inputs);
     }
 
     public function passedValidation()
