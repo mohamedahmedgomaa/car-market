@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
         $this->call(InitialDataSeeder::class);
 
         // 3. Seed Mock Sellers
+        $cairo = City::where('name->en', 'Cairo')->first();
+        $giza = City::where('name->en', 'Giza')->first();
+
         $seller1 = Seller::create([
             'name' => 'Negm Motors',
             'email' => 'negm-motors@example.com',
@@ -37,6 +40,8 @@ class DatabaseSeeder extends Seeder
             'address' => ['en' => 'Cairo, Egypt', 'ar' => 'القاهرة، مصر'],
             'is_verified' => true,
             'is_active' => true,
+            'city_id' => $cairo ? $cairo->id : null,
+            'governorate_id' => $cairo ? $cairo->governorate_id : null,
         ]);
 
         $seller2 = Seller::create([
@@ -49,6 +54,8 @@ class DatabaseSeeder extends Seeder
             'address' => ['en' => 'Giza, Egypt', 'ar' => 'الجيزة، مصر'],
             'is_verified' => true,
             'is_active' => true,
+            'city_id' => $giza ? $giza->id : null,
+            'governorate_id' => $giza ? $giza->governorate_id : null,
         ]);
 
         // 4. Seed Mock Cars
@@ -61,15 +68,13 @@ class DatabaseSeeder extends Seeder
         $toyota = Brand::where('name->en', 'Toyota')->first();
         $toyotaModel = $toyota ? $toyota->models()->first() : null;
 
-        $cairo = City::where('name->en', 'Cairo')->first();
-        $giza = City::where('name->en', 'Giza')->first();
-
         if ($bmw && $bmwModel && $cairo) {
             Car::create([
                 'seller_id' => $seller1->id,
                 'brand_id' => $bmw->id,
                 'model_id' => $bmwModel->id,
                 'city_id' => $cairo->id,
+                'governorate_id' => $cairo->governorate_id,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => ['en' => 'BMW 3 Series M Sport', 'ar' => 'بي إم دبليو الفئة الثالثة إم سبورت'],
@@ -92,6 +97,7 @@ class DatabaseSeeder extends Seeder
                 'brand_id' => $mercedes->id,
                 'model_id' => $mercModel->id,
                 'city_id' => $cairo->id,
+                'governorate_id' => $cairo->governorate_id,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => ['en' => 'Mercedes-Benz C-Class C200', 'ar' => 'مرسيدس-بنز سي كلاس C200'],
@@ -114,6 +120,7 @@ class DatabaseSeeder extends Seeder
                 'brand_id' => $toyota->id,
                 'model_id' => $toyotaModel->id,
                 'city_id' => $giza->id,
+                'governorate_id' => $giza->governorate_id,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => ['en' => 'Toyota Corolla Active Plus', 'ar' => 'تويوتا كورولا أكتيف بلس'],
@@ -135,6 +142,7 @@ class DatabaseSeeder extends Seeder
                 'brand_id' => $toyota->id,
                 'model_id' => $toyotaModel->id,
                 'city_id' => $giza->id,
+                'governorate_id' => $giza->governorate_id,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => ['en' => 'Toyota Corolla (Pending Approval)', 'ar' => 'تويوتا كورولا (بانتظار الموافقة)'],

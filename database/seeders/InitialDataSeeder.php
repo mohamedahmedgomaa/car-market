@@ -19,41 +19,8 @@ class InitialDataSeeder extends Seeder
             ['name' => ['ar' => 'مصر', 'en' => 'Egypt']]
         );
 
-        // 2. Cities
-        $cities = [
-            ['ar' => 'القاهرة', 'en' => 'Cairo'],
-            ['ar' => 'الجيزة', 'en' => 'Giza'],
-            ['ar' => 'الإسكندرية', 'en' => 'Alexandria'],
-            ['ar' => 'المنصورة', 'en' => 'Mansoura'],
-            ['ar' => 'طنطا', 'en' => 'Tanta'],
-            ['ar' => 'الزقازيق', 'en' => 'Zagazig'],
-            ['ar' => 'بنها', 'en' => 'Banha'],
-            ['ar' => 'دمنهور', 'en' => 'Damanhour'],
-            ['ar' => 'شبين الكوم', 'en' => 'Shibin El Kom'],
-            ['ar' => 'أسيوط', 'en' => 'Assiut'],
-            ['ar' => 'سوهاج', 'en' => 'Sohag'],
-            ['ar' => 'المنيا', 'en' => 'Minya'],
-            ['ar' => 'قنا', 'en' => 'Qena'],
-            ['ar' => 'الأقصر', 'en' => 'Luxor'],
-            ['ar' => 'أسوان', 'en' => 'Aswan'],
-            ['ar' => 'السويس', 'en' => 'Suez'],
-            ['ar' => 'الإسماعيلية', 'en' => 'Ismailia'],
-            ['ar' => 'بور سعيد', 'en' => 'Port Said'],
-            ['ar' => 'الغردقة', 'en' => 'Hurghada'],
-            ['ar' => 'شرم الشيخ', 'en' => 'Sharm El Sheikh'],
-            ['ar' => 'مرسى مطروح', 'en' => 'Marsa Matrouh'],
-            ['ar' => 'الفيوم', 'en' => 'Fayoum'],
-            ['ar' => 'بني سويف', 'en' => 'Beni Suef'],
-            ['ar' => 'كفر الشيخ', 'en' => 'Kafr El Sheikh'],
-            ['ar' => 'دمياط', 'en' => 'Damietta'],
-        ];
-
-        foreach ($cities as $cityData) {
-            City::updateOrCreate(
-                ['name->en' => $cityData['en']],
-                ['name' => $cityData, 'country_id' => $egypt->id]
-            );
-        }
+        // 2. Governorates & Cities
+        $this->call(EgyptLocationSeeder::class);
 
         // 3. Car Brands & Models (Comprehensive List)
         $carBrands = [
