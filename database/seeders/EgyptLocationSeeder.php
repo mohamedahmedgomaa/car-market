@@ -411,7 +411,12 @@ class EgyptLocationSeeder extends Seeder
         ];
 
         // 4. Truncate locations cleanly
-        DB::statement('PRAGMA foreign_keys = OFF;'); // For SQLite
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        } elseif ($driver === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+        }
         
         City::query()->delete();
         Governorate::query()->delete();
@@ -503,6 +508,10 @@ class EgyptLocationSeeder extends Seeder
             }
         }
 
-        DB::statement('PRAGMA foreign_keys = ON;');
+        if ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        } elseif ($driver === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+        }
     }
 }
