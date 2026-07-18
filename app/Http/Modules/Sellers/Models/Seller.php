@@ -26,9 +26,16 @@ class Seller extends BaseAuthModel
         'remember_token',
     ];
 
+    protected $casts = [
+        'is_verified' => 'boolean',
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
+    ];
+
     public static function getAllowedSorts(): array
     {
         return [
+            'id',
             'created_at',
             'cars_count',
             'sort_order',
@@ -65,7 +72,7 @@ class Seller extends BaseAuthModel
 
     public static function getDefaultSort()
     {
-        return '-sort_order,-created_at';
+        return '-id';
     }
 
     public function cars()
