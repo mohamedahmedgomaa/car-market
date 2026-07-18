@@ -28,6 +28,10 @@ class CarService extends BaseApiService
 
     public function store(BaseRequest|CreateCarRequest $request): JsonResponse
     {
+        @ini_set('max_execution_time', 300);
+        @set_time_limit(300);
+        @ini_set('memory_limit', '512M');
+
         return DB::transaction(function () use ($request) {
 
             $car = $this->repository->save($request->all());
@@ -66,6 +70,10 @@ class CarService extends BaseApiService
 
     public function update(BaseRequest|UpdateCarRequest $request, int $id, bool $restore = false): JsonResponse
     {
+        @ini_set('max_execution_time', 300);
+        @set_time_limit(300);
+        @ini_set('memory_limit', '512M');
+
         return DB::transaction(function () use ($id, $request) {
 
             $car = $this->repository->getById($id);
