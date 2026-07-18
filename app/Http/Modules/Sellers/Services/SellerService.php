@@ -30,6 +30,25 @@ class SellerService extends BaseApiService
     {
         $data = $request->all();
 
+        if (isset($data['password']) && \Illuminate\Support\Facades\Hash::info($data['password'])['algoName'] === 'unknown') {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+        }
+
+        $data['store_name'] = [
+            'en' => $data['store_name_en'] ?? null,
+            'ar' => $data['store_name_ar'] ?? null,
+        ];
+
+        $data['store_description'] = [
+            'en' => $data['store_description_en'] ?? null,
+            'ar' => $data['store_description_ar'] ?? null,
+        ];
+
+        $data['address'] = [
+            'en' => $data['address_en'] ?? null,
+            'ar' => $data['address_ar'] ?? null,
+        ];
+
         if ($request->hasFile('store_logo')) {
             $file = $request->file('store_logo');
 
@@ -120,6 +139,35 @@ class SellerService extends BaseApiService
         if (!$seller) return $this->responseWithError('Seller not found', 404);
 
         $data = $request->all();
+
+        if (isset($data['password']) && !empty($data['password'])) {
+            if (\Illuminate\Support\Facades\Hash::info($data['password'])['algoName'] === 'unknown') {
+                $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+            }
+        } else {
+            unset($data['password']);
+        }
+
+        if (array_key_exists('store_name_en', $data) || array_key_exists('store_name_ar', $data)) {
+            $data['store_name'] = [
+                'en' => $data['store_name_en'] ?? $seller->getTranslation('store_name', 'en', false),
+                'ar' => $data['store_name_ar'] ?? $seller->getTranslation('store_name', 'ar', false),
+            ];
+        }
+
+        if (array_key_exists('store_description_en', $data) || array_key_exists('store_description_ar', $data)) {
+            $data['store_description'] = [
+                'en' => $data['store_description_en'] ?? $seller->getTranslation('store_description', 'en', false),
+                'ar' => $data['store_description_ar'] ?? $seller->getTranslation('store_description', 'ar', false),
+            ];
+        }
+
+        if (array_key_exists('address_en', $data) || array_key_exists('address_ar', $data)) {
+            $data['address'] = [
+                'en' => $data['address_en'] ?? $seller->getTranslation('address', 'en', false),
+                'ar' => $data['address_ar'] ?? $seller->getTranslation('address', 'ar', false),
+            ];
+        }
 
         if ($request->hasFile('store_logo')) {
 
