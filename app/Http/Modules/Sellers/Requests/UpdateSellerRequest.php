@@ -32,6 +32,7 @@ class UpdateSellerRequest extends BaseRequest
             'address_en' => 'nullable|string|max:255',
             'map_url' => 'nullable|string|max:2048',
             'sort_order' => 'nullable|integer',
+            'tier' => 'nullable|string|in:none,silver,gold,platinum',
         ];
     }
 
