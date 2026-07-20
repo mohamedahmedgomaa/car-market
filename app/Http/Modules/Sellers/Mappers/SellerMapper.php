@@ -33,6 +33,7 @@ class SellerMapper
         $dto->setAddress($model->getTranslations('address'));
         $dto->setMapUrl($model->map_url);
         $dto->setSortOrder($model->sort_order);
+        $dto->setTier($model->tier);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
@@ -63,6 +64,7 @@ class SellerMapper
         $model->address = $dto->getAddress();
         $model->map_url = $dto->getMapUrl();
         $model->sort_order = $dto->getSortOrder();
+        $model->tier = $dto->getTier();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
 
@@ -111,6 +113,7 @@ class SellerMapper
             'address' => $dto->getAddress(),
             'map_url' => $dto->getMapUrl(),
             'sort_order' => $dto->getSortOrder(),
+            'tier' => $dto->getTier(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
         ];
