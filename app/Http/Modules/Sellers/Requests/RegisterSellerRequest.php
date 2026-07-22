@@ -27,7 +27,7 @@ class RegisterSellerRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|string|unique:sellers,email',
+            'email' => 'nullable|string|unique:sellers,email',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'nullable|string|max:20',
             'store_name_en' => 'required|string|max:255',
@@ -35,6 +35,7 @@ class RegisterSellerRequest extends BaseRequest
             'store_description_en' => 'nullable|string',
             'store_description_ar' => 'nullable|string',
             'store_logo' => 'nullable|image|max:2048',
+            'cover_image' => 'nullable|image|max:2048',
             'business_license' => 'nullable|string|max:255',
             'bank_account' => 'nullable|string|max:255',
             'address_en' => 'nullable|string|max:255',
