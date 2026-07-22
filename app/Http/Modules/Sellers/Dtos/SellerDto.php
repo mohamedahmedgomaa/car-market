@@ -12,6 +12,7 @@ class SellerDto implements \JsonSerializable
     private $store_name;
     private $store_description;
     private $store_logo;
+    private $cover_image;
     private $business_license;
     private $bank_account;
     private $is_verified;
