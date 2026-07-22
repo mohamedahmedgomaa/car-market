@@ -188,6 +188,16 @@ class SellerDto implements \JsonSerializable
         $this->store_logo = $value;
     }
 
+    public function getCoverImage()
+    {
+        return $this->cover_image;
+    }
+
+    public function setCoverImage($value): void
+    {
+        $this->cover_image = $value;
+    }
+
     public function getBusinessLicense()
     {
         return $this->business_license;

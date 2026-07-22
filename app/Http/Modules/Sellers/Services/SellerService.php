@@ -80,6 +80,20 @@ class SellerService extends BaseApiService
             $data['tax_card_image'] = $result['secure_url'] ?? null;
         }
 
+        if ($request->hasFile('cover_image')) {
+            $file = $request->file('cover_image');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'store_covers',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['cover_image'] = $result['secure_url'] ?? null;
+        }
+
         $seller = Seller::create($data);
 
         return $this->responseWithData($this->toDto($seller), 201);
@@ -118,6 +132,20 @@ class SellerService extends BaseApiService
             );
 
             $data['tax_card_image'] = $result['secure_url'] ?? null;
+        }
+
+        if ($request->hasFile('cover_image')) {
+            $file = $request->file('cover_image');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'store_covers',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['cover_image'] = $result['secure_url'] ?? null;
         }
 
         $data['is_verified'] = false;
@@ -208,6 +236,20 @@ class SellerService extends BaseApiService
             );
 
             $data['tax_card_image'] = $result['secure_url'] ?? null;
+        }
+
+        if ($request->hasFile('cover_image')) {
+            $file = $request->file('cover_image');
+
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => 'store_covers',
+                    'resource_type' => 'image',
+                ]
+            );
+
+            $data['cover_image'] = $result['secure_url'] ?? null;
         }
 
         return $seller->update($data)

@@ -22,6 +22,7 @@ class SellerMapper
         $dto->setStoreName($model->getTranslations('store_name'));
         $dto->setStoreDescription($model->getTranslations('store_description'));
         $dto->setStoreLogo($model->store_logo);
+        $dto->setCoverImage($model->cover_image);
         $dto->setBusinessLicense($model->business_license);
         $dto->setBankAccount($model->bank_account);
         $dto->setIsVerified($model->is_verified);
@@ -55,6 +56,7 @@ class SellerMapper
         $model->store_name = $dto->getStoreName();
         $model->store_description = $dto->getStoreDescription();
         $model->store_logo = $dto->getStoreLogo();
+        $model->cover_image = $dto->getCoverImage();
         $model->business_license = $dto->getBusinessLicense();
         $model->bank_account = $dto->getBankAccount();
         $model->is_verified = $dto->getIsVerified();
@@ -102,6 +104,7 @@ class SellerMapper
             'store_name' => $dto->getStoreName(),
             'store_description' => $dto->getStoreDescription(),
             'store_logo' => $dto->getStoreLogo(),
+            'cover_image' => $dto->getCoverImage(),
             'business_license' => $dto->getBusinessLicense(),
             'bank_account' => $dto->getBankAccount(),
             'is_verified' => $dto->getIsVerified(),
