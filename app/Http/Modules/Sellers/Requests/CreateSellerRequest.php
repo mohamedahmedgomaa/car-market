@@ -16,7 +16,7 @@ class CreateSellerRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|string|unique:sellers,email',
+            'email' => 'nullable|string|unique:sellers,email',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'nullable|string',
             'store_name_ar' => 'required',
@@ -24,6 +24,7 @@ class CreateSellerRequest extends BaseRequest
             'store_description_ar' => 'nullable',
             'store_description_en' => 'nullable',
             'store_logo' => 'nullable|image|max:2048',
+            'cover_image' => 'nullable|image|max:2048',
             'business_license' => 'nullable|string',
             'bank_account' => 'nullable|string',
             'city_id' => 'nullable|exists:cities,id',
