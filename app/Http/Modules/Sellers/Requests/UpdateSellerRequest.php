@@ -24,6 +24,7 @@ class UpdateSellerRequest extends BaseRequest
             'store_description_ar' => 'nullable',
             'store_description_en' => 'nullable',
             'store_logo' => 'nullable|image|max:2048',
+            'cover_image' => 'nullable|image|max:2048',
             'business_license' => 'nullable|string|max:255',
             'bank_account' => 'nullable|string|max:255',
             'city_id' => 'nullable|exists:cities,id',
