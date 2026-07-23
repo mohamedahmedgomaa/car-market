@@ -34,7 +34,7 @@ class CreateSellerRequest extends BaseRequest
             'map_url' => 'nullable|string|max:2048',
             'sort_order' => 'nullable|integer',
             'is_verified' => 'nullable|boolean',
-            'tier' => 'nullable|string|in:none,silver,gold,platinum',
+            'tier' => 'nullable|string|in:none,silver,gold,platinum,diamond',
         ];
     }
 
