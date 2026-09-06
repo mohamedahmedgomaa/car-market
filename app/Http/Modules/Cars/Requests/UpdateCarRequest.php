@@ -53,7 +53,7 @@ class UpdateCarRequest extends BaseRequest
             'whatsapp_number' => 'nullable|string|max:20',
 
             'is_best_deal' => 'nullable|boolean',
-            'is_import' => 'nullable|boolean',
+            'is_import' => 'nullable',
             'is_featured' => 'nullable|boolean',
             'show_on_home' => 'nullable|boolean',
             'is_global_ad' => 'nullable|boolean',
