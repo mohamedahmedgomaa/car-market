@@ -21,6 +21,7 @@ class CarDto implements \JsonSerializable
     private $title;
     private $description;
     private $price;
+    private $currency;
     private $year;
     private $mileage;
     private $transmission;
@@ -159,6 +160,16 @@ class CarDto implements \JsonSerializable
     public function setPrice($value): void
     {
         $this->price = $value;
+    }
+
+    public function getCurrency()
+    {
+        return $this->currency ?? 'EGP';
+    }
+
+    public function setCurrency($value): void
+    {
+        $this->currency = $value;
     }
 
     public function getYear()

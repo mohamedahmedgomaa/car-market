@@ -34,6 +34,7 @@ class CarMapper
         $dto->setTitle($model->getTranslations('title'));
         $dto->setDescription($model->getTranslations('description'));
         $dto->setPrice($model->price);
+        $dto->setCurrency($model->currency ?? 'EGP');
         $dto->setYear($model->year);
         $dto->setMileage($model->mileage);
         $dto->setTransmission($model->transmission);
@@ -84,6 +85,7 @@ class CarMapper
         $model->title = $dto->getTitle();
         $model->description = $dto->getDescription();
         $model->price = $dto->getPrice();
+        $model->currency = $dto->getCurrency();
         $model->year = $dto->getYear();
         $model->mileage = $dto->getMileage();
         $model->transmission = $dto->getTransmission();
@@ -147,6 +149,7 @@ class CarMapper
             'title' => $dto->getTitle(),
             'description' => $dto->getDescription(),
             'price' => $dto->getPrice(),
+            'currency' => $dto->getCurrency(),
             'year' => $dto->getYear(),
             'mileage' => $dto->getMileage(),
             'transmission' => $dto->getTransmission(),

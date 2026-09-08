@@ -31,6 +31,7 @@ class CreateCarRequest extends BaseRequest
             'description_en' => 'required|string',
 
             'price' => 'required|numeric|min:0',
+            'currency' => 'nullable|string|in:EGP,USD,SYP',
             'year' => 'required|digits:4|integer',
             'mileage' => 'required|integer|min:0',
 
