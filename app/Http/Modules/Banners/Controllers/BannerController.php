@@ -34,6 +34,7 @@ class BannerController extends Controller
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240', // max 10MB to support 2K quality
             'type' => 'nullable|string|in:hero,sidebar',
+            'link' => 'nullable|string|max:1000',
         ]);
 
         $type = $request->input('type', 'hero');
@@ -51,8 +52,8 @@ class BannerController extends Controller
                 $transformation['width'] = 640;
                 $transformation['height'] = 420;
             } else {
-                $transformation['width'] = 2560;
-                $transformation['height'] = 1600;
+                $transformation['width'] = 1600;
+                $transformation['height'] = 800; // 2:1 Aspect Ratio
             }
 
             $result = cloudinary()->uploadApi()->upload(
@@ -77,6 +78,7 @@ class BannerController extends Controller
             'image_path' => $url,
             'is_active' => true,
             'type' => $type,
+            'link' => $request->input('link'),
         ]);
 
         return response()->json([
@@ -89,13 +91,20 @@ class BannerController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean',
+            'link' => 'nullable|string|max:1000',
         ]);
 
         $banner = Banner::findOrFail($id);
-        $banner->update([
-            'is_active' => $request->is_active,
-        ]);
+        $data = [];
+        if ($request->has('is_active')) {
+            $data['is_active'] = $request->is_active;
+        }
+        if ($request->has('link')) {
+            $data['link'] = $request->link;
+        }
+
+        $banner->update($data);
 
         return response()->json([
             'status' => 200,
