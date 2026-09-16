@@ -49,6 +49,8 @@ class UpdateCarRequest extends BaseRequest
             'torque' => 'nullable|string|max:50',
             'engine_capacity' => 'nullable|string|max:50',
             'cylinders' => 'nullable|string|max:50',
+            'acceleration' => 'nullable|string|max:50',
+            'weight' => 'nullable|string|max:50',
 
             'phone_number' => 'nullable|string|max:20',
             'whatsapp_number' => 'nullable|string|max:20',
