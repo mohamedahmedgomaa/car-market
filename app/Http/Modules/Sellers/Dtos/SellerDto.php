@@ -26,6 +26,61 @@ class SellerDto implements \JsonSerializable
     private $map_url;
     private $sort_order;
     private $tier;
+    private $facebook;
+    private $instagram;
+    private $website;
+    private $youtube;
+    private $tiktok;
+
+    public function getFacebook()
+    {
+        return $this->facebook;
+    }
+
+    public function setFacebook($value): void
+    {
+        $this->facebook = $value;
+    }
+
+    public function getInstagram()
+    {
+        return $this->instagram;
+    }
+
+    public function setInstagram($value): void
+    {
+        $this->instagram = $value;
+    }
+
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    public function setWebsite($value): void
+    {
+        $this->website = $value;
+    }
+
+    public function getYoutube()
+    {
+        return $this->youtube;
+    }
+
+    public function setYoutube($value): void
+    {
+        $this->youtube = $value;
+    }
+
+    public function getTiktok()
+    {
+        return $this->tiktok;
+    }
+
+    public function setTiktok($value): void
+    {
+        $this->tiktok = $value;
+    }
 
     public function getTier()
     {

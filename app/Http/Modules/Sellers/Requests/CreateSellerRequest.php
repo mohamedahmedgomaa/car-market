@@ -16,7 +16,7 @@ class CreateSellerRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'nullable|string|unique:sellers,email',
+            'email' => 'nullable|string|max:255',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'nullable|string',
             'store_name_ar' => 'required',
@@ -32,6 +32,16 @@ class CreateSellerRequest extends BaseRequest
             'address_en' => 'nullable|string|max:255',
             'address_ar' => 'nullable|string|max:255',
             'map_url' => 'nullable|string|max:2048',
+            'facebook' => 'nullable|string|max:2048',
+            'facebook_url' => 'nullable|string|max:2048',
+            'instagram' => 'nullable|string|max:2048',
+            'instagram_url' => 'nullable|string|max:2048',
+            'website' => 'nullable|string|max:2048',
+            'website_url' => 'nullable|string|max:2048',
+            'youtube' => 'nullable|string|max:2048',
+            'youtube_url' => 'nullable|string|max:2048',
+            'tiktok' => 'nullable|string|max:2048',
+            'tiktok_url' => 'nullable|string|max:2048',
             'sort_order' => 'nullable|integer',
             'is_verified' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
@@ -43,7 +53,7 @@ class CreateSellerRequest extends BaseRequest
     {
         $inputs = $this->all();
         foreach ($inputs as $key => $value) {
-            if ($value === 'null' || $value === 'undefined') {
+            if ($value === 'null' || $value === 'undefined' || $value === '') {
                 $inputs[$key] = null;
             }
         }
@@ -65,7 +75,31 @@ class CreateSellerRequest extends BaseRequest
             'address' => [
                 'en' => $this->address_en,
                 'ar' => $this->address_ar,
-            ]
+            ],
+        $fb = !empty($this->facebook) ? $this->facebook : $this->facebook_url;
+        $ig = !empty($this->instagram) ? $this->instagram : $this->instagram_url;
+        $yt = !empty($this->youtube) ? $this->youtube : (!empty($this->youtube_url) ? $this->youtube_url : (!empty($this->website) ? $this->website : $this->website_url));
+        $tt = !empty($this->tiktok) ? $this->tiktok : $this->tiktok_url;
+
+        $this->merge([
+            'password' => Hash::make($this->password),
+            'store_name' => [
+                'en' => $this->store_name_en,
+                'ar' => $this->store_name_ar,
+            ],
+            'store_description' => [
+                'en' => $this->store_description_en,
+                'ar' => $this->store_description_ar,
+            ],
+            'address' => [
+                'en' => $this->address_en,
+                'ar' => $this->address_ar,
+            ],
+            'facebook' => $fb,
+            'instagram' => $ig,
+            'website' => $yt,
+            'youtube' => $yt,
+            'tiktok' => $tt,
         ]);
     }
 }

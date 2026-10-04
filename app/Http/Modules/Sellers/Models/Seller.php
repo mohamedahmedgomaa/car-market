@@ -19,12 +19,56 @@ class Seller extends BaseAuthModel
 
     protected $with = ['city', 'governorate'];
 
-    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'cover_image', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'city_id', 'governorate_id', 'map_url', 'sort_order', 'tier', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'cover_image', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'city_id', 'governorate_id', 'map_url', 'facebook', 'facebook_url', 'instagram', 'instagram_url', 'website', 'website_url', 'youtube', 'youtube_url', 'tiktok', 'tiktok_url', 'sort_order', 'tier', 'created_at', 'updated_at'];
     public $translatable = ['store_name', 'store_description', 'address'];
+    protected $appends = ['facebook_url', 'instagram_url', 'tiktok_url', 'youtube_url'];
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    public function setFacebookUrlAttribute($value)
+    {
+        $this->attributes['facebook'] = $value;
+    }
+
+    public function getFacebookUrlAttribute()
+    {
+        return $this->facebook ?? null;
+    }
+
+    public function setInstagramUrlAttribute($value)
+    {
+        $this->attributes['instagram'] = $value;
+    }
+
+    public function getInstagramUrlAttribute()
+    {
+        return $this->instagram ?? null;
+    }
+
+    public function setTiktokUrlAttribute($value)
+    {
+        $this->attributes['tiktok'] = $value;
+    }
+
+    public function getTiktokUrlAttribute()
+    {
+        return $this->tiktok ?? null;
+    }
+
+    public function setYoutubeUrlAttribute($value)
+    {
+        $this->attributes['youtube'] = $value;
+        if (empty($this->attributes['website'])) {
+            $this->attributes['website'] = $value;
+        }
+    }
+
+    public function getYoutubeUrlAttribute()
+    {
+        return $this->youtube ?? $this->website ?? null;
+    }
 
     protected $casts = [
         'is_verified' => 'boolean',

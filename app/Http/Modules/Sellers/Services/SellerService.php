@@ -49,6 +49,22 @@ class SellerService extends BaseApiService
             'ar' => $data['address_ar'] ?? null,
         ];
 
+        if (empty($data['facebook']) && !empty($data['facebook_url'])) {
+            $data['facebook'] = $data['facebook_url'];
+        }
+        if (empty($data['instagram']) && !empty($data['instagram_url'])) {
+            $data['instagram'] = $data['instagram_url'];
+        }
+        if (empty($data['tiktok']) && !empty($data['tiktok_url'])) {
+            $data['tiktok'] = $data['tiktok_url'];
+        }
+        if (empty($data['youtube']) && !empty($data['youtube_url'])) {
+            $data['youtube'] = $data['youtube_url'];
+        }
+        if (!empty($data['youtube']) && empty($data['website'])) {
+            $data['website'] = $data['youtube'];
+        }
+
         if ($request->hasFile('store_logo')) {
             $file = $request->file('store_logo');
 
@@ -195,6 +211,22 @@ class SellerService extends BaseApiService
                 'en' => $data['address_en'] ?? $seller->getTranslation('address', 'en', false),
                 'ar' => $data['address_ar'] ?? $seller->getTranslation('address', 'ar', false),
             ];
+        }
+
+        if (array_key_exists('facebook_url', $data) && !array_key_exists('facebook', $data)) {
+            $data['facebook'] = $data['facebook_url'];
+        }
+        if (array_key_exists('instagram_url', $data) && !array_key_exists('instagram', $data)) {
+            $data['instagram'] = $data['instagram_url'];
+        }
+        if (array_key_exists('tiktok_url', $data) && !array_key_exists('tiktok', $data)) {
+            $data['tiktok'] = $data['tiktok_url'];
+        }
+        if (array_key_exists('youtube_url', $data) && !array_key_exists('youtube', $data)) {
+            $data['youtube'] = $data['youtube_url'];
+        }
+        if (!empty($data['youtube']) && empty($data['website'])) {
+            $data['website'] = $data['youtube'];
         }
 
         if ($request->hasFile('store_logo')) {

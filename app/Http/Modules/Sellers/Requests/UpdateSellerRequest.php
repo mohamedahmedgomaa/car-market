@@ -14,9 +14,12 @@ class UpdateSellerRequest extends BaseRequest
 
     public function rules(): array
     {
+        $routeSeller = $this->route('seller');
+        $sellerId = is_object($routeSeller) ? $routeSeller->id : ($routeSeller ?? $this->route('id') ?? $this->seller);
+
         return [
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:sellers,email,' . $this->seller,
+            'email' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:6|confirmed',
             'phone' => 'nullable|string|max:20',
             'store_name_ar' => 'nullable',
@@ -32,6 +35,16 @@ class UpdateSellerRequest extends BaseRequest
             'address_ar' => 'nullable|string|max:255',
             'address_en' => 'nullable|string|max:255',
             'map_url' => 'nullable|string|max:2048',
+            'facebook' => 'nullable|string|max:2048',
+            'facebook_url' => 'nullable|string|max:2048',
+            'instagram' => 'nullable|string|max:2048',
+            'instagram_url' => 'nullable|string|max:2048',
+            'website' => 'nullable|string|max:2048',
+            'website_url' => 'nullable|string|max:2048',
+            'youtube' => 'nullable|string|max:2048',
+            'youtube_url' => 'nullable|string|max:2048',
+            'tiktok' => 'nullable|string|max:2048',
+            'tiktok_url' => 'nullable|string|max:2048',
             'sort_order' => 'nullable|integer',
             'is_verified' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
@@ -43,7 +56,7 @@ class UpdateSellerRequest extends BaseRequest
     {
         $inputs = $this->all();
         foreach ($inputs as $key => $value) {
-            if ($value === 'null' || $value === 'undefined') {
+            if ($value === 'null' || $value === 'undefined' || $value === '') {
                 $inputs[$key] = null;
             }
         }
@@ -85,6 +98,27 @@ class UpdateSellerRequest extends BaseRequest
         }
         if (!empty($address)) {
             $data['address'] = $address;
+        }
+
+        $fb = !empty($this->facebook) ? $this->facebook : $this->facebook_url;
+        if (!is_null($fb)) {
+            $data['facebook'] = $fb;
+        }
+
+        $ig = !empty($this->instagram) ? $this->instagram : $this->instagram_url;
+        if (!is_null($ig)) {
+            $data['instagram'] = $ig;
+        }
+
+        $yt = !empty($this->youtube) ? $this->youtube : (!empty($this->youtube_url) ? $this->youtube_url : (!empty($this->website) ? $this->website : $this->website_url));
+        if (!is_null($yt)) {
+            $data['youtube'] = $yt;
+            $data['website'] = $yt;
+        }
+
+        $tt = !empty($this->tiktok) ? $this->tiktok : $this->tiktok_url;
+        if (!is_null($tt)) {
+            $data['tiktok'] = $tt;
         }
 
         $this->merge($data);

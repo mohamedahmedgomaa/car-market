@@ -33,6 +33,11 @@ class SellerMapper
         $dto->setGovernorate($model->governorate);
         $dto->setAddress($model->getTranslations('address'));
         $dto->setMapUrl($model->map_url);
+        $dto->setFacebook($model->facebook ?? $model->facebook_url);
+        $dto->setInstagram($model->instagram ?? $model->instagram_url);
+        $dto->setWebsite($model->website ?? $model->website_url ?? $model->youtube);
+        $dto->setYoutube($model->youtube ?? $model->youtube_url ?? $model->website);
+        $dto->setTiktok($model->tiktok ?? $model->tiktok_url);
         $dto->setSortOrder($model->sort_order);
         $dto->setTier($model->tier);
         $dto->setCreatedAt($model->created_at);
@@ -65,6 +70,11 @@ class SellerMapper
         $model->governorate_id = $dto->getGovernorateId();
         $model->address = $dto->getAddress();
         $model->map_url = $dto->getMapUrl();
+        $model->facebook = $dto->getFacebook();
+        $model->instagram = $dto->getInstagram();
+        $model->website = $dto->getWebsite();
+        $model->youtube = $dto->getYoutube();
+        $model->tiktok = $dto->getTiktok();
         $model->sort_order = $dto->getSortOrder();
         $model->tier = $dto->getTier();
         $model->created_at = $dto->getCreatedAt();
@@ -115,6 +125,16 @@ class SellerMapper
             'governorate' => $dto->getGovernorate(),
             'address' => $dto->getAddress(),
             'map_url' => $dto->getMapUrl(),
+            'facebook' => $dto->getFacebook(),
+            'facebook_url' => $dto->getFacebook(),
+            'instagram' => $dto->getInstagram(),
+            'instagram_url' => $dto->getInstagram(),
+            'website' => $dto->getWebsite(),
+            'website_url' => $dto->getWebsite() ?? $dto->getYoutube(),
+            'youtube' => $dto->getYoutube(),
+            'youtube_url' => $dto->getYoutube(),
+            'tiktok' => $dto->getTiktok(),
+            'tiktok_url' => $dto->getTiktok(),
             'sort_order' => $dto->getSortOrder(),
             'tier' => $dto->getTier(),
             'created_at' => $dto->getCreatedAt(),
