@@ -35,8 +35,8 @@ class SellerMapper
         $dto->setMapUrl($model->map_url);
         $dto->setFacebook($model->facebook ?? $model->facebook_url);
         $dto->setInstagram($model->instagram ?? $model->instagram_url);
-        $dto->setWebsite($model->website ?? $model->website_url ?? $model->youtube);
-        $dto->setYoutube($model->youtube ?? $model->youtube_url ?? $model->website);
+        $dto->setWebsite($model->website ?? $model->website_url);
+        $dto->setYoutube($model->youtube ?? $model->youtube_url);
         $dto->setTiktok($model->tiktok ?? $model->tiktok_url);
         $dto->setSortOrder($model->sort_order);
         $dto->setTier($model->tier);
@@ -130,7 +130,7 @@ class SellerMapper
             'instagram' => $dto->getInstagram(),
             'instagram_url' => $dto->getInstagram(),
             'website' => $dto->getWebsite(),
-            'website_url' => $dto->getWebsite() ?? $dto->getYoutube(),
+            'website_url' => $dto->getWebsite(),
             'youtube' => $dto->getYoutube(),
             'youtube_url' => $dto->getYoutube(),
             'tiktok' => $dto->getTiktok(),

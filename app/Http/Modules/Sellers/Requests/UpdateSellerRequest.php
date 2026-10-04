@@ -100,25 +100,34 @@ class UpdateSellerRequest extends BaseRequest
             $data['address'] = $address;
         }
 
-        $fb = !empty($this->facebook) ? $this->facebook : $this->facebook_url;
-        if (!is_null($fb)) {
-            $data['facebook'] = $fb;
+        if ($this->has('facebook')) {
+            $data['facebook'] = $this->facebook;
+        } elseif ($this->has('facebook_url')) {
+            $data['facebook'] = $this->facebook_url;
         }
 
-        $ig = !empty($this->instagram) ? $this->instagram : $this->instagram_url;
-        if (!is_null($ig)) {
-            $data['instagram'] = $ig;
+        if ($this->has('instagram')) {
+            $data['instagram'] = $this->instagram;
+        } elseif ($this->has('instagram_url')) {
+            $data['instagram'] = $this->instagram_url;
         }
 
-        $yt = !empty($this->youtube) ? $this->youtube : (!empty($this->youtube_url) ? $this->youtube_url : (!empty($this->website) ? $this->website : $this->website_url));
-        if (!is_null($yt)) {
-            $data['youtube'] = $yt;
-            $data['website'] = $yt;
+        if ($this->has('tiktok')) {
+            $data['tiktok'] = $this->tiktok;
+        } elseif ($this->has('tiktok_url')) {
+            $data['tiktok'] = $this->tiktok_url;
         }
 
-        $tt = !empty($this->tiktok) ? $this->tiktok : $this->tiktok_url;
-        if (!is_null($tt)) {
-            $data['tiktok'] = $tt;
+        if ($this->has('youtube')) {
+            $data['youtube'] = $this->youtube;
+        } elseif ($this->has('youtube_url')) {
+            $data['youtube'] = $this->youtube_url;
+        }
+
+        if ($this->has('website')) {
+            $data['website'] = $this->website;
+        } elseif ($this->has('website_url')) {
+            $data['website'] = $this->website_url;
         }
 
         $this->merge($data);

@@ -60,14 +60,21 @@ class Seller extends BaseAuthModel
     public function setYoutubeUrlAttribute($value)
     {
         $this->attributes['youtube'] = $value;
-        if (empty($this->attributes['website'])) {
-            $this->attributes['website'] = $value;
-        }
     }
 
     public function getYoutubeUrlAttribute()
     {
-        return $this->youtube ?? $this->website ?? null;
+        return $this->attributes['youtube'] ?? null;
+    }
+
+    public function setWebsiteUrlAttribute($value)
+    {
+        $this->attributes['website'] = $value;
+    }
+
+    public function getWebsiteUrlAttribute()
+    {
+        return $this->attributes['website'] ?? null;
     }
 
     protected $casts = [

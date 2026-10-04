@@ -62,24 +62,11 @@ class CreateSellerRequest extends BaseRequest
 
     public function passedValidation()
     {
-        $this->merge([
-            'password' => Hash::make($this->password),
-            'store_name' => [
-                'en' => $this->store_name_en,
-                'ar' => $this->store_name_ar,
-            ],
-            'store_description' => [
-                'en' => $this->store_description_en,
-                'ar' => $this->store_description_ar,
-            ],
-            'address' => [
-                'en' => $this->address_en,
-                'ar' => $this->address_ar,
-            ],
-        $fb = !empty($this->facebook) ? $this->facebook : $this->facebook_url;
-        $ig = !empty($this->instagram) ? $this->instagram : $this->instagram_url;
-        $yt = !empty($this->youtube) ? $this->youtube : (!empty($this->youtube_url) ? $this->youtube_url : (!empty($this->website) ? $this->website : $this->website_url));
-        $tt = !empty($this->tiktok) ? $this->tiktok : $this->tiktok_url;
+        $fb = $this->facebook ?? $this->facebook_url;
+        $ig = $this->instagram ?? $this->instagram_url;
+        $yt = $this->youtube ?? $this->youtube_url;
+        $web = $this->website ?? $this->website_url;
+        $tt = $this->tiktok ?? $this->tiktok_url;
 
         $this->merge([
             'password' => Hash::make($this->password),
@@ -97,7 +84,7 @@ class CreateSellerRequest extends BaseRequest
             ],
             'facebook' => $fb,
             'instagram' => $ig,
-            'website' => $yt,
+            'website' => $web,
             'youtube' => $yt,
             'tiktok' => $tt,
         ]);

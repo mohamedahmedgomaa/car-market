@@ -58,11 +58,8 @@ class SellerService extends BaseApiService
         if (empty($data['tiktok']) && !empty($data['tiktok_url'])) {
             $data['tiktok'] = $data['tiktok_url'];
         }
-        if (empty($data['youtube']) && !empty($data['youtube_url'])) {
-            $data['youtube'] = $data['youtube_url'];
-        }
-        if (!empty($data['youtube']) && empty($data['website'])) {
-            $data['website'] = $data['youtube'];
+        if (empty($data['website']) && !empty($data['website_url'])) {
+            $data['website'] = $data['website_url'];
         }
 
         if ($request->hasFile('store_logo')) {
@@ -222,11 +219,8 @@ class SellerService extends BaseApiService
         if (array_key_exists('tiktok_url', $data) && !array_key_exists('tiktok', $data)) {
             $data['tiktok'] = $data['tiktok_url'];
         }
-        if (array_key_exists('youtube_url', $data) && !array_key_exists('youtube', $data)) {
-            $data['youtube'] = $data['youtube_url'];
-        }
-        if (!empty($data['youtube']) && empty($data['website'])) {
-            $data['website'] = $data['youtube'];
+        if (empty($data['website']) && !empty($data['website_url'])) {
+            $data['website'] = $data['website_url'];
         }
 
         if ($request->hasFile('store_logo')) {
