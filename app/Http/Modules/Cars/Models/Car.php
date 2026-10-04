@@ -93,6 +93,7 @@ class Car extends BaseModel
             AllowedFilter::scope('year_between'),
             AllowedFilter::scope('price_between'),
             AllowedFilter::scope('mileage_between'),
+            AllowedFilter::scope('created_between'),
             AllowedFilter::scope('top_expensive'),
             AllowedFilter::scope('user_id'),
         ];
@@ -211,5 +212,30 @@ class Car extends BaseModel
         return $query->whereHas('favorites', function ($q) use ($userId) {
             $q->where('users.id', (int)$userId);
         });
+    }
+
+    public function scopeCreatedBetween(Builder $query, $value): Builder
+    {
+        if (is_array($value)) {
+            $valStr = implode('.', $value);
+        } else {
+            $valStr = (string)$value;
+        }
+
+        $parts = explode('.', $valStr);
+        if (count($parts) < 2) {
+            $parts = explode(',', $valStr);
+        }
+
+        $from = trim($parts[0] ?? '');
+        $to = trim($parts[1] ?? $from);
+
+        if (empty($from) || $from === 'Array') {
+            return $query;
+        }
+
+        return $query
+            ->when(!empty($from), fn($q) => $q->where('created_at', '>=', $from . ' 00:00:00'))
+            ->when(!empty($to), fn($q) => $q->where('created_at', '<=', $to . ' 23:59:59'));
     }
 }
