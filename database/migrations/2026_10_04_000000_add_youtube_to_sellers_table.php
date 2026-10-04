@@ -12,6 +12,7 @@ return new class extends Migration
             if (!Schema::hasColumn('sellers', 'youtube')) {
                 $table->string('youtube')->nullable()->after('instagram');
             }
+            $table->text('map_url')->nullable()->change();
         });
     }
 
