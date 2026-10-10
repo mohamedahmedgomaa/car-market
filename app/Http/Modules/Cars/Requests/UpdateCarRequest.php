@@ -62,6 +62,7 @@ class UpdateCarRequest extends BaseRequest
             'is_global_ad' => 'nullable|boolean',
             'ad_expiry' => 'nullable|date',
             'featured_fee' => 'nullable|numeric|min:0',
+            'created_at' => 'nullable|string',
 
             // Features
             'features' => 'nullable|array',

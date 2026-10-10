@@ -162,7 +162,15 @@ class CarService extends BaseApiService
 
     public function updateStatus(UpdateCarStatusRequest $request, Car $car): JsonResponse
     {
-        $car->update($request->validated());
+        $data = $request->validated();
+
+        if (isset($data['created_at']) && !empty($data['created_at'])) {
+            $car->created_at = \Carbon\Carbon::parse($data['created_at']);
+            unset($data['created_at']);
+        }
+
+        $car->fill($data);
+        $car->save();
 
         return $this->responseWithData($this->toDto($car->fresh()), 200);
     }

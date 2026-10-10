@@ -22,6 +22,7 @@ class UpdateCarStatusRequest extends BaseRequest
             'is_global_ad' => 'sometimes|boolean',
             'ad_expiry' => 'sometimes|nullable|date',
             'featured_fee' => 'sometimes|nullable|numeric',
+            'created_at' => 'sometimes|nullable',
         ];
     }
 }
