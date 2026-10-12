@@ -122,6 +122,9 @@ $userModules = [
 
 $loadModuleRoutes($userModules, 'user');
 
+// Dedicated fast home page endpoint
+Route::get('user/home', [\App\Http\Controllers\HomeController::class, 'index']);
+
 // User Auth Routes
 Route::prefix('user/auth')->group(function () {
     Route::post('register', [\App\Http\Modules\Users\Controllers\UserController::class, 'register']);

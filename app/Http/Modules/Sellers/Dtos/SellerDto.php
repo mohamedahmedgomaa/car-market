@@ -18,6 +18,7 @@ class SellerDto implements \JsonSerializable
     private $is_verified;
     private $is_active;
     private $created_at;
+    private $updated_at;
     private $city_id;
     private $governorate_id;
     private $city;

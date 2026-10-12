@@ -26,6 +26,41 @@ class CarService extends BaseApiService
         parent::__construct($repository);
     }
 
+    public function index(BaseRequest $request): JsonResponse
+    {
+        if ($request->filled('offset') && !$request->filled('page')) {
+            $request->merge(['page' => 1]);
+        }
+
+        return parent::index($request);
+    }
+
+    public function show(BaseRequest $request, int $id): JsonResponse
+    {
+        return $this->execute(function () use ($id) {
+            $car = $this->repository->getModel()
+                ->with([
+                    'seller.city',
+                    'seller.governorate',
+                    'brand',
+                    'model',
+                    'city',
+                    'governorate',
+                    'country',
+                    'images',
+                    'features',
+                    'favorites',
+                ])
+                ->find($id);
+
+            if ($car) {
+                return $this->responseWithData($this->toDto($car));
+            }
+
+            return parent::responseErrorThereIsNoData();
+        }, $this->checkAuth);
+    }
+
     public function store(BaseRequest|CreateCarRequest $request): JsonResponse
     {
         @ini_set('max_execution_time', 300);

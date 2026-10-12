@@ -99,6 +99,21 @@ class Car extends BaseModel
         ];
     }
 
+    public static function getDefaultIncludedRelations(): array
+    {
+        return [
+            'seller.city',
+            'seller.governorate',
+            'brand',
+            'model',
+            'city',
+            'governorate',
+            'country',
+            'images',
+            'favorites',
+        ];
+    }
+
     public static function getDefaultIncludedRelationsCount(): array
     {
         return ['favorites'];

@@ -43,9 +43,9 @@ class CarMapper
         $dto->setColor($model->color);
         $dto->setCondition($model->condition);
         $dto->setStatus($model->status);
-        $dto->setImages($model->images->toArray());
-        $dto->setFeatures($model->features->toArray());
-        $dto->setFavorites($model->favorites->toArray());
+        $dto->setImages($model->relationLoaded('images') ? $model->images->toArray() : []);
+        $dto->setFeatures($model->relationLoaded('features') ? $model->features->toArray() : []);
+        $dto->setFavorites($model->relationLoaded('favorites') ? $model->favorites->toArray() : []);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 

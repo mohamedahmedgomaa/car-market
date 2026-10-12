@@ -16,7 +16,7 @@ class PassportClientsSeeder extends Seeder
 
         foreach ($providers as $provider) {
             $exists = DB::table('oauth_clients')
-                ->where('personal_access_client', true)
+                ->where('grant_types', 'like', '%personal_access%')
                 ->where('provider', $provider)
                 ->exists();
 

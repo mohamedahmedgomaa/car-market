@@ -158,5 +158,8 @@ class DatabaseSeeder extends Seeder
                 'status' => 'pending',
             ]);
         }
+
+        // 5. Seed comprehensive test dataset
+        $this->call(CarMarketTestDataSeeder::class);
     }
 }
