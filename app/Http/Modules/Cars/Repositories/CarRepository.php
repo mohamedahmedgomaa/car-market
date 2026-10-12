@@ -47,6 +47,10 @@ class CarRepository extends BaseApiRepository
             'color',
             'condition',
             'status',
+            'phone_number',
+            'whatsapp_number',
+            'youtube_url',
+            'instagram_url',
             'is_best_deal',
             'is_import',
             'is_featured',
@@ -65,12 +69,12 @@ class CarRepository extends BaseApiRepository
             'city:id,name',
             'governorate:id,name',
             'seller' => function ($q) {
-                $q->select('id', 'name', 'store_name', 'tier', 'is_verified', 'city_id', 'governorate_id');
+                $q->select('id', 'name', 'store_name', 'store_logo', 'phone', 'tier', 'is_verified', 'city_id', 'governorate_id');
             },
             'seller.city:id,name',
             'seller.governorate:id,name',
             'images' => function ($q) {
-                $q->select('id', 'car_id', 'path', 'is_main');
+                $q->select('id', 'car_id', 'path', 'is_main')->orderByDesc('is_main')->orderBy('id');
             },
             'favorites' => function ($q) {
                 $q->select('users.id');

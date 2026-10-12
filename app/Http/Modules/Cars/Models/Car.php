@@ -166,7 +166,7 @@ class Car extends BaseModel
 
     public function images()
     {
-        return $this->hasMany(CarImage::class);
+        return $this->hasMany(CarImage::class)->orderByDesc('is_main')->orderBy('id');
     }
 
     public function favorites()
