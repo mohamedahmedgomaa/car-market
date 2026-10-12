@@ -65,6 +65,8 @@ class CarMapper
         $dto->setWeight($model->weight);
         $dto->setPhoneNumber($model->phone_number);
         $dto->setWhatsappNumber($model->whatsapp_number);
+        $dto->setYoutubeUrl($model->youtube_url);
+        $dto->setInstagramUrl($model->instagram_url);
 
         return $dto;
     }
@@ -115,6 +117,8 @@ class CarMapper
         $model->weight = $dto->getWeight();
         $model->phone_number = $dto->getPhoneNumber();
         $model->whatsapp_number = $dto->getWhatsappNumber();
+        $model->youtube_url = $dto->getYoutubeUrl();
+        $model->instagram_url = $dto->getInstagramUrl();
 
         return $model;
     }
@@ -179,6 +183,8 @@ class CarMapper
             'weight' => $dto->getWeight(),
             'phone_number' => $dto->getPhoneNumber(),
             'whatsapp_number' => $dto->getWhatsappNumber(),
+            'youtube_url' => $dto->getYoutubeUrl(),
+            'instagram_url' => $dto->getInstagramUrl(),
         ];
     }
 }

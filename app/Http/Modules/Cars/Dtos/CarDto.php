@@ -52,6 +52,8 @@ class CarDto implements \JsonSerializable
     private $weight;
     private $phone_number;
     private $whatsapp_number;
+    private $youtube_url;
+    private $instagram_url;
 
 
     public function getId()
@@ -456,6 +458,12 @@ class CarDto implements \JsonSerializable
 
     public function getWhatsappNumber() { return $this->whatsapp_number; }
     public function setWhatsappNumber($v) { $this->whatsapp_number = $v; }
+
+    public function getYoutubeUrl() { return $this->youtube_url; }
+    public function setYoutubeUrl($v) { $this->youtube_url = $v; }
+
+    public function getInstagramUrl() { return $this->instagram_url; }
+    public function setInstagramUrl($v) { $this->instagram_url = $v; }
 
     public function jsonSerialize(): array
     {

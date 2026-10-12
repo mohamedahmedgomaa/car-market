@@ -51,6 +51,8 @@ class CreateCarRequest extends BaseRequest
 
             'phone_number' => 'nullable|string|max:20',
             'whatsapp_number' => 'nullable|string|max:20',
+            'youtube_url' => 'nullable|string|max:2048',
+            'instagram_url' => 'nullable|string|max:2048',
 
             'is_best_deal' => 'nullable|boolean',
             'is_import' => 'nullable',
