@@ -164,9 +164,18 @@ class Car extends BaseModel
         return $this->hasMany(FavoriteCar::class, 'car_id');
     }
 
-    public function scopeGlobal(Builder $query, $date): Builder
+    public function scopeGlobal(Builder $query, $term): Builder
     {
-        return $query->where("title", 'like', "%$date%");
+        return $query->where(function (Builder $q) use ($term) {
+            $q->where("title", 'like', "%$term%")
+              ->orWhere("description", 'like', "%$term%")
+              ->orWhereHas('brand', function ($bq) use ($term) {
+                  $bq->where('name', 'like', "%$term%");
+              })
+              ->orWhereHas('model', function ($mq) use ($term) {
+                  $mq->where('name', 'like', "%$term%");
+              });
+        });
     }
 
     public function scopeYearBetween(Builder $query, $value): Builder
