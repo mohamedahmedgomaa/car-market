@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Al-Ahram Cars',
             'email' => 'ahram-cars@example.com',
             'password' => bcrypt('password'),
-            'phone' => '01551552993',
+            'phone' => '01055353377',
             'store_name' => ['en' => 'Al-Ahram Cars', 'ar' => 'معرض الأهرام للسيارات'],
             'store_description' => ['en' => 'The best deal on used and new cars.', 'ar' => 'أفضل العروض على السيارات المستعملة والجديدة.'],
             'address' => ['en' => 'Giza, Egypt', 'ar' => 'الجيزة، مصر'],
