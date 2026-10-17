@@ -100,8 +100,8 @@ class BannerController extends Controller
         if ($request->has('is_active')) {
             $data['is_active'] = $request->is_active;
         }
-        if ($request->has('link')) {
-            $data['link'] = $request->link;
+        if ($request->exists('link') || $request->has('link')) {
+            $data['link'] = $request->input('link');
         }
 
         $banner->update($data);
