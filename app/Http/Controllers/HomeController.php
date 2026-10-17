@@ -49,10 +49,14 @@ class HomeController extends Controller
         }
 
         // 2. Video Banner
-        $videoBanner = Banner::query()
+        $latestVideoBanner = Banner::query()
             ->where('is_active', true)
             ->where('type', 'video')
-            ->value('image_path') ?? 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4';
+            ->latest('id')
+            ->first(['id', 'image_path', 'link']);
+
+        $videoBanner = $latestVideoBanner ? $latestVideoBanner->image_path : null;
+        $videoBannerLink = $latestVideoBanner ? $latestVideoBanner->link : null;
 
         // 3. Brands for search bar
         $brands = Brand::query()
@@ -152,6 +156,7 @@ class HomeController extends Controller
         return [
             'hero_banners' => $heroBanners,
             'video_banner' => $videoBanner,
+            'video_banner_link' => $videoBannerLink,
             'brands' => $brands,
             'latest_cars' => $latestCars,
             'latest_bikes' => $latestBikes,

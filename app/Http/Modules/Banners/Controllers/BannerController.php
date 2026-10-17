@@ -31,13 +31,60 @@ class BannerController extends Controller
 
     public function store(Request $request)
     {
+        $type = $request->input('type', 'hero');
+
+        if ($type === 'video') {
+            $request->validate([
+                'type' => 'required|string|in:hero,sidebar,video',
+                'video' => 'nullable|file|mimes:mp4,mov,ogg,webm,quicktime|max:61440',
+                'image' => 'nullable',
+                'video_url' => 'nullable|string|max:1000',
+                'link' => 'nullable|string|max:1000',
+            ]);
+
+            $url = null;
+            $videoFile = $request->file('video') ?? ($request->hasFile('image') ? $request->file('image') : null);
+
+            if ($videoFile) {
+                $result = cloudinary()->uploadApi()->upload(
+                    $videoFile->getRealPath(),
+                    [
+                        'folder' => 'banners/videos',
+                        'resource_type' => 'video',
+                    ]
+                );
+                $url = $result['secure_url'] ?? null;
+            } elseif ($request->filled('video_url')) {
+                $url = trim($request->input('video_url'));
+            }
+
+            if (!$url) {
+                return response()->json([
+                    'status' => 422,
+                    'message' => 'يرجى تحميل ملف فيديو صالح أو إدخال رابط فيديو / يوتيوب',
+                ], 422);
+            }
+
+            $banner = Banner::create([
+                'image_path' => $url,
+                'is_active' => true,
+                'type' => 'video',
+                'link' => $request->input('link'),
+            ]);
+
+            return response()->json([
+                'status' => 201,
+                'data' => $banner,
+                'message' => 'تم إنشاء إعلان الفيديو بنجاح',
+            ], 201);
+        }
+
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240', // max 10MB to support 2K quality
-            'type' => 'nullable|string|in:hero,sidebar',
+            'type' => 'nullable|string|in:hero,sidebar,video',
             'link' => 'nullable|string|max:1000',
         ]);
 
-        $type = $request->input('type', 'hero');
         $url = null;
 
         if ($request->hasFile('image')) {
@@ -93,6 +140,8 @@ class BannerController extends Controller
         $request->validate([
             'is_active' => 'nullable|boolean',
             'link' => 'nullable|string|max:1000',
+            'video_url' => 'nullable|string|max:1000',
+            'image_path' => 'nullable|string|max:1000',
         ]);
 
         $banner = Banner::findOrFail($id);
@@ -102,6 +151,11 @@ class BannerController extends Controller
         }
         if ($request->exists('link') || $request->has('link')) {
             $data['link'] = $request->input('link');
+        }
+        if ($request->filled('video_url')) {
+            $data['image_path'] = $request->input('video_url');
+        } elseif ($request->filled('image_path')) {
+            $data['image_path'] = $request->input('image_path');
         }
 
         $banner->update($data);
