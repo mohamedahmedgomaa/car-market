@@ -46,14 +46,22 @@ class BannerController extends Controller
             $videoFile = $request->file('video') ?? ($request->hasFile('image') ? $request->file('image') : null);
 
             if ($videoFile) {
-                $result = cloudinary()->uploadApi()->upload(
-                    $videoFile->getRealPath(),
-                    [
-                        'folder' => 'banners/videos',
-                        'resource_type' => 'video',
-                    ]
-                );
-                $url = $result['secure_url'] ?? null;
+                try {
+                    $result = cloudinary()->uploadApi()->upload(
+                        $videoFile->getRealPath(),
+                        [
+                            'folder' => 'banners/videos',
+                            'resource_type' => 'video',
+                        ]
+                    );
+                    $url = $result['secure_url'] ?? null;
+                } catch (\Throwable $e) {
+                    \Log::error('Cloudinary video upload error: ' . $e->getMessage());
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'تعذر رفع ملف الفيديو إلى الخادم: ' . $e->getMessage() . '. يمكنك استخدام رابط يوتيوب بدلاً من ذلك.',
+                    ], 500);
+                }
             } elseif ($request->filled('video_url')) {
                 $url = trim($request->input('video_url'));
             }
