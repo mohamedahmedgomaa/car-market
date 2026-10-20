@@ -14,7 +14,7 @@ class LoginSellerRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:sellers,email',
+            'email' => 'required|email',
             'password' => 'required',
         ];
     }

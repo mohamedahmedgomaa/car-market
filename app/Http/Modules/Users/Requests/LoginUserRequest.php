@@ -15,7 +15,7 @@ class LoginUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
             'password' => 'required',
         ];
     }

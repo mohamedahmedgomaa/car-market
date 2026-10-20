@@ -116,49 +116,93 @@ class SellerService extends BaseApiService
     {
         $data = $request->all();
 
+        if (isset($data['password']) && \Illuminate\Support\Facades\Hash::info($data['password'])['algoName'] === 'unknown') {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+        }
+
+        if (isset($data['store_name_en']) || isset($data['store_name_ar'])) {
+            $data['store_name'] = [
+                'en' => $data['store_name_en'] ?? ($data['store_name_ar'] ?? ''),
+                'ar' => $data['store_name_ar'] ?? ($data['store_name_en'] ?? ''),
+            ];
+        }
+
+        if (isset($data['store_description_en']) || isset($data['store_description_ar'])) {
+            $data['store_description'] = [
+                'en' => $data['store_description_en'] ?? null,
+                'ar' => $data['store_description_ar'] ?? null,
+            ];
+        }
+
+        if (isset($data['address_en']) || isset($data['address_ar'])) {
+            $data['address'] = [
+                'en' => $data['address_en'] ?? null,
+                'ar' => $data['address_ar'] ?? null,
+            ];
+        }
+
+        if (empty($data['facebook']) && !empty($data['facebook_url'])) {
+            $data['facebook'] = $data['facebook_url'];
+        }
+        if (empty($data['instagram']) && !empty($data['instagram_url'])) {
+            $data['instagram'] = $data['instagram_url'];
+        }
+        if (empty($data['tiktok']) && !empty($data['tiktok_url'])) {
+            $data['tiktok'] = $data['tiktok_url'];
+        }
+        if (empty($data['youtube']) && !empty($data['youtube_url'])) {
+            $data['youtube'] = $data['youtube_url'];
+        }
+        if (empty($data['website']) && !empty($data['website_url'])) {
+            $data['website'] = $data['website_url'];
+        }
+
         if ($request->hasFile('store_logo')) {
-            $file = $request->file('store_logo');
-
-            $result = cloudinary()->uploadApi()->upload(
-                $file->getRealPath(),
-                [
-                    'folder' => 'store_logos',
-                    'resource_type' => 'image',
-                ]
-            );
-
-            $data['store_logo'] = $result['secure_url'] ?? null;
-
-            // لو عندك عمود:
-            // $data['store_logo_public_id'] = $result['public_id'] ?? null;
+            try {
+                $file = $request->file('store_logo');
+                $result = cloudinary()->uploadApi()->upload(
+                    $file->getRealPath(),
+                    [
+                        'folder' => 'store_logos',
+                        'resource_type' => 'image',
+                    ]
+                );
+                $data['store_logo'] = $result['secure_url'] ?? null;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Logo upload failed: ' . $e->getMessage());
+            }
         }
 
         if ($request->hasFile('tax_card_image')) {
-            $file = $request->file('tax_card_image');
-
-            $result = cloudinary()->uploadApi()->upload(
-                $file->getRealPath(),
-                [
-                    'folder' => 'tax_card_images',
-                    'resource_type' => 'image',
-                ]
-            );
-
-            $data['tax_card_image'] = $result['secure_url'] ?? null;
+            try {
+                $file = $request->file('tax_card_image');
+                $result = cloudinary()->uploadApi()->upload(
+                    $file->getRealPath(),
+                    [
+                        'folder' => 'tax_card_images',
+                        'resource_type' => 'image',
+                    ]
+                );
+                $data['tax_card_image'] = $result['secure_url'] ?? null;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Tax card upload failed: ' . $e->getMessage());
+            }
         }
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-
-            $result = cloudinary()->uploadApi()->upload(
-                $file->getRealPath(),
-                [
-                    'folder' => 'store_covers',
-                    'resource_type' => 'image',
-                ]
-            );
-
-            $data['cover_image'] = $result['secure_url'] ?? null;
+            try {
+                $file = $request->file('cover_image');
+                $result = cloudinary()->uploadApi()->upload(
+                    $file->getRealPath(),
+                    [
+                        'folder' => 'store_covers',
+                        'resource_type' => 'image',
+                    ]
+                );
+                $data['cover_image'] = $result['secure_url'] ?? null;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Cover upload failed: ' . $e->getMessage());
+            }
         }
 
         $data['is_verified'] = false;
