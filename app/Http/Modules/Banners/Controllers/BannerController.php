@@ -34,9 +34,13 @@ class BannerController extends Controller
         $type = $request->input('type', 'hero');
 
         if ($type === 'video') {
+            @ini_set('max_execution_time', 600);
+            @set_time_limit(600);
+            @ini_set('memory_limit', '1024M');
+
             $request->validate([
                 'type' => 'required|string|in:hero,sidebar,video',
-                'video' => 'nullable|file|mimes:mp4,mov,ogg,webm,quicktime|max:61440',
+                'video' => 'nullable|file|mimes:mp4,mov,ogg,webm,quicktime|max:512000', // max 500MB
                 'image' => 'nullable',
                 'video_url' => 'nullable|string|max:1000',
                 'link' => 'nullable|string|max:1000',
