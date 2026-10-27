@@ -88,7 +88,7 @@ class BannerController extends Controller
         }
 
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240', // max 10MB to support 2K quality
+            'image' => 'required|file|mimes:jpeg,png,jpg,webp,heic,heif|max:20480',
             'type' => 'nullable|string|in:hero,sidebar,video',
             'link' => 'nullable|string|max:1000',
         ]);

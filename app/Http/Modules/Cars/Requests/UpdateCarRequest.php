@@ -76,7 +76,7 @@ class UpdateCarRequest extends BaseRequest
 
             // New images
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpg,jpeg,png,webp', // |max:2048
+            'images.*' => 'file|mimes:jpg,jpeg,png,webp,heic,heif|max:20480',
 
             // Main image selection
             'main_image_id' => 'nullable|integer|exists:car_images,id',      // old image id

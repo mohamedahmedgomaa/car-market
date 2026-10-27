@@ -68,7 +68,7 @@ class CreateCarRequest extends BaseRequest
 
             // 🔥 Images
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpg,jpeg,png,webp', // |max:2048
+            'images.*' => 'file|mimes:jpg,jpeg,png,webp,heic,heif|max:20480',
             'main_image' => 'nullable|integer', // index
         ];
     }

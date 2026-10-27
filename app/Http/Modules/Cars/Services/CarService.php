@@ -78,12 +78,19 @@ class CarService extends BaseApiService
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
 
+                    $ext = strtolower($image->getClientOriginalExtension());
+                    $mime = strtolower((string) $image->getMimeType());
+                    $uploadOptions = [
+                        'folder' => 'cars',
+                        'resource_type' => 'image',
+                    ];
+                    if (in_array($ext, ['heic', 'heif']) || str_contains($mime, 'heic') || str_contains($mime, 'heif')) {
+                        $uploadOptions['format'] = 'jpg';
+                    }
+
                     $result = cloudinary()->uploadApi()->upload(
                         $image->getRealPath(),
-                        [
-                            'folder' => 'cars',
-                            'resource_type' => 'image',
-                        ]
+                        $uploadOptions
                     );
 
                     $url = $result['secure_url'] ?? null;
@@ -151,12 +158,19 @@ class CarService extends BaseApiService
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
 
+                    $ext = strtolower($image->getClientOriginalExtension());
+                    $mime = strtolower((string) $image->getMimeType());
+                    $uploadOptions = [
+                        'folder' => 'cars',
+                        'resource_type' => 'image',
+                    ];
+                    if (in_array($ext, ['heic', 'heif']) || str_contains($mime, 'heic') || str_contains($mime, 'heif')) {
+                        $uploadOptions['format'] = 'jpg';
+                    }
+
                     $result = cloudinary()->uploadApi()->upload(
                         $image->getRealPath(),
-                        [
-                            'folder' => 'cars',
-                            'resource_type' => 'image',
-                        ]
+                        $uploadOptions
                     );
 
                     $url = $result['secure_url'] ?? null;

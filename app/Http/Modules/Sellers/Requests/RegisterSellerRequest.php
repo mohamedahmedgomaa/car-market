@@ -34,8 +34,8 @@ class RegisterSellerRequest extends BaseRequest
             'store_name_ar' => 'required|string|max:255',
             'store_description_en' => 'nullable|string',
             'store_description_ar' => 'nullable|string',
-            'store_logo' => 'nullable|image|max:2048',
-            'cover_image' => 'nullable|image|max:2048',
+            'store_logo' => 'nullable|file|mimes:jpg,jpeg,png,webp,heic,heif|max:10240',
+            'cover_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,heic,heif|max:10240',
             'business_license' => 'nullable|string|max:255',
             'bank_account' => 'nullable|string|max:255',
             'address_en' => 'nullable|string|max:255',
@@ -44,7 +44,7 @@ class RegisterSellerRequest extends BaseRequest
             'governorate_id' => 'nullable|exists:governorates,id',
             'map_url' => 'nullable|string|max:2048',
             'tax_number' => 'nullable|string|max:255',
-            'tax_card_image' => 'nullable|image|max:4096',
+            'tax_card_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,heic,heif|max:10240',
             'is_verified' => 'nullable|boolean',
         ];
     }
