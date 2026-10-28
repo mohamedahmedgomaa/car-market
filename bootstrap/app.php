@@ -19,5 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, $request) {
+            return response()->json([
+                'status' => 413,
+                'message' => 'حجم ملف الفيديو كبير جداً ويتجاوز الحد المسموح به في إعدادات PHP على خادم الاستضافة (post_max_size). يرجى زيادة الحد في cPanel أو رفع فيديو بحجم أقل.',
+            ], 413);
+        });
     })->create();

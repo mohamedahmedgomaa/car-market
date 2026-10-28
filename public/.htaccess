@@ -24,7 +24,40 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# ----------------------------------------------------------------------
+# Maximum Request Size for Apache (512MB)
+# ----------------------------------------------------------------------
+LimitRequestBody 536870912
+
+# ----------------------------------------------------------------------
+# Video MIME Types for direct streaming & byte ranges
+# ----------------------------------------------------------------------
+<IfModule mod_mime.c>
+    AddType video/mp4 .mp4
+    AddType video/webm .webm
+    AddType video/ogg .ogv
+    AddType video/quicktime .mov
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Always ensure CORS headers on server-level responses (e.g. 413, 500, 504)
+# ----------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-XSRF-Token"
+</IfModule>
+
 <IfModule mod_php.c>
+    php_value upload_max_filesize 512M
+    php_value post_max_size 512M
+    php_value max_file_uploads 50
+    php_value memory_limit 1024M
+    php_value max_execution_time 600
+    php_value max_input_time 600
+</IfModule>
+
+<IfModule mod_php7.c>
     php_value upload_max_filesize 512M
     php_value post_max_size 512M
     php_value max_file_uploads 50
@@ -50,4 +83,5 @@
     php_value max_execution_time 600
     php_value max_input_time 600
 </IfModule>
+
 

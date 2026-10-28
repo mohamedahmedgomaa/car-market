@@ -50,21 +50,56 @@ class BannerController extends Controller
             $videoFile = $request->file('video') ?? ($request->hasFile('image') ? $request->file('image') : null);
 
             if ($videoFile) {
+                // 1. Try Cloudinary first (if configured and working)
                 try {
-                    $result = cloudinary()->uploadApi()->upload(
-                        $videoFile->getRealPath(),
-                        [
-                            'folder' => 'banners/videos',
-                            'resource_type' => 'video',
-                        ]
-                    );
-                    $url = $result['secure_url'] ?? null;
+                    if (function_exists('cloudinary') && config('cloudinary.cloud_url')) {
+                        if (method_exists(cloudinary()->uploadApi(), 'uploadLarge')) {
+                            $result = cloudinary()->uploadApi()->uploadLarge(
+                                $videoFile->getRealPath(),
+                                [
+                                    'folder' => 'banners/videos',
+                                    'resource_type' => 'video',
+                                    'chunk_size' => 6000000,
+                                ]
+                            );
+                        } else {
+                            $result = cloudinary()->uploadApi()->upload(
+                                $videoFile->getRealPath(),
+                                [
+                                    'folder' => 'banners/videos',
+                                    'resource_type' => 'video',
+                                ]
+                            );
+                        }
+                        $url = $result['secure_url'] ?? null;
+                    }
                 } catch (\Throwable $e) {
-                    \Log::error('Cloudinary video upload error: ' . $e->getMessage());
-                    return response()->json([
-                        'status' => 500,
-                        'message' => 'تعذر رفع ملف الفيديو إلى الخادم: ' . $e->getMessage() . '. يمكنك استخدام رابط يوتيوب بدلاً من ذلك.',
-                    ], 500);
+                    \Log::warning('Cloudinary video upload notice (saving locally on hosting server instead): ' . $e->getMessage());
+                    $url = null;
+                }
+
+                // 2. Direct save on hosting server (Ultra-fast, zero-dependency, 100% reliable)
+                if (!$url) {
+                    try {
+                        $destinationPath = public_path('uploads/banners/videos');
+                        if (!file_exists($destinationPath)) {
+                            @mkdir($destinationPath, 0755, true);
+                        }
+                        $extension = $videoFile->getClientOriginalExtension() ?: 'mp4';
+                        $fileName = 'video_banner_' . time() . '_' . uniqid() . '.' . $extension;
+                        $videoFile->move($destinationPath, $fileName);
+
+                        $url = asset('uploads/banners/videos/' . $fileName);
+                        if (request()->secure() || request()->header('x-forwarded-proto') === 'https') {
+                            $url = str_replace('http://', 'https://', $url);
+                        }
+                    } catch (\Throwable $localErr) {
+                        \Log::error('Local video storage error: ' . $localErr->getMessage());
+                        return response()->json([
+                            'status' => 500,
+                            'message' => 'تعذر حفظ ملف الفيديو على السيرفر: ' . $localErr->getMessage(),
+                        ], 500);
+                    }
                 }
             } elseif ($request->filled('video_url')) {
                 $url = trim($request->input('video_url'));
@@ -87,7 +122,7 @@ class BannerController extends Controller
             return response()->json([
                 'status' => 201,
                 'data' => $banner,
-                'message' => 'تم إنشاء إعلان الفيديو بنجاح',
+                'message' => 'تم إنشاء إعلان الفيديو بنجاح وحفظه على الخادم',
             ], 201);
         }
 
@@ -183,8 +218,16 @@ class BannerController extends Controller
     {
         $banner = Banner::findOrFail($id);
 
-        // Optional: delete from Cloudinary if needed, based on public_id
-        // We are just deleting the record for simplicity
+        if ($banner->image_path && str_contains($banner->image_path, 'uploads/banners/videos/')) {
+            $parsedPath = parse_url($banner->image_path, PHP_URL_PATH);
+            if ($parsedPath) {
+                $localFile = public_path(ltrim($parsedPath, '/'));
+                if (file_exists($localFile)) {
+                    @unlink($localFile);
+                }
+            }
+        }
+
         $banner->delete();
 
         return response()->json([
