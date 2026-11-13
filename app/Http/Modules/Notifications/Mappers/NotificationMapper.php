@@ -2,8 +2,8 @@
 
 namespace App\Http\Modules\Notifications\Mappers;
 
-use App\Http\Modules\Notifications\Models\Notification;
 use App\Http\Modules\Notifications\Dtos\NotificationDto;
+use App\Http\Modules\Notifications\Models\Notification;
 
 class NotificationMapper
 {
@@ -14,10 +14,13 @@ class NotificationMapper
     {
         $dto = $dto ?? new NotificationDto();
 
-                $dto->setId($model->id);
+        $dto->setId($model->id);
         $dto->setUserId($model->user_id);
+        $dto->setSellerId($model->seller_id ?? null);
+        $dto->setType($model->type ?? 'general');
         $dto->setTitle($model->title);
         $dto->setBody($model->body);
+        $dto->setData($model->data ?? null);
         $dto->setIsRead($model->is_read);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
@@ -32,10 +35,13 @@ class NotificationMapper
     {
         $model = $model ?? new Notification();
 
-                $model->id = $dto->getId();
+        $model->id = $dto->getId();
         $model->user_id = $dto->getUserId();
+        $model->seller_id = $dto->getSellerId();
+        $model->type = $dto->getType();
         $model->title = $dto->getTitle();
         $model->body = $dto->getBody();
+        $model->data = $dto->getData();
         $model->is_read = $dto->getIsRead();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
@@ -66,14 +72,16 @@ class NotificationMapper
     public function dtoToArray(NotificationDto $dto): array
     {
         return [
-                        'id' => $dto->getId(),
+            'id' => $dto->getId(),
             'user_id' => $dto->getUserId(),
+            'seller_id' => $dto->getSellerId(),
+            'type' => $dto->getType(),
             'title' => $dto->getTitle(),
             'body' => $dto->getBody(),
+            'data' => $dto->getData(),
             'is_read' => $dto->getIsRead(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
-
         ];
     }
 }

@@ -7,7 +7,6 @@ class SellerDto implements \JsonSerializable
     private $id;
     private $name;
     private $email;
-    private $password;
     private $phone;
     private $store_name;
     private $store_description;
@@ -15,6 +14,8 @@ class SellerDto implements \JsonSerializable
     private $cover_image;
     private $business_license;
     private $bank_account;
+    private $tax_number;
+    private $tax_card_image;
     private $is_verified;
     private $is_active;
     private $created_at;
@@ -27,293 +28,106 @@ class SellerDto implements \JsonSerializable
     private $map_url;
     private $sort_order;
     private $tier;
+    private $views_count;
+    private $cars_count;
     private $facebook;
     private $instagram;
     private $website;
     private $youtube;
     private $tiktok;
 
-    public function getFacebook()
-    {
-        return $this->facebook;
-    }
+    public function getFacebook() { return $this->facebook; }
+    public function setFacebook($value): void { $this->facebook = $value; }
 
-    public function setFacebook($value): void
-    {
-        $this->facebook = $value;
-    }
+    public function getInstagram() { return $this->instagram; }
+    public function setInstagram($value): void { $this->instagram = $value; }
 
-    public function getInstagram()
-    {
-        return $this->instagram;
-    }
+    public function getWebsite() { return $this->website; }
+    public function setWebsite($value): void { $this->website = $value; }
 
-    public function setInstagram($value): void
-    {
-        $this->instagram = $value;
-    }
+    public function getYoutube() { return $this->youtube; }
+    public function setYoutube($value): void { $this->youtube = $value; }
 
-    public function getWebsite()
-    {
-        return $this->website;
-    }
+    public function getTiktok() { return $this->tiktok; }
+    public function setTiktok($value): void { $this->tiktok = $value; }
 
-    public function setWebsite($value): void
-    {
-        $this->website = $value;
-    }
+    public function getTier() { return $this->tier; }
+    public function setTier($value): void { $this->tier = $value; }
 
-    public function getYoutube()
-    {
-        return $this->youtube;
-    }
+    public function getViewsCount() { return $this->views_count ?? 0; }
+    public function setViewsCount($value): void { $this->views_count = (int) $value; }
 
-    public function setYoutube($value): void
-    {
-        $this->youtube = $value;
-    }
+    public function getCarsCount() { return $this->cars_count; }
+    public function setCarsCount($value): void { $this->cars_count = $value !== null ? (int) $value : null; }
 
-    public function getTiktok()
-    {
-        return $this->tiktok;
-    }
+    public function getSortOrder() { return $this->sort_order; }
+    public function setSortOrder($value): void { $this->sort_order = $value; }
 
-    public function setTiktok($value): void
-    {
-        $this->tiktok = $value;
-    }
+    public function getAddress() { return $this->address; }
+    public function setAddress($value): void { $this->address = $value; }
 
-    public function getTier()
-    {
-        return $this->tier;
-    }
+    public function getMapUrl() { return $this->map_url; }
+    public function setMapUrl($value): void { $this->map_url = $value; }
 
-    public function setTier($value): void
-    {
-        $this->tier = $value;
-    }
+    public function getCityId() { return $this->city_id; }
+    public function setCityId($value): void { $this->city_id = $value; }
 
-    public function getSortOrder()
-    {
-        return $this->sort_order;
-    }
+    public function getGovernorateId() { return $this->governorate_id; }
+    public function setGovernorateId($value): void { $this->governorate_id = $value; }
 
-    public function setSortOrder($value): void
-    {
-        $this->sort_order = $value;
-    }
+    public function getCity() { return $this->city; }
+    public function setCity($value): void { $this->city = $value; }
 
-    public function getAddress()
-    {
-        return $this->address;
-    }
+    public function getGovernorate() { return $this->governorate; }
+    public function setGovernorate($value): void { $this->governorate = $value; }
 
-    public function setAddress($value): void
-    {
-        $this->address = $value;
-    }
+    public function getId() { return $this->id; }
+    public function setId($value): void { $this->id = $value; }
 
-    public function getMapUrl()
-    {
-        return $this->map_url;
-    }
+    public function getName() { return $this->name; }
+    public function setName($value): void { $this->name = $value; }
 
-    public function setMapUrl($value): void
-    {
-        $this->map_url = $value;
-    }
+    public function getEmail() { return $this->email; }
+    public function setEmail($value): void { $this->email = $value; }
 
-    public function getCityId()
-    {
-        return $this->city_id;
-    }
+    public function getPhone() { return $this->phone; }
+    public function setPhone($value): void { $this->phone = $value; }
 
-    public function setCityId($value): void
-    {
-        $this->city_id = $value;
-    }
+    public function getStoreName() { return $this->store_name; }
+    public function setStoreName($value): void { $this->store_name = $value; }
 
-    public function getGovernorateId()
-    {
-        return $this->governorate_id;
-    }
+    public function getStoreDescription() { return $this->store_description; }
+    public function setStoreDescription($value): void { $this->store_description = $value; }
 
-    public function setGovernorateId($value): void
-    {
-        $this->governorate_id = $value;
-    }
+    public function getStoreLogo() { return $this->store_logo; }
+    public function setStoreLogo($value): void { $this->store_logo = $value; }
 
-    public function getCity()
-    {
-        return $this->city;
-    }
+    public function getCoverImage() { return $this->cover_image; }
+    public function setCoverImage($value): void { $this->cover_image = $value; }
 
-    public function setCity($value): void
-    {
-        $this->city = $value;
-    }
+    public function getBusinessLicense() { return $this->business_license; }
+    public function setBusinessLicense($value): void { $this->business_license = $value; }
 
-    public function getGovernorate()
-    {
-        return $this->governorate;
-    }
+    public function getBankAccount() { return $this->bank_account; }
+    public function setBankAccount($value): void { $this->bank_account = $value; }
 
-    public function setGovernorate($value): void
-    {
-        $this->governorate = $value;
-    }
+    public function getTaxNumber() { return $this->tax_number; }
+    public function setTaxNumber($value): void { $this->tax_number = $value; }
 
+    public function getTaxCardImage() { return $this->tax_card_image; }
+    public function setTaxCardImage($value): void { $this->tax_card_image = $value; }
 
-    public function getId()
-    {
-        return $this->id;
-    }
+    public function getIsVerified() { return $this->is_verified; }
+    public function setIsVerified($value): void { $this->is_verified = $value; }
 
-    public function setId($value): void
-    {
-        $this->id = $value;
-    }
+    public function getIsActive() { return $this->is_active; }
+    public function setIsActive($value): void { $this->is_active = $value; }
 
-    public function getName()
-    {
-        return $this->name;
-    }
+    public function getCreatedAt() { return $this->created_at; }
+    public function setCreatedAt($value): void { $this->created_at = $value; }
 
-    public function setName($value): void
-    {
-        $this->name = $value;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    public function setEmail($value): void
-    {
-        $this->email = $value;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function setPassword($value): void
-    {
-        $this->password = $value;
-    }
-
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    public function setPhone($value): void
-    {
-        $this->phone = $value;
-    }
-
-    public function getStoreName()
-    {
-        return $this->store_name;
-    }
-
-    public function setStoreName($value): void
-    {
-        $this->store_name = $value;
-    }
-
-    public function getStoreDescription()
-    {
-        return $this->store_description;
-    }
-
-    public function setStoreDescription($value): void
-    {
-        $this->store_description = $value;
-    }
-
-    public function getStoreLogo()
-    {
-        return $this->store_logo;
-    }
-
-    public function setStoreLogo($value): void
-    {
-        $this->store_logo = $value;
-    }
-
-    public function getCoverImage()
-    {
-        return $this->cover_image;
-    }
-
-    public function setCoverImage($value): void
-    {
-        $this->cover_image = $value;
-    }
-
-    public function getBusinessLicense()
-    {
-        return $this->business_license;
-    }
-
-    public function setBusinessLicense($value): void
-    {
-        $this->business_license = $value;
-    }
-
-    public function getBankAccount()
-    {
-        return $this->bank_account;
-    }
-
-    public function setBankAccount($value): void
-    {
-        $this->bank_account = $value;
-    }
-
-    public function getIsVerified()
-    {
-        return $this->is_verified;
-    }
-
-    public function setIsVerified($value): void
-    {
-        $this->is_verified = $value;
-    }
-
-    public function getIsActive()
-    {
-        return $this->is_active;
-    }
-
-    public function setIsActive($value): void
-    {
-        $this->is_active = $value;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt($value): void
-    {
-        $this->created_at = $value;
-    }
-
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt($value): void
-    {
-        $this->updated_at = $value;
-    }
-
+    public function getUpdatedAt() { return $this->updated_at; }
+    public function setUpdatedAt($value): void { $this->updated_at = $value; }
 
     public function jsonSerialize(): array
     {

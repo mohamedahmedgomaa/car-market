@@ -17,10 +17,11 @@ class ForceFilterSellerId
     {
         $seller = auth('api_seller')->user();
         if ($seller) {
-            $filter = (array) $request->query('filter', []);
+            $filter = (array) $request->input('filter', []);
             $filter['seller_id'] = $seller->id;
 
             $request->query->set('filter', $filter);
+            $request->merge(['filter' => $filter]);
         }
 
         return $next($request);

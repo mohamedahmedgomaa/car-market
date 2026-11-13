@@ -16,7 +16,7 @@ class Model extends BaseModel
 
     protected $table = 'models';
 
-    protected $fillable = ['id', 'brand_id', 'name', 'type', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'brand_id', 'name', 'type', 'model_3d_url', 'created_at', 'updated_at'];
     public $translatable = ['name'];
 
     public static function getAllowedFilters(): array

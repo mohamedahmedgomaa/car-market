@@ -17,6 +17,8 @@ class UpdateModelRequest extends BaseRequest
             'brand_id' => 'required|exists:brands,id',
             'name_ar' => 'nullable',
             'name_en' => 'nullable',
+            'type' => 'nullable|string',
+            'model_3d_url' => 'nullable|string|max:500',
         ];
     }
 

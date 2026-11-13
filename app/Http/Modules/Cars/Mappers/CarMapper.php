@@ -2,8 +2,8 @@
 
 namespace App\Http\Modules\Cars\Mappers;
 
-use App\Http\Modules\Cars\Models\Car;
 use App\Http\Modules\Cars\Dtos\CarDto;
+use App\Http\Modules\Cars\Models\Car;
 
 class CarMapper
 {
@@ -34,6 +34,10 @@ class CarMapper
         $dto->setTitle($model->getTranslations('title'));
         $dto->setDescription($model->getTranslations('description'));
         $dto->setPrice($model->price);
+        $dto->setOldPrice($model->old_price ?? null);
+        $dto->setIsPriceDropped(!empty($model->old_price) && (float) $model->price < (float) $model->old_price);
+        $dto->setSoldPrice($model->sold_price ?? null);
+        $dto->setSoldAt($model->sold_at ?? null);
         $dto->setCurrency($model->currency ?? 'EGP');
         $dto->setYear($model->year);
         $dto->setMileage($model->mileage);
@@ -43,9 +47,15 @@ class CarMapper
         $dto->setColor($model->color);
         $dto->setCondition($model->condition);
         $dto->setStatus($model->status);
+        $dto->setRejectionReason($model->rejection_reason ?? null);
+        $dto->setViewsCount($model->views_count ?? 0);
+        $dto->setWhatsappClicksCount($model->whatsapp_clicks_count ?? 0);
+        $dto->setPhoneClicksCount($model->phone_clicks_count ?? 0);
+        $dto->setSharesCount($model->shares_count ?? 0);
         $dto->setImages($model->relationLoaded('images') ? $model->images->toArray() : []);
         $dto->setFeatures($model->relationLoaded('features') ? $model->features->toArray() : []);
         $dto->setFavorites($model->relationLoaded('favorites') ? $model->favorites->toArray() : []);
+        $dto->setPriceHistories($model->relationLoaded('priceHistories') ? $model->priceHistories->toArray() : []);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
@@ -67,6 +77,7 @@ class CarMapper
         $dto->setWhatsappNumber($model->whatsapp_number);
         $dto->setYoutubeUrl($model->youtube_url);
         $dto->setInstagramUrl($model->instagram_url);
+        $dto->setModel3dUrl($model->model_3d_url);
 
         return $dto;
     }
@@ -89,6 +100,9 @@ class CarMapper
         $model->title = $dto->getTitle();
         $model->description = $dto->getDescription();
         $model->price = $dto->getPrice();
+        $model->old_price = $dto->getOldPrice();
+        $model->sold_price = $dto->getSoldPrice();
+        $model->sold_at = $dto->getSoldAt();
         $model->currency = $dto->getCurrency();
         $model->year = $dto->getYear();
         $model->mileage = $dto->getMileage();
@@ -98,6 +112,11 @@ class CarMapper
         $model->color = $dto->getColor();
         $model->condition = $dto->getCondition();
         $model->status = $dto->getStatus();
+        $model->rejection_reason = $dto->getRejectionReason();
+        $model->views_count = $dto->getViewsCount();
+        $model->whatsapp_clicks_count = $dto->getWhatsappClicksCount();
+        $model->phone_clicks_count = $dto->getPhoneClicksCount();
+        $model->shares_count = $dto->getSharesCount();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
 
@@ -119,6 +138,7 @@ class CarMapper
         $model->whatsapp_number = $dto->getWhatsappNumber();
         $model->youtube_url = $dto->getYoutubeUrl();
         $model->instagram_url = $dto->getInstagramUrl();
+        $model->model_3d_url = $dto->getModel3dUrl();
 
         return $model;
     }
@@ -157,6 +177,10 @@ class CarMapper
             'title' => $dto->getTitle(),
             'description' => $dto->getDescription(),
             'price' => $dto->getPrice(),
+            'old_price' => $dto->getOldPrice(),
+            'is_price_dropped' => $dto->getIsPriceDropped(),
+            'sold_price' => $dto->getSoldPrice(),
+            'sold_at' => $dto->getSoldAt(),
             'currency' => $dto->getCurrency(),
             'year' => $dto->getYear(),
             'mileage' => $dto->getMileage(),
@@ -166,6 +190,11 @@ class CarMapper
             'color' => $dto->getColor(),
             'condition' => $dto->getCondition(),
             'status' => $dto->getStatus(),
+            'rejection_reason' => $dto->getRejectionReason(),
+            'views_count' => $dto->getViewsCount(),
+            'whatsapp_clicks_count' => $dto->getWhatsappClicksCount(),
+            'phone_clicks_count' => $dto->getPhoneClicksCount(),
+            'shares_count' => $dto->getSharesCount(),
             'created_at' => $dto->getCreatedAt(),
             'updated_at' => $dto->getUpdatedAt(),
             'is_best_deal' => $dto->getIsBestDeal(),

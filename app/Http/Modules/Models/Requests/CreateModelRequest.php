@@ -17,6 +17,8 @@ class CreateModelRequest extends BaseRequest
             'brand_id' => 'required|exists:brands,id',
             'name_ar' => 'required',
             'name_en' => 'required',
+            'type' => 'nullable|string',
+            'model_3d_url' => 'nullable|string|max:500',
         ];
     }
     public function passedValidation()

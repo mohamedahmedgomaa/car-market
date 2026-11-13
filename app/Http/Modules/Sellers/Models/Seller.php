@@ -1,14 +1,15 @@
 <?php
 
 namespace App\Http\Modules\Sellers\Models;
+
 use App\Http\Modules\Cars\Models\Car;
+use App\Http\Modules\Notifications\Models\Notification;
 use Gomaa\Base\Base\Models\BaseAuthModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
 use Spatie\QueryBuilder\AllowedFilter;
-use Gomaa\Base\Base\Models\BaseModel;
 use Spatie\Translatable\HasTranslations;
-use Illuminate\Database\Eloquent\Builder;
 
 class Seller extends BaseAuthModel
 {
@@ -19,9 +20,47 @@ class Seller extends BaseAuthModel
 
     protected $with = ['city', 'governorate'];
 
-    protected $fillable = ['id', 'name', 'email', 'password', 'phone', 'address', 'store_name', 'store_description', 'store_logo', 'cover_image', 'business_license', 'bank_account', 'tax_number', 'tax_card_image', 'is_verified', 'is_active', 'city_id', 'governorate_id', 'map_url', 'facebook', 'facebook_url', 'instagram', 'instagram_url', 'website', 'website_url', 'youtube', 'youtube_url', 'tiktok', 'tiktok_url', 'sort_order', 'tier', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'id',
+        'name',
+        'email',
+        'password',
+        'phone',
+        'address',
+        'store_name',
+        'store_description',
+        'store_logo',
+        'cover_image',
+        'business_license',
+        'bank_account',
+        'tax_number',
+        'tax_card_image',
+        'is_verified',
+        'is_active',
+        'city_id',
+        'governorate_id',
+        'map_url',
+        'facebook',
+        'facebook_url',
+        'instagram',
+        'instagram_url',
+        'website',
+        'website_url',
+        'youtube',
+        'youtube_url',
+        'tiktok',
+        'tiktok_url',
+        'sort_order',
+        'tier',
+        'views_count',
+        'created_at',
+        'updated_at',
+    ];
+
     public $translatable = ['store_name', 'store_description', 'address'];
+
     protected $appends = ['facebook_url', 'instagram_url', 'tiktok_url', 'youtube_url'];
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -81,6 +120,7 @@ class Seller extends BaseAuthModel
         'is_verified' => 'boolean',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
+        'views_count' => 'integer',
     ];
 
     public static function getAllowedSorts(): array
@@ -90,6 +130,7 @@ class Seller extends BaseAuthModel
             'created_at',
             'cars_count',
             'sort_order',
+            'views_count',
         ];
     }
 
@@ -100,7 +141,6 @@ class Seller extends BaseAuthModel
             AllowedFilter::exact('id'),
             AllowedFilter::exact('name'),
             AllowedFilter::exact('email'),
-            AllowedFilter::exact('password'),
             AllowedFilter::exact('phone'),
             AllowedFilter::exact('address'),
             AllowedFilter::exact('store_name'),
@@ -114,10 +154,11 @@ class Seller extends BaseAuthModel
             AllowedFilter::exact('is_active'),
             AllowedFilter::exact('city_id'),
             AllowedFilter::exact('governorate_id'),
+            AllowedFilter::exact('tier'),
             AllowedFilter::exact('cars.status'),
             AllowedFilter::exact('created_at'),
             AllowedFilter::exact('updated_at'),
-            AllowedFilter::exact('sort_order')
+            AllowedFilter::exact('sort_order'),
         ];
     }
 
@@ -129,6 +170,16 @@ class Seller extends BaseAuthModel
     public function cars()
     {
         return $this->hasMany(Car::class, 'seller_id');
+    }
+
+    public function analyticsEvents()
+    {
+        return $this->hasMany(AnalyticsEvent::class, 'seller_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'seller_id');
     }
 
     public function city()
@@ -148,10 +199,10 @@ class Seller extends BaseAuthModel
 
     public function scopeGlobal(Builder $query, $date): Builder
     {
-        return $query->where("name", 'like', "%$date%")
-                     ->orWhere("email", 'like', "%$date%")
-                     ->orWhere("phone", 'like', "%$date%")
-                     ->orWhere("store_name", 'like', "%$date%")
-                     ->orWhere("store_description", 'like', "%$date%");
+        return $query->where('name', 'like', "%$date%")
+            ->orWhere('email', 'like', "%$date%")
+            ->orWhere('phone', 'like', "%$date%")
+            ->orWhere('store_name', 'like', "%$date%")
+            ->orWhere('store_description', 'like', "%$date%");
     }
 }

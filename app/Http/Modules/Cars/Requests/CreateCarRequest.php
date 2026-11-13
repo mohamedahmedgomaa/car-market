@@ -53,6 +53,7 @@ class CreateCarRequest extends BaseRequest
             'whatsapp_number' => 'nullable|string|max:20',
             'youtube_url' => 'nullable|string|max:2048',
             'instagram_url' => 'nullable|string|max:2048',
+            'model_3d_url' => 'nullable|string|max:2048',
 
             'is_best_deal' => 'nullable|boolean',
             'is_import' => 'nullable',
@@ -62,11 +63,11 @@ class CreateCarRequest extends BaseRequest
             'ad_expiry' => 'nullable|date',
             'featured_fee' => 'nullable|numeric|min:0',
 
-            // 🔥 Features
+            // Features
             'features' => 'nullable|array',
             'features.*' => 'exists:car_features,id',
 
-            // 🔥 Images
+            // Images
             'images' => 'nullable|array',
             'images.*' => 'file|mimes:jpg,jpeg,png,webp,heic,heif|max:20480',
             'main_image' => 'nullable|integer', // index
@@ -75,14 +76,24 @@ class CreateCarRequest extends BaseRequest
 
     protected function passedValidation(): void
     {
-        $this->merge([
-            'status' => 'pending',
+        $isAdmin = auth('api_admin')->check();
 
+        // Sellers cannot self-promote or self-approve their cars
+        if (!$isAdmin) {
+            $this->request->remove('is_featured');
+            $this->request->remove('show_on_home');
+            $this->request->remove('is_best_deal');
+            $this->request->remove('is_global_ad');
+            $this->request->remove('ad_expiry');
+            $this->request->remove('featured_fee');
+        }
+
+        $this->merge([
+            'status' => $isAdmin && $this->filled('status') ? $this->status : 'pending',
             'title' => [
                 'ar' => $this->title_ar,
                 'en' => $this->title_en,
             ],
-
             'description' => [
                 'ar' => $this->description_ar,
                 'en' => $this->description_en,

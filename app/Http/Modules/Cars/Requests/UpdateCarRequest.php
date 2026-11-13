@@ -40,9 +40,7 @@ class UpdateCarRequest extends BaseRequest
             'fuel_type' => ['required', Rule::in(['petrol', 'diesel', 'electric', 'hybrid', 'mild_hybrid', 'reev'])],
             'drivetrain' => ['required', Rule::in(['fwd', 'rwd', 'awd', '4wd'])],
 
-            // اللون هيجي من الفرونت كـ "#RRGGBB" (نخليه string)
             'color' => 'nullable|string|max:50',
-
             'condition' => ['required', Rule::in(['new', 'used'])],
 
             'horsepower' => 'nullable|string|max:50',
@@ -56,6 +54,7 @@ class UpdateCarRequest extends BaseRequest
             'whatsapp_number' => 'nullable|string|max:20',
             'youtube_url' => 'nullable|string|max:2048',
             'instagram_url' => 'nullable|string|max:2048',
+            'model_3d_url' => 'nullable|string|max:2048',
 
             'is_best_deal' => 'nullable|boolean',
             'is_import' => 'nullable',
@@ -79,13 +78,27 @@ class UpdateCarRequest extends BaseRequest
             'images.*' => 'file|mimes:jpg,jpeg,png,webp,heic,heif|max:20480',
 
             // Main image selection
-            'main_image_id' => 'nullable|integer|exists:car_images,id',      // old image id
-            'main_image_new_index' => 'nullable|integer|min:0',             // index in uploaded images[]
+            'main_image_id' => 'nullable|integer|exists:car_images,id',
+            'main_image_new_index' => 'nullable|integer|min:0',
         ];
     }
 
     protected function passedValidation(): void
     {
+        $isAdmin = auth('api_admin')->check();
+
+        // Sellers cannot modify admin promotion/placement flags
+        if (!$isAdmin) {
+            $this->request->remove('is_featured');
+            $this->request->remove('show_on_home');
+            $this->request->remove('is_best_deal');
+            $this->request->remove('is_global_ad');
+            $this->request->remove('ad_expiry');
+            $this->request->remove('featured_fee');
+            $this->request->remove('status');
+            $this->request->remove('created_at');
+        }
+
         $this->merge([
             'title' => [
                 'ar' => $this->title_ar,

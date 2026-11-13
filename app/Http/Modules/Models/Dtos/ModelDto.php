@@ -8,6 +8,8 @@ class ModelDto implements \JsonSerializable
     private $brand_id;
     private ?object $brand = null;
     private $name;
+    private $type;
+    private $model_3d_url;
     private $created_at;
     private $updated_at;
 
@@ -40,6 +42,26 @@ class ModelDto implements \JsonSerializable
     public function setName($value): void
     {
         $this->name = $value;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($value): void
+    {
+        $this->type = $value;
+    }
+
+    public function getModel3dUrl()
+    {
+        return $this->model_3d_url;
+    }
+
+    public function setModel3dUrl($value): void
+    {
+        $this->model_3d_url = $value;
     }
 
     public function getCreatedAt()

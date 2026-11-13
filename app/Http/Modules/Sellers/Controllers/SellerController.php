@@ -2,7 +2,6 @@
 
 namespace App\Http\Modules\Sellers\Controllers;
 
-
 use App\Http\Modules\Sellers\Requests\CreateSellerRequest;
 use App\Http\Modules\Sellers\Requests\DeleteSellerRequest;
 use App\Http\Modules\Sellers\Requests\ListSellerRequest;
@@ -12,16 +11,16 @@ use App\Http\Modules\Sellers\Requests\ShowSellerRequest;
 use App\Http\Modules\Sellers\Requests\UpdateSellerRequest;
 use App\Http\Modules\Sellers\Services\SellerService;
 use Gomaa\Base\Base\Controllers\BaseApiController;
+use Illuminate\Http\Request;
 
 class SellerController extends BaseApiController
 {
-
     /**
      * @param SellerService $service
      */
     public function __construct(SellerService $service)
     {
-        parent::__construct($service,[
+        parent::__construct($service, [
             'index' => ListSellerRequest::class,
             'show' => ShowSellerRequest::class,
             'store' => CreateSellerRequest::class,
@@ -45,4 +44,13 @@ class SellerController extends BaseApiController
         return $this->service->logout($request);
     }
 
+    public function me(Request $request)
+    {
+        return $this->service->me($request);
+    }
+
+    public function updateProfile(UpdateSellerRequest $request)
+    {
+        return $this->service->updateProfile($request);
+    }
 }

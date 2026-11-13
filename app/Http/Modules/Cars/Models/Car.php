@@ -2,20 +2,21 @@
 
 namespace App\Http\Modules\Cars\Models;
 
+use App\Http\Modules\Brands\Models\Brand;
+use App\Http\Modules\CarFeaturePivots\Models\CarFeaturePivot;
 use App\Http\Modules\CarFeatures\Models\CarFeature;
+use App\Http\Modules\CarImages\Models\CarImage;
+use App\Http\Modules\Cities\Models\City;
 use App\Http\Modules\Countries\Models\Country;
 use App\Http\Modules\FavoriteCars\Models\FavoriteCar;
-use App\Http\Modules\CarImages\Models\CarImage;
-use App\Http\Modules\CarFeaturePivots\Models\CarFeaturePivot;
-use App\Http\Modules\Cities\Models\City;
 use App\Http\Modules\Models\Models\Model;
-use App\Http\Modules\Brands\Models\Brand;
+use App\Http\Modules\Sellers\Models\AnalyticsEvent;
 use App\Http\Modules\Sellers\Models\Seller;
 use App\Http\Modules\Users\Models\User;
+use Gomaa\Base\Base\Models\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\QueryBuilder\AllowedFilter;
-use Gomaa\Base\Base\Models\BaseModel;
 use Spatie\Translatable\HasTranslations;
 
 class Car extends BaseModel
@@ -25,9 +26,69 @@ class Car extends BaseModel
 
     protected $table = 'cars';
 
-    protected $fillable = ['id', 'seller_id', 'brand_id', 'model_id', 'city_id', 'governorate_id', 'country_id', 'type', 'title', 'description', 'price', 'currency', 'year', 'mileage', 'transmission', 'fuel_type', 'drivetrain', 'color', 'condition', 'horsepower', 'torque', 'engine_capacity', 'cylinders', 'acceleration', 'weight', 'phone_number', 'whatsapp_number', 'youtube_url', 'instagram_url', 'is_best_deal', 'is_import', 'is_featured', 'show_on_home', 'is_global_ad', 'ad_expiry', 'featured_fee', 'status', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'id',
+        'seller_id',
+        'brand_id',
+        'model_id',
+        'city_id',
+        'governorate_id',
+        'country_id',
+        'type',
+        'title',
+        'description',
+        'price',
+        'old_price',
+        'sold_price',
+        'sold_at',
+        'currency',
+        'year',
+        'mileage',
+        'transmission',
+        'fuel_type',
+        'drivetrain',
+        'color',
+        'condition',
+        'horsepower',
+        'torque',
+        'engine_capacity',
+        'cylinders',
+        'acceleration',
+        'weight',
+        'phone_number',
+        'whatsapp_number',
+        'youtube_url',
+        'instagram_url',
+        'model_3d_url',
+        'is_best_deal',
+        'is_import',
+        'is_featured',
+        'show_on_home',
+        'is_global_ad',
+        'ad_expiry',
+        'featured_fee',
+        'status',
+        'rejection_reason',
+        'views_count',
+        'whatsapp_clicks_count',
+        'phone_clicks_count',
+        'shares_count',
+        'created_at',
+        'updated_at',
+    ];
 
     public $translatable = ['title', 'description'];
+
+    protected $casts = [
+        'price' => 'float',
+        'old_price' => 'float',
+        'sold_price' => 'float',
+        'sold_at' => 'datetime',
+        'views_count' => 'integer',
+        'whatsapp_clicks_count' => 'integer',
+        'phone_clicks_count' => 'integer',
+        'shares_count' => 'integer',
+    ];
 
     public static function getAllowedSorts(): array
     {
@@ -35,6 +96,9 @@ class Car extends BaseModel
             'price',
             'created_at',
             'favorites_count',
+            'views_count',
+            'whatsapp_clicks_count',
+            'phone_clicks_count',
         ];
     }
 
@@ -49,6 +113,7 @@ class Car extends BaseModel
             'country',
             'images',
             'features',
+            'priceHistories',
         ];
     }
 
@@ -179,49 +244,57 @@ class Car extends BaseModel
         return $this->hasMany(FavoriteCar::class, 'car_id');
     }
 
+    public function priceHistories()
+    {
+        return $this->hasMany(CarPriceHistory::class, 'car_id')->orderByDesc('created_at');
+    }
+
+    public function analyticsEvents()
+    {
+        return $this->hasMany(AnalyticsEvent::class, 'car_id');
+    }
+
     public function scopeGlobal(Builder $query, $term): Builder
     {
         return $query->where(function (Builder $q) use ($term) {
-            $q->where("title", 'like', "%$term%")
-              ->orWhere("description", 'like', "%$term%")
-              ->orWhereHas('brand', function ($bq) use ($term) {
-                  $bq->where('name', 'like', "%$term%");
-              })
-              ->orWhereHas('model', function ($mq) use ($term) {
-                  $mq->where('name', 'like', "%$term%");
-              });
+            $q->where('title', 'like', "%$term%")
+                ->orWhere('description', 'like', "%$term%")
+                ->orWhereHas('brand', function ($bq) use ($term) {
+                    $bq->where('name', 'like', "%$term%");
+                })
+                ->orWhereHas('model', function ($mq) use ($term) {
+                    $mq->where('name', 'like', "%$term%");
+                });
         });
     }
 
     public function scopeYearBetween(Builder $query, $value): Builder
     {
-
-        [$from, $to] = array_pad(explode('.', (string)$value, 2), 2, null);
+        [$from, $to] = array_pad(explode('.', (string) $value, 2), 2, null);
         return $query
-            ->when($from !== null && $from !== '', fn($q) => $q->where('year', '>=', (int)$from))
-            ->when($to !== null && $to !== '', fn($q) => $q->where('year', '<=', (int)$to));
+            ->when($from !== null && $from !== '', fn ($q) => $q->where('year', '>=', (int) $from))
+            ->when($to !== null && $to !== '', fn ($q) => $q->where('year', '<=', (int) $to));
     }
 
     public function scopePriceBetween(Builder $query, $value): Builder
     {
-        [$from, $to] = array_pad(explode('.', (string)$value, 2), 2, null);
+        [$from, $to] = array_pad(explode('.', (string) $value, 2), 2, null);
         return $query
-            ->when($from !== null && $from !== '', fn($q) => $q->where('price', '>=', (float)$from))
-            ->when($to !== null && $to !== '', fn($q) => $q->where('price', '<=', (float)$to));
+            ->when($from !== null && $from !== '', fn ($q) => $q->where('price', '>=', (float) $from))
+            ->when($to !== null && $to !== '', fn ($q) => $q->where('price', '<=', (float) $to));
     }
 
     public function scopeMileageBetween(Builder $query, $value): Builder
     {
-        [$from, $to] = array_pad(explode('.', (string)$value, 2), 2, null);
+        [$from, $to] = array_pad(explode('.', (string) $value, 2), 2, null);
 
         return $query
-            ->when($from !== null && $from !== '', fn($q) => $q->where('mileage', '>=', (int)$from))
-            ->when($to !== null && $to !== '', fn($q) => $q->where('mileage', '<=', (int)$to));
+            ->when($from !== null && $from !== '', fn ($q) => $q->where('mileage', '>=', (int) $from))
+            ->when($to !== null && $to !== '', fn ($q) => $q->where('mileage', '<=', (int) $to));
     }
 
     public function scopeTopExpensive(Builder $query, $value): Builder
     {
-        // لو الفلتر اتبعت بأي قيمة truthy
         if (!filter_var($value, FILTER_VALIDATE_BOOLEAN) && $value != 1 && $value !== '1') {
             return $query;
         }
@@ -231,10 +304,12 @@ class Car extends BaseModel
 
     public function scopeUserId($query, $userId)
     {
-        if (empty($userId)) return $query;
+        if (empty($userId)) {
+            return $query;
+        }
 
         return $query->whereHas('favorites', function ($q) use ($userId) {
-            $q->where('users.id', (int)$userId);
+            $q->where('users.id', (int) $userId);
         });
     }
 
@@ -243,7 +318,7 @@ class Car extends BaseModel
         if (is_array($value)) {
             $valStr = implode('.', $value);
         } else {
-            $valStr = (string)$value;
+            $valStr = (string) $value;
         }
 
         $parts = explode('.', $valStr);
@@ -259,7 +334,7 @@ class Car extends BaseModel
         }
 
         return $query
-            ->when(!empty($from), fn($q) => $q->where('created_at', '>=', $from . ' 00:00:00'))
-            ->when(!empty($to), fn($q) => $q->where('created_at', '<=', $to . ' 23:59:59'));
+            ->when(!empty($from), fn ($q) => $q->where('created_at', '>=', $from . ' 00:00:00'))
+            ->when(!empty($to), fn ($q) => $q->where('created_at', '<=', $to . ' 23:59:59'));
     }
 }

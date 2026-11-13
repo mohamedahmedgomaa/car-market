@@ -21,6 +21,10 @@ class CarDto implements \JsonSerializable
     private $title;
     private $description;
     private $price;
+    private $old_price;
+    private $is_price_dropped = false;
+    private $sold_price;
+    private $sold_at;
     private $currency;
     private $year;
     private $mileage;
@@ -30,9 +34,15 @@ class CarDto implements \JsonSerializable
     private $color;
     private $condition;
     private $status;
+    private $rejection_reason;
+    private $views_count = 0;
+    private $whatsapp_clicks_count = 0;
+    private $phone_clicks_count = 0;
+    private $shares_count = 0;
     private ?array $images = [];
     private ?array $features = [];
     private ?array $favorites = [];
+    private ?array $price_histories = [];
     private $created_at;
     private $updated_at;
 
@@ -54,365 +64,126 @@ class CarDto implements \JsonSerializable
     private $whatsapp_number;
     private $youtube_url;
     private $instagram_url;
+    private $model_3d_url;
 
+    public function getId() { return $this->id; }
+    public function setId($value): void { $this->id = $value; }
 
-    public function getId()
-    {
-        return $this->id;
-    }
+    public function getSellerId() { return $this->seller_id; }
+    public function setSellerId($value): void { $this->seller_id = $value; }
 
-    public function setId($value): void
-    {
-        $this->id = $value;
-    }
+    public function getBrandId() { return $this->brand_id; }
+    public function setBrandId($value): void { $this->brand_id = $value; }
 
-    public function getSellerId()
-    {
-        return $this->seller_id;
-    }
+    public function getModelId() { return $this->model_id; }
+    public function setModelId($value): void { $this->model_id = $value; }
 
-    public function setSellerId($value): void
-    {
-        $this->seller_id = $value;
-    }
+    public function getCityId() { return $this->city_id; }
+    public function setCityId($value): void { $this->city_id = $value; }
 
-    public function getBrandId()
-    {
-        return $this->brand_id;
-    }
+    public function getGovernorateId() { return $this->governorate_id; }
+    public function setGovernorateId($value): void { $this->governorate_id = $value; }
 
-    public function setBrandId($value): void
-    {
-        $this->brand_id = $value;
-    }
+    public function getCountryId() { return $this->country_id; }
+    public function setCountryId($value): void { $this->country_id = $value; }
 
-    public function getModelId()
-    {
-        return $this->model_id;
-    }
+    public function getType() { return $this->type; }
+    public function setType($value): void { $this->type = $value; }
 
-    public function setModelId($value): void
-    {
-        $this->model_id = $value;
-    }
+    public function getTitle() { return $this->title; }
+    public function setTitle($value): void { $this->title = $value; }
 
-    public function getCityId()
-    {
-        return $this->city_id;
-    }
+    public function getDescription() { return $this->description; }
+    public function setDescription($value): void { $this->description = $value; }
 
-    public function setCityId($value): void
-    {
-        $this->city_id = $value;
-    }
+    public function getPrice() { return $this->price; }
+    public function setPrice($value): void { $this->price = $value; }
 
-    public function getGovernorateId()
-    {
-        return $this->governorate_id;
-    }
+    public function getOldPrice() { return $this->old_price; }
+    public function setOldPrice($value): void { $this->old_price = $value; }
 
-    public function setGovernorateId($value): void
-    {
-        $this->governorate_id = $value;
-    }
+    public function getIsPriceDropped(): bool { return (bool) $this->is_price_dropped; }
+    public function setIsPriceDropped($value): void { $this->is_price_dropped = (bool) $value; }
 
-    public function getCountryId()
-    {
-        return $this->country_id;
-    }
+    public function getSoldPrice() { return $this->sold_price; }
+    public function setSoldPrice($value): void { $this->sold_price = $value; }
 
-    public function setCountryId($value): void
-    {
-        $this->country_id = $value;
-    }
+    public function getSoldAt() { return $this->sold_at; }
+    public function setSoldAt($value): void { $this->sold_at = $value; }
 
-    public function getType()
-    {
-        return $this->type;
-    }
+    public function getCurrency() { return $this->currency ?? 'EGP'; }
+    public function setCurrency($value): void { $this->currency = $value; }
 
-    public function setType($value): void
-    {
-        $this->type = $value;
-    }
+    public function getYear() { return $this->year; }
+    public function setYear($value): void { $this->year = $value; }
 
-    public function getTitle()
-    {
-        return $this->title;
-    }
+    public function getMileage() { return $this->mileage; }
+    public function setMileage($value): void { $this->mileage = $value; }
 
-    public function setTitle($value): void
-    {
-        $this->title = $value;
-    }
+    public function getTransmission() { return $this->transmission; }
+    public function setTransmission($value): void { $this->transmission = $value; }
 
-    public function getDescription()
-    {
-        return $this->description;
-    }
+    public function getFuelType() { return $this->fuel_type; }
+    public function setFuelType($value): void { $this->fuel_type = $value; }
 
-    public function setDescription($value): void
-    {
-        $this->description = $value;
-    }
+    public function getDrivetrain() { return $this->drivetrain; }
+    public function setDrivetrain($value): void { $this->drivetrain = $value; }
 
-    public function getPrice()
-    {
-        return $this->price;
-    }
+    public function getColor() { return $this->color; }
+    public function setColor($value): void { $this->color = $value; }
 
-    public function setPrice($value): void
-    {
-        $this->price = $value;
-    }
+    public function getCondition() { return $this->condition; }
+    public function setCondition($value): void { $this->condition = $value; }
 
-    public function getCurrency()
-    {
-        return $this->currency ?? 'EGP';
-    }
+    public function getStatus() { return $this->status; }
+    public function setStatus($value): void { $this->status = $value; }
 
-    public function setCurrency($value): void
-    {
-        $this->currency = $value;
-    }
+    public function getRejectionReason() { return $this->rejection_reason; }
+    public function setRejectionReason($value): void { $this->rejection_reason = $value; }
 
-    public function getYear()
-    {
-        return $this->year;
-    }
+    public function getViewsCount(): int { return (int) ($this->views_count ?? 0); }
+    public function setViewsCount($value): void { $this->views_count = (int) $value; }
 
-    public function setYear($value): void
-    {
-        $this->year = $value;
-    }
+    public function getWhatsappClicksCount(): int { return (int) ($this->whatsapp_clicks_count ?? 0); }
+    public function setWhatsappClicksCount($value): void { $this->whatsapp_clicks_count = (int) $value; }
 
-    public function getMileage()
-    {
-        return $this->mileage;
-    }
+    public function getPhoneClicksCount(): int { return (int) ($this->phone_clicks_count ?? 0); }
+    public function setPhoneClicksCount($value): void { $this->phone_clicks_count = (int) $value; }
 
-    public function setMileage($value): void
-    {
-        $this->mileage = $value;
-    }
+    public function getSharesCount(): int { return (int) ($this->shares_count ?? 0); }
+    public function setSharesCount($value): void { $this->shares_count = (int) $value; }
 
-    public function getTransmission()
-    {
-        return $this->transmission;
-    }
+    public function getCreatedAt() { return $this->created_at; }
+    public function setCreatedAt($value): void { $this->created_at = $value; }
 
-    public function setTransmission($value): void
-    {
-        $this->transmission = $value;
-    }
+    public function getUpdatedAt() { return $this->updated_at; }
+    public function setUpdatedAt($value): void { $this->updated_at = $value; }
 
-    public function getFuelType()
-    {
-        return $this->fuel_type;
-    }
+    public function setBrand(?object $brand): void { $this->brand = $brand; }
+    public function setCity(?object $city): void { $this->city = $city; }
+    public function setGovernorate(?object $governorate): void { $this->governorate = $governorate; }
+    public function setCountry(?object $country): void { $this->country = $country; }
+    public function setModel(?object $model): void { $this->model = $model; }
+    public function setSeller(?object $seller): void { $this->seller = $seller; }
 
-    public function setFuelType($value): void
-    {
-        $this->fuel_type = $value;
-    }
+    public function getSeller(): ?object { return $this->seller; }
+    public function getBrand(): ?object { return $this->brand; }
+    public function getCity(): ?object { return $this->city; }
+    public function getGovernorate(): ?object { return $this->governorate; }
+    public function getCountry(): ?object { return $this->country; }
+    public function getModel(): ?object { return $this->model; }
 
-    public function getDrivetrain()
-    {
-        return $this->drivetrain;
-    }
+    public function getImages(): ?array { return $this->images; }
+    public function setImages(?array $images): void { $this->images = $images; }
 
-    public function setDrivetrain($value): void
-    {
-        $this->drivetrain = $value;
-    }
+    public function getFeatures(): ?array { return $this->features; }
+    public function setFeatures(?array $features): void { $this->features = $features; }
 
-    public function getColor()
-    {
-        return $this->color;
-    }
+    public function getFavorites(): ?array { return $this->favorites; }
+    public function setFavorites(?array $favorites): void { $this->favorites = $favorites; }
 
-    public function setColor($value): void
-    {
-        $this->color = $value;
-    }
-
-    public function getCondition()
-    {
-        return $this->condition;
-    }
-
-    public function setCondition($value): void
-    {
-        $this->condition = $value;
-    }
-
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    public function setStatus($value): void
-    {
-        $this->status = $value;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt($value): void
-    {
-        $this->created_at = $value;
-    }
-
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt($value): void
-    {
-        $this->updated_at = $value;
-    }
-
-    /**
-     * @param object|null $brand
-     */
-    public function setBrand(?object $brand): void
-    {
-        $this->brand = $brand;
-    }
-
-    /**
-     * @param object|null $city
-     */
-    public function setCity(?object $city): void
-    {
-        $this->city = $city;
-    }
-
-    public function setGovernorate(?object $governorate): void
-    {
-        $this->governorate = $governorate;
-    }
-
-    /**
-     * @param object|null $country
-     */
-    public function setCountry(?object $country): void
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @param object|null $model
-     */
-    public function setModel(?object $model): void
-    {
-        $this->model = $model;
-    }
-
-    /**
-     * @param object|null $seller
-     */
-    public function setSeller(?object $seller): void
-    {
-        $this->seller = $seller;
-    }
-
-    /**
-     * @return object|null
-     */
-    public function getSeller(): ?object
-    {
-        return $this->seller;
-    }
-
-    /**
-     * @return object|null
-     */
-    public function getBrand(): ?object
-    {
-        return $this->brand;
-    }
-
-    /**
-     * @return object|null
-     */
-    public function getCity(): ?object
-    {
-        return $this->city;
-    }
-
-    public function getGovernorate(): ?object
-    {
-        return $this->governorate;
-    }
-
-    /**
-     * @return object|null
-     */
-    public function getCountry(): ?object
-    {
-        return $this->country;
-    }
-
-    /**
-     * @return object|null
-     */
-    public function getModel(): ?object
-    {
-        return $this->model;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getImages(): ?array
-    {
-        return $this->images;
-    }
-
-    /**
-     * @param array|null $images
-     */
-    public function setImages(?array $images): void
-    {
-        $this->images = $images;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getFeatures(): ?array
-    {
-        return $this->features;
-    }
-
-    /**
-     * @param array|null $features
-     */
-    public function setFeatures(?array $features): void
-    {
-        $this->features = $features;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getFavorites(): ?array
-    {
-        return $this->favorites;
-    }
-
-    /**
-     * @param array|null $favorites
-     */
-    public function setFavorites(?array $favorites): void
-    {
-        $this->favorites = $favorites;
-    }
+    public function getPriceHistories(): ?array { return $this->price_histories; }
+    public function setPriceHistories(?array $histories): void { $this->price_histories = $histories; }
 
     public function getIsBestDeal() { return $this->is_best_deal; }
     public function setIsBestDeal($v) { $this->is_best_deal = $v; }
@@ -464,6 +235,9 @@ class CarDto implements \JsonSerializable
 
     public function getInstagramUrl() { return $this->instagram_url; }
     public function setInstagramUrl($v) { $this->instagram_url = $v; }
+
+    public function getModel3dUrl() { return $this->model_3d_url; }
+    public function setModel3dUrl($v) { $this->model_3d_url = $v; }
 
     public function jsonSerialize(): array
     {

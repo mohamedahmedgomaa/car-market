@@ -8,13 +8,11 @@ class DeleteSellerRequest extends BaseRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth('api_admin')->check();
     }
 
     public function rules(): array
     {
-        return [
-            
-        ];
+        return [];
     }
 }

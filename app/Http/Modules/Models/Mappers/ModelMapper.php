@@ -18,6 +18,8 @@ class ModelMapper
         $dto->setBrandId($model->brand_id);
         $dto->setBrand($model->brand);
         $dto->setName($model->getTranslations('name'));
+        $dto->setType($model->type);
+        $dto->setModel3dUrl($model->model_3d_url);
         $dto->setCreatedAt($model->created_at);
         $dto->setUpdatedAt($model->updated_at);
 
@@ -34,6 +36,8 @@ class ModelMapper
         $model->id = $dto->getId();
         $model->brand_id = $dto->getBrandId();
         $model->name = $dto->getName();
+        $model->type = $dto->getType();
+        $model->model_3d_url = $dto->getModel3dUrl();
         $model->created_at = $dto->getCreatedAt();
         $model->updated_at = $dto->getUpdatedAt();
 
