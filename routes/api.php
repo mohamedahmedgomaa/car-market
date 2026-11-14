@@ -88,6 +88,8 @@ Route::prefix('admin/auth')->group(function () {
     Route::post('login', [AdminController::class, 'login']);
 
     Route::middleware('auth:api_admin')->group(function () {
+        Route::get('me', [AdminController::class, 'me']);
+        Route::post('me', [AdminController::class, 'me']);
         Route::post('logout', [AdminController::class, 'logout']);
     });
 });

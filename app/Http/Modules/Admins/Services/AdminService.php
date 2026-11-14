@@ -12,6 +12,7 @@ use App\Http\Modules\Admins\Repositories\AdminRepository;
 use App\Http\Modules\Admins\Mappers\AdminMapper;
 use App\Http\Modules\Admins\Dtos\AdminDto;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminService extends BaseApiService
@@ -58,5 +59,16 @@ class AdminService extends BaseApiService
     {
         $request->user()->token()->revoke();
         return $this->responseWithMessage('Logged out successfully', 200);
+    }
+
+    public function me(Request $request): JsonResponse
+    {
+        /** @var Admin|null $admin */
+        $admin = auth('api_admin')->user() ?? $request->user();
+        if (!$admin) {
+            return $this->responseWithError('Unauthenticated', 401);
+        }
+
+        return $this->responseWithData($this->toDto($admin), 200);
     }
 }

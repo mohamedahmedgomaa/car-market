@@ -12,6 +12,7 @@ use App\Http\Modules\Admins\Requests\ListAdminRequest;
 use App\Http\Modules\Admins\Requests\ShowAdminRequest;
 use App\Http\Modules\Admins\Requests\UpdateAdminRequest;
 use App\Http\Modules\Admins\Services\AdminService;
+use Illuminate\Http\Request;
 
 class AdminController extends BaseApiController
 {
@@ -45,4 +46,8 @@ class AdminController extends BaseApiController
         return $this->service->logout($request);
     }
 
+    public function me(Request $request)
+    {
+        return $this->service->me($request);
+    }
 }
