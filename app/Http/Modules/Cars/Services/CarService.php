@@ -129,6 +129,8 @@ class CarService extends BaseApiService
                 }
             }
 
+            $this->handle360Uploads($car, $request);
+
             return $this->responseWithData($this->toDto($car), 201);
         });
     }
@@ -262,6 +264,8 @@ class CarService extends BaseApiService
                     $first->update(['is_main' => true]);
                 }
             }
+
+            $this->handle360Uploads($car, $request);
 
             $loadRelations = ['seller', 'brand', 'model', 'country', 'city', 'features', 'images'];
             if (Schema::hasTable('car_price_histories')) {
@@ -486,6 +490,146 @@ class CarService extends BaseApiService
             }
         } catch (\Throwable $e) {
             // Do not break car update if notification or history logging fails
+        }
+    }
+
+    protected function handle360Uploads(Car $car, $request): void
+    {
+        $hasChanges = false;
+
+        // 1. Interior 360 Panorama (Single Image)
+        if ($request->hasFile('interior_360_image')) {
+            $file = $request->file('interior_360_image');
+            $url = $this->uploadSingleImage($file, 'cars/360_interiors');
+            if ($url) {
+                $car->interior_360_url = $url;
+                $hasChanges = true;
+            }
+        } elseif ($request->filled('interior_360_url')) {
+            $car->interior_360_url = $request->input('interior_360_url');
+            $hasChanges = true;
+        } elseif ($request->has('remove_interior_360') && $request->boolean('remove_interior_360')) {
+            $car->interior_360_url = null;
+            $hasChanges = true;
+        }
+
+        // 2. Exterior 360 Spin (Multiple image frames)
+        if ($request->hasFile('exterior_360_files')) {
+            $files = $request->file('exterior_360_files');
+            usort($files, function ($a, $b) {
+                return strnatcasecmp($a->getClientOriginalName(), $b->getClientOriginalName());
+            });
+
+            $urls = [];
+            foreach ($files as $file) {
+                $url = $this->uploadSingleImage($file, 'cars/360_exteriors/' . $car->id);
+                if ($url) {
+                    $urls[] = $url;
+                }
+            }
+            if (!empty($urls)) {
+                $car->exterior_360_images = $urls;
+                $hasChanges = true;
+            }
+        } elseif ($request->hasFile('exterior_360_zip')) {
+            $zipFile = $request->file('exterior_360_zip');
+            if (class_exists(\ZipArchive::class)) {
+                $zip = new \ZipArchive();
+                if ($zip->open($zipFile->getRealPath()) === true) {
+                    $extractPath = storage_path('app/temp_360_' . $car->id . '_' . uniqid());
+                    $zip->extractTo($extractPath);
+                    $zip->close();
+
+                    $allFiles = \Illuminate\Support\Facades\File::allFiles($extractPath);
+                    $validImages = array_filter($allFiles, function ($f) {
+                        return in_array(strtolower($f->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
+                    });
+
+                    usort($validImages, function ($a, $b) {
+                        return strnatcasecmp($a->getFilename(), $b->getFilename());
+                    });
+
+                    $urls = [];
+                    foreach ($validImages as $imgFile) {
+                        $url = $this->uploadSingleFilePath($imgFile->getRealPath(), 'cars/360_exteriors/' . $car->id);
+                        if ($url) {
+                            $urls[] = $url;
+                        }
+                    }
+
+                    \Illuminate\Support\Facades\File::deleteDirectory($extractPath);
+
+                    if (!empty($urls)) {
+                        $car->exterior_360_images = $urls;
+                        $hasChanges = true;
+                    }
+                }
+            }
+        } elseif ($request->filled('exterior_360_images')) {
+            $val = $request->input('exterior_360_images');
+            $car->exterior_360_images = is_array($val) ? $val : json_decode($val, true);
+            $hasChanges = true;
+        } elseif ($request->has('remove_exterior_360') && $request->boolean('remove_exterior_360')) {
+            $car->exterior_360_images = null;
+            $hasChanges = true;
+        }
+
+        // 3. Custom 3D Model GLB (Optional)
+        if ($request->hasFile('model_3d_file')) {
+            $file = $request->file('model_3d_file');
+            $filename = 'car_' . $car->id . '_' . time() . '.glb';
+            $path = $file->storeAs('uploads/models_3d', $filename, 'public');
+            $car->model_3d_url = '/storage/' . $path;
+            $hasChanges = true;
+        } elseif ($request->filled('model_3d_url')) {
+            $car->model_3d_url = $request->input('model_3d_url');
+            $hasChanges = true;
+        } elseif ($request->has('remove_model_3d') && $request->boolean('remove_model_3d')) {
+            $car->model_3d_url = null;
+            $hasChanges = true;
+        }
+
+        if ($hasChanges) {
+            $car->save();
+        }
+    }
+
+    protected function uploadSingleImage($file, string $folder): ?string
+    {
+        try {
+            $result = cloudinary()->uploadApi()->upload(
+                $file->getRealPath(),
+                [
+                    'folder' => $folder,
+                    'resource_type' => 'image',
+                ]
+            );
+            return $result['secure_url'] ?? null;
+        } catch (\Throwable $e) {
+            $ext = $file->getClientOriginalExtension() ?: 'jpg';
+            $filename = uniqid('360_') . '.' . $ext;
+            $path = $file->storeAs('uploads/' . $folder, $filename, 'public');
+            return '/storage/' . $path;
+        }
+    }
+
+    protected function uploadSingleFilePath(string $realPath, string $folder): ?string
+    {
+        try {
+            $result = cloudinary()->uploadApi()->upload(
+                $realPath,
+                [
+                    'folder' => $folder,
+                    'resource_type' => 'image',
+                ]
+            );
+            return $result['secure_url'] ?? null;
+        } catch (\Throwable $e) {
+            $ext = pathinfo($realPath, PATHINFO_EXTENSION) ?: 'jpg';
+            $filename = uniqid('360_') . '.' . $ext;
+            $destRel = 'uploads/' . $folder . '/' . $filename;
+            \Illuminate\Support\Facades\Storage::disk('public')->put($destRel, file_get_contents($realPath));
+            return '/storage/' . $destRel;
         }
     }
 }
