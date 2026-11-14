@@ -35,6 +35,11 @@ class CarController extends BaseApiController
         return $this->service->updateStatus($request, $car);
     }
 
+    public function bulkUpdateStatus(\Illuminate\Http\Request $request): JsonResponse
+    {
+        return $this->service->bulkUpdateStatus($request);
+    }
+
     public function updateSellerStatus(UpdateSellerCarStatusRequest $request, Car $car): JsonResponse
     {
         return $this->service->updateSellerStatus($request, $car);

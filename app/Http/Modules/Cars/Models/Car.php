@@ -26,6 +26,21 @@ class Car extends BaseModel
 
     protected $table = 'cars';
 
+    protected static function booted()
+    {
+        static::saving(function ($car) {
+            if (empty($car->governorate_id) && !empty($car->city_id)) {
+                $city = \App\Http\Modules\Cities\Models\City::find($car->city_id);
+                if ($city) {
+                    $car->governorate_id = $city->governorate_id;
+                    if (empty($car->country_id) && !empty($city->country_id)) {
+                        $car->country_id = $city->country_id;
+                    }
+                }
+            }
+        });
+    }
+
     protected $fillable = [
         'id',
         'seller_id',

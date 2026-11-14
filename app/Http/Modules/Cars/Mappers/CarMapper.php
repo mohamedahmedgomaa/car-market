@@ -26,10 +26,12 @@ class CarMapper
         $dto->setModel($model->model);
         $dto->setCityId($model->city_id);
         $dto->setCity($model->city);
-        $dto->setGovernorateId($model->governorate_id);
-        $dto->setGovernorate($model->governorate);
-        $dto->setCountryId($model->country_id);
-        $dto->setCountry($model->country);
+        $govId = $model->governorate_id ?: ($model->city?->governorate_id ?: null);
+        $dto->setGovernorateId($govId);
+        $dto->setGovernorate($model->governorate ?: ($model->city?->governorate ?: null));
+        $countryId = $model->country_id ?: ($model->city?->country_id ?: null);
+        $dto->setCountryId($countryId);
+        $dto->setCountry($model->country ?: ($model->city?->country ?: null));
         $dto->setType($model->type);
         $dto->setTitle($model->getTranslations('title'));
         $dto->setDescription($model->getTranslations('description'));

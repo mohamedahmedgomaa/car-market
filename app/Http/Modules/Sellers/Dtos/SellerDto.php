@@ -35,6 +35,11 @@ class SellerDto implements \JsonSerializable
     private $website;
     private $youtube;
     private $tiktok;
+    private $facebook_url;
+    private $instagram_url;
+    private $website_url;
+    private $youtube_url;
+    private $tiktok_url;
 
     public function getFacebook() { return $this->facebook; }
     public function setFacebook($value): void { $this->facebook = $value; }
@@ -50,6 +55,21 @@ class SellerDto implements \JsonSerializable
 
     public function getTiktok() { return $this->tiktok; }
     public function setTiktok($value): void { $this->tiktok = $value; }
+
+    public function getFacebookUrl() { return $this->facebook_url ?? $this->facebook; }
+    public function setFacebookUrl($value): void { $this->facebook_url = $value; }
+
+    public function getInstagramUrl() { return $this->instagram_url ?? $this->instagram; }
+    public function setInstagramUrl($value): void { $this->instagram_url = $value; }
+
+    public function getWebsiteUrl() { return $this->website_url ?? $this->website; }
+    public function setWebsiteUrl($value): void { $this->website_url = $value; }
+
+    public function getYoutubeUrl() { return $this->youtube_url ?? $this->youtube; }
+    public function setYoutubeUrl($value): void { $this->youtube_url = $value; }
+
+    public function getTiktokUrl() { return $this->tiktok_url ?? $this->tiktok; }
+    public function setTiktokUrl($value): void { $this->tiktok_url = $value; }
 
     public function getTier() { return $this->tier; }
     public function setTier($value): void { $this->tier = $value; }

@@ -61,11 +61,22 @@ class SellerMapper
         $dto->setGovernorate($model->governorate);
         $dto->setAddress($model->getTranslations('address'));
         $dto->setMapUrl($model->map_url);
-        $dto->setFacebook($model->facebook ?? $model->facebook_url);
-        $dto->setInstagram($model->instagram ?? $model->instagram_url);
-        $dto->setWebsite($model->website ?? $model->website_url);
-        $dto->setYoutube($model->youtube ?? $model->youtube_url);
-        $dto->setTiktok($model->tiktok ?? $model->tiktok_url);
+        $fb = $model->facebook ?? $model->facebook_url;
+        $ig = $model->instagram ?? $model->instagram_url;
+        $web = $model->website ?? $model->website_url;
+        $yt = $model->youtube ?? $model->youtube_url;
+        $tt = $model->tiktok ?? $model->tiktok_url;
+
+        $dto->setFacebook($fb);
+        $dto->setFacebookUrl($fb);
+        $dto->setInstagram($ig);
+        $dto->setInstagramUrl($ig);
+        $dto->setWebsite($web);
+        $dto->setWebsiteUrl($web);
+        $dto->setYoutube($yt);
+        $dto->setYoutubeUrl($yt);
+        $dto->setTiktok($tt);
+        $dto->setTiktokUrl($tt);
         $dto->setSortOrder($model->sort_order);
         $dto->setTier($model->tier);
         $dto->setViewsCount($model->views_count ?? 0);

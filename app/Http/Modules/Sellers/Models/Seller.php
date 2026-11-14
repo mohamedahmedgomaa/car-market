@@ -73,7 +73,7 @@ class Seller extends BaseAuthModel
 
     public function getFacebookUrlAttribute()
     {
-        return $this->facebook ?? null;
+        return $this->attributes['facebook'] ?? $this->facebook ?? null;
     }
 
     public function setInstagramUrlAttribute($value)
@@ -83,7 +83,7 @@ class Seller extends BaseAuthModel
 
     public function getInstagramUrlAttribute()
     {
-        return $this->instagram ?? null;
+        return $this->attributes['instagram'] ?? $this->instagram ?? null;
     }
 
     public function setTiktokUrlAttribute($value)
@@ -93,7 +93,7 @@ class Seller extends BaseAuthModel
 
     public function getTiktokUrlAttribute()
     {
-        return $this->tiktok ?? null;
+        return $this->attributes['tiktok'] ?? $this->tiktok ?? null;
     }
 
     public function setYoutubeUrlAttribute($value)
@@ -103,7 +103,7 @@ class Seller extends BaseAuthModel
 
     public function getYoutubeUrlAttribute()
     {
-        return $this->attributes['youtube'] ?? null;
+        return $this->attributes['youtube'] ?? $this->youtube ?? null;
     }
 
     public function setWebsiteUrlAttribute($value)
@@ -113,7 +113,7 @@ class Seller extends BaseAuthModel
 
     public function getWebsiteUrlAttribute()
     {
-        return $this->attributes['website'] ?? null;
+        return $this->attributes['website'] ?? $this->website ?? null;
     }
 
     protected $casts = [

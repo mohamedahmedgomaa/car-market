@@ -100,34 +100,24 @@ class UpdateSellerRequest extends BaseRequest
             $data['address'] = $address;
         }
 
-        if ($this->has('facebook')) {
-            $data['facebook'] = $this->facebook;
-        } elseif ($this->has('facebook_url')) {
-            $data['facebook'] = $this->facebook_url;
+        if ($this->exists('facebook') || $this->exists('facebook_url')) {
+            $data['facebook'] = $this->input('facebook', $this->input('facebook_url'));
         }
 
-        if ($this->has('instagram')) {
-            $data['instagram'] = $this->instagram;
-        } elseif ($this->has('instagram_url')) {
-            $data['instagram'] = $this->instagram_url;
+        if ($this->exists('instagram') || $this->exists('instagram_url')) {
+            $data['instagram'] = $this->input('instagram', $this->input('instagram_url'));
         }
 
-        if ($this->has('tiktok')) {
-            $data['tiktok'] = $this->tiktok;
-        } elseif ($this->has('tiktok_url')) {
-            $data['tiktok'] = $this->tiktok_url;
+        if ($this->exists('tiktok') || $this->exists('tiktok_url')) {
+            $data['tiktok'] = $this->input('tiktok', $this->input('tiktok_url'));
         }
 
-        if ($this->has('youtube')) {
-            $data['youtube'] = $this->youtube;
-        } elseif ($this->has('youtube_url')) {
-            $data['youtube'] = $this->youtube_url;
+        if ($this->exists('youtube') || $this->exists('youtube_url')) {
+            $data['youtube'] = $this->input('youtube', $this->input('youtube_url'));
         }
 
-        if ($this->has('website')) {
-            $data['website'] = $this->website;
-        } elseif ($this->has('website_url')) {
-            $data['website'] = $this->website_url;
+        if ($this->exists('website') || $this->exists('website_url')) {
+            $data['website'] = $this->input('website', $this->input('website_url'));
         }
 
         $this->merge($data);

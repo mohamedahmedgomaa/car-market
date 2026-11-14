@@ -84,6 +84,17 @@ class CreateCarRequest extends BaseRequest
         ];
     }
 
+    protected function prepareForValidation(): void
+    {
+        $inputs = $this->all();
+        foreach ($inputs as $key => $value) {
+            if ($value === 'null' || $value === 'undefined' || $value === '') {
+                $inputs[$key] = null;
+            }
+        }
+        $this->replace($inputs);
+    }
+
     protected function passedValidation(): void
     {
         $isAdmin = auth('api_admin')->check();

@@ -348,6 +348,82 @@ class CarService extends BaseApiService
         return $this->responseWithData($this->toDto($car->fresh()), 200);
     }
 
+    public function bulkUpdateStatus(Request $request): JsonResponse
+    {
+        if (!auth('api_admin')->check()) {
+            return $this->responseWithError('Forbidden: Only admins can bulk update car statuses.', 403);
+        }
+
+        $validated = $request->validate([
+            'car_ids' => 'required|array|min:1',
+            'car_ids.*' => 'integer|exists:cars,id',
+            'status' => 'required|in:approved,rejected,pending,archived',
+            'rejection_reason' => 'nullable|string|max:500',
+        ]);
+
+        $carIds = $validated['car_ids'];
+        $status = $validated['status'];
+        $reason = $validated['rejection_reason'] ?? null;
+
+        $cars = Car::whereIn('id', $carIds)->get();
+        $updatedCount = 0;
+
+        foreach ($cars as $car) {
+            $previousStatus = $car->status;
+            $car->status = $status;
+
+            if ($status === 'approved' && Schema::hasColumn('cars', 'rejection_reason')) {
+                $car->rejection_reason = null;
+            } elseif ($status === 'rejected' && Schema::hasColumn('cars', 'rejection_reason')) {
+                $car->rejection_reason = $reason;
+            }
+
+            $car->save();
+            $updatedCount++;
+
+            // Notify Seller
+            if ($status !== $previousStatus && $car->seller_id) {
+                $titleAr = $car->getTranslation('title', 'ar', false) ?: 'سيارتك';
+                $titleEn = $car->getTranslation('title', 'en', false) ?: 'your car';
+
+                if ($status === 'approved') {
+                    NotificationService::notifySeller(
+                        (int) $car->seller_id,
+                        [
+                            'ar' => 'تمت الموافقة على إعلانك ✅',
+                            'en' => 'Your Car Listing is Approved ✅',
+                        ],
+                        [
+                            'ar' => "تمت الموافقة على إعلان ({$titleAr}) وهو الآن معروض للجمهور في الموقع.",
+                            'en' => "Your listing ({$titleEn}) has been approved and is now live on the site.",
+                        ],
+                        'car_approved',
+                        ['car_id' => $car->id, 'status' => 'approved']
+                    );
+                } elseif ($status === 'rejected') {
+                    NotificationService::notifySeller(
+                        (int) $car->seller_id,
+                        [
+                            'ar' => 'تم رفض إعلان السيارة ⚠️',
+                            'en' => 'Car Listing Rejected ⚠️',
+                        ],
+                        [
+                            'ar' => "تم رفض إعلان ({$titleAr})." . ($reason ? " السبب: {$reason}" : ' يرجى مراجعة البيانات والمحاولة مرة أخرى.'),
+                            'en' => "Your listing ({$titleEn}) was rejected." . ($reason ? " Reason: {$reason}" : ' Please review and update the listing.'),
+                        ],
+                        'car_rejected',
+                        ['car_id' => $car->id, 'status' => 'rejected', 'rejection_reason' => $reason]
+                    );
+                }
+            }
+        }
+
+        return $this->responseWithData([
+            'updated_count' => $updatedCount,
+            'status' => $status,
+        ], 200);
+    }
+
     public function updateSellerStatus(UpdateSellerCarStatusRequest $request, Car $car): JsonResponse
     {
         if (!auth('api_admin')->check() && (int) $car->seller_id !== (int) auth('api_seller')->id()) {
