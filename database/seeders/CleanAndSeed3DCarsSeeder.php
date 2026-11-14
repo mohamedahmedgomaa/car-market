@@ -24,6 +24,10 @@ class CleanAndSeed3DCarsSeeder extends Seeder
         Car::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        $coupeSpinFrames = array_map(fn($i) => "/images/360/exterior-coupe/frame_{$i}.jpg", range(1, 24));
+        $suvSpinFrames = array_map(fn($i) => "/images/360/exterior-suv/frame_{$i}.jpg", range(1, 24));
+        $interiorPano = '/images/360/interiors/cockpit_360.jpg';
+
         $showcaseCars = [
             // 1. Porsche 718 Cayman (Coupe) - Keeps ID 101123
             [
@@ -56,6 +60,8 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'engine_capacity' => 2000,
                 'acceleration' => 4.7,
                 'weight' => 1365,
+                'exterior_360_images' => $coupeSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'model_3d_url' => '/models/coupe.glb',
                 'is_featured' => 1,
                 'show_on_home' => 1,
@@ -95,6 +101,8 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'engine_capacity' => 4000,
                 'acceleration' => 3.2,
                 'weight' => 1450,
+                'exterior_360_images' => $coupeSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'model_3d_url' => '/models/coupe.glb',
                 'is_featured' => 1,
                 'show_on_home' => 1,
@@ -113,16 +121,16 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => [
-                    'en' => 'Ferrari 458 Spider 2023',
-                    'ar' => 'فيراري 458 سبايدر 2023',
+                    'en' => 'Ferrari 458 Spider 2022',
+                    'ar' => 'فيراري 458 سبايدر 2022',
                 ],
                 'description' => [
-                    'en' => 'Iconic naturally aspirated V8 mid-engine Italian masterpiece with retractable hardtop and carbon fiber racing seats.',
-                    'ar' => 'أيقونة فيراري الإيطالية بمحرك V8 وسقف صلب قابل للكشف بالكامل، مقصورة جلدية فاخرة مع تطريزات يدوية وتقارير فحص وكالة معتمدة.',
+                    'en' => 'Stunning Ferrari 458 Spider in Rosso Corsa, naturally aspirated V8 screaming to 9000 RPM, retractable hard top, and carbon interior.',
+                    'ar' => 'فيراري 458 سبايدر باللون الأحمر الأيقوني Rosso Corsa، محرك V8 تنفس طبيعي، سقف صلب قابل للطي كهربائياً، وديكورات داخلية ألياف الكربون.',
                 ],
-                'price' => 9600000,
+                'price' => 8900000,
                 'currency' => 'EGP',
-                'year' => 2023,
+                'year' => 2022,
                 'mileage' => 8400,
                 'transmission' => 'automatic',
                 'fuel_type' => 'petrol',
@@ -134,85 +142,88 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'engine_capacity' => 4500,
                 'acceleration' => 3.4,
                 'weight' => 1430,
-                'model_3d_url' => '/models/sports.glb',
+                'exterior_360_images' => $coupeSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'is_featured' => 1,
                 'show_on_home' => 1,
                 'is_best_deal' => 1,
                 'status' => 'approved',
-                'main_image' => 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=1200&q=80',
+                'main_image' => 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=80',
             ],
 
-            // 4. Range Rover Sport Autobiography (SUV)
+            // 4. Range Rover Sport HSE (SUV)
             [
                 'id' => 101126,
                 'seller_id' => 1,
-                'brand_id' => 29, // Land Rover
-                'model_id' => 255, // Range Rover Sport
+                'brand_id' => 26, // Land Rover
+                'model_id' => 237, // Range Rover Sport
                 'city_id' => 1,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => [
-                    'en' => 'Range Rover Sport Autobiography 2024',
-                    'ar' => 'رينج روفر سبورت أوتوبيوغرافي 2024',
+                    'en' => 'Range Rover Sport HSE Dynamic 2023',
+                    'ar' => 'رينج روفر سبورت HSE دايناميك 2023',
                 ],
                 'description' => [
-                    'en' => 'Ultimate luxury British SUV with adaptive dynamic air suspension, panoramic glass roof, Meridian 3D sound, and twin-turbo V8 power.',
-                    'ar' => 'قمة الفخامة البريطانية مع نظام تعليق هوائي متكيف، سقف بانوراما، نظام صوت Meridian ثلاثي الأبعاد، ودفع رباعي ذكي متقدم.',
+                    'en' => 'Luxurious Land Rover Range Rover Sport with dynamic air suspension, panoramic roof, Meridian 3D sound system, and pristine condition.',
+                    'ar' => 'لاند روفر رينج روفر سبورت HSE مع تعليق هوائي متكيف، سقف بانورامي، نظام صوت ميريديان ثلاثي الأبعاد، وحالة الفابريكا بالكامل.',
                 ],
-                'price' => 7850000,
+                'price' => 6750000,
                 'currency' => 'EGP',
-                'year' => 2024,
-                'mileage' => 3200,
+                'year' => 2023,
+                'mileage' => 16000,
                 'transmission' => 'automatic',
                 'fuel_type' => 'petrol',
                 'drivetrain' => 'awd',
                 'color' => 'Santorini Black',
-                'condition' => 'new',
-                'horsepower' => 523,
-                'cylinders' => 8,
-                'engine_capacity' => 4400,
-                'acceleration' => 4.3,
-                'weight' => 2430,
-                'model_3d_url' => '/models/suv.glb',
+                'condition' => 'used',
+                'horsepower' => 395,
+                'cylinders' => 6,
+                'engine_capacity' => 3000,
+                'acceleration' => 5.7,
+                'weight' => 2310,
+                'exterior_360_images' => $suvSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'is_featured' => 1,
                 'show_on_home' => 1,
                 'is_best_deal' => 1,
                 'status' => 'approved',
-                'main_image' => 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1200&q=80',
+                'main_image' => 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=1200&q=80',
             ],
 
-            // 5. Mercedes-Benz S-Class S580 (Sedan)
+            // 5. Mercedes-Benz S-Class S500 (Sedan)
             [
                 'id' => 101127,
                 'seller_id' => 1,
-                'brand_id' => 34, // Mercedes
-                'model_id' => 298, // S-Class
+                'brand_id' => 31, // Mercedes
+                'model_id' => 282, // S-Class
                 'city_id' => 1,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => [
-                    'en' => 'Mercedes-Benz S-Class S580 4MATIC 2024',
-                    'ar' => 'مرسيدس بنز إس كلاس S580 فورماتيك 2024',
+                    'en' => 'Mercedes-Benz S-Class S500 4MATIC 2023',
+                    'ar' => 'مرسيدس بنز الفئة S إس 500 فورماتيك 2023',
                 ],
                 'description' => [
-                    'en' => 'The pinnacle of executive luxury sedans with Maybach-grade rear executive seating, MBUX hyperscreen, and Burmester high-end audio.',
-                    'ar' => 'سيدة سيارات السيدان التنفيذية الفاخرة مع مقاعد خلفية رئوية مدفأة ومبردة مع مساج، شاشات MBUX تفاعلية، ونظام قيادة شبه ذاتي.',
+                    'en' => 'The pinnacle of luxury: S500 4MATIC with executive rear seating, Burmester 4D surround sound, digital light headlamps, and Level 3 driver assist.',
+                    'ar' => 'قمة الفخامة الألمانية: مرسيدس S500 فورماتيك بمقاعد خلفية تنفيذية، نظام صوتي برميستر 4D، إضاءة رقمية ذكية، وأنظمة مساعدة القيادة المتقدمة.',
                 ],
-                'price' => 8400000,
+                'price' => 9200000,
                 'currency' => 'EGP',
-                'year' => 2024,
-                'mileage' => 1800,
+                'year' => 2023,
+                'mileage' => 9500,
                 'transmission' => 'automatic',
-                'fuel_type' => 'hybrid',
+                'fuel_type' => 'petrol',
                 'drivetrain' => 'awd',
                 'color' => 'Obsidian Black',
-                'condition' => 'new',
-                'horsepower' => 496,
-                'cylinders' => 8,
-                'engine_capacity' => 4000,
-                'acceleration' => 4.4,
-                'weight' => 2190,
-                'model_3d_url' => '/models/sedan.glb',
+                'condition' => 'used',
+                'horsepower' => 429,
+                'cylinders' => 6,
+                'engine_capacity' => 3000,
+                'acceleration' => 4.9,
+                'weight' => 2065,
+                'exterior_360_images' => $coupeSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'is_featured' => 1,
                 'show_on_home' => 1,
                 'is_best_deal' => 1,
@@ -220,38 +231,39 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'main_image' => 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=80',
             ],
 
-            // 6. BMW M5 Competition (Sport Sedan)
+            // 6. BMW M5 Competition (Sedan)
             [
                 'id' => 101128,
                 'seller_id' => 1,
-                'brand_id' => 6, // BMW
-                'model_id' => 56, // M5
+                'brand_id' => 5, // BMW
+                'model_id' => 45, // M5
                 'city_id' => 1,
                 'country_id' => 1,
                 'type' => 'car',
                 'title' => [
-                    'en' => 'BMW M5 Competition 2024',
-                    'ar' => 'بي إم دبليو M5 كومبيتيشن 2024',
+                    'en' => 'BMW M5 Competition 2023',
+                    'ar' => 'بي إم دبليو إم 5 كومبيتيشن 2023',
                 ],
                 'description' => [
-                    'en' => 'High-performance luxury super-sedan with M xDrive switchable AWD/RWD system, M Carbon roof, and track-ready cooling.',
-                    'ar' => 'سوبر سيدان الأداء العالي بمحرك M TwinPower Turbo ودفع كلي ذكي قابل للتحويل لدفع خلفي كامل وسقف كربون فايبر.',
+                    'en' => 'High-performance supercar masquerading as an executive sedan. Twin-turbo V8, M xDrive with switchable pure RWD mode, and carbon roof.',
+                    'ar' => 'سوبركار في ثوب سيدان تنفيذي فاخر: بي إم دبليو M5 بقوة 617 حصان، دفع كلي M xDrive مع إمكانية التحويل لدفع خلفي كامل، وسقف كربون.',
                 ],
-                'price' => 6900000,
+                'price' => 7450000,
                 'currency' => 'EGP',
-                'year' => 2024,
-                'mileage' => 6500,
+                'year' => 2023,
+                'mileage' => 11000,
                 'transmission' => 'automatic',
                 'fuel_type' => 'petrol',
                 'drivetrain' => 'awd',
-                'color' => 'Alpine White',
+                'color' => 'Marina Bay Blue',
                 'condition' => 'used',
                 'horsepower' => 617,
                 'cylinders' => 8,
                 'engine_capacity' => 4400,
                 'acceleration' => 3.1,
                 'weight' => 1970,
-                'model_3d_url' => '/models/sedan.glb',
+                'exterior_360_images' => $coupeSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'is_featured' => 1,
                 'show_on_home' => 1,
                 'is_best_deal' => 1,
@@ -259,12 +271,12 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'main_image' => 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80',
             ],
 
-            // 7. Tesla Model 3 Performance (Electric EV)
+            // 7. Tesla Model 3 Performance (EV)
             [
                 'id' => 101129,
                 'seller_id' => 1,
-                'brand_id' => 51, // Tesla
-                'model_id' => 431, // Model 3
+                'brand_id' => 46, // Tesla
+                'model_id' => 421, // Model 3
                 'city_id' => 1,
                 'country_id' => 1,
                 'type' => 'car',
@@ -290,7 +302,8 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'engine_capacity' => 0,
                 'acceleration' => 2.9,
                 'weight' => 1850,
-                'model_3d_url' => '/models/ev.glb',
+                'exterior_360_images' => $coupeSpinFrames,
+                'interior_360_url' => $interiorPano,
                 'is_featured' => 1,
                 'show_on_home' => 1,
                 'is_best_deal' => 1,
@@ -311,9 +324,9 @@ class CleanAndSeed3DCarsSeeder extends Seeder
                 'is_main' => 1,
             ]);
 
-            $this->command->info("Created showcase 3D Car: {$data['id']} - " . json_encode($data['title']['ar'], JSON_UNESCAPED_UNICODE) . " [{$data['model_3d_url']}]");
+            $this->command->info("Created showcase Car: {$data['id']} - " . json_encode($data['title']['ar'], JSON_UNESCAPED_UNICODE) . " [360 Spin: 24 frames, Interior 360: {$data['interior_360_url']}]");
         }
 
-        $this->command->info('Database cleaned successfully. Only verified 3D cars are now active!');
+        $this->command->info('Database cleaned and seeded successfully with real 360 showcase cars!');
     }
 }

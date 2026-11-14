@@ -78,6 +78,8 @@ class CarMapper
         $dto->setYoutubeUrl($model->youtube_url);
         $dto->setInstagramUrl($model->instagram_url);
         $dto->setModel3dUrl($model->model_3d_url);
+        $dto->setExterior360Images($model->exterior_360_images);
+        $dto->setInterior360Url($model->interior_360_url);
 
         return $dto;
     }
@@ -139,6 +141,8 @@ class CarMapper
         $model->youtube_url = $dto->getYoutubeUrl();
         $model->instagram_url = $dto->getInstagramUrl();
         $model->model_3d_url = $dto->getModel3dUrl();
+        $model->exterior_360_images = $dto->getExterior360Images();
+        $model->interior_360_url = $dto->getInterior360Url();
 
         return $model;
     }

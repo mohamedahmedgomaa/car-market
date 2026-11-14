@@ -60,6 +60,8 @@ class Car extends BaseModel
         'youtube_url',
         'instagram_url',
         'model_3d_url',
+        'exterior_360_images',
+        'interior_360_url',
         'is_best_deal',
         'is_import',
         'is_featured',
@@ -88,6 +90,7 @@ class Car extends BaseModel
         'whatsapp_clicks_count' => 'integer',
         'phone_clicks_count' => 'integer',
         'shares_count' => 'integer',
+        'exterior_360_images' => 'array',
     ];
 
     public static function getAllowedSorts(): array

@@ -65,6 +65,8 @@ class CarDto implements \JsonSerializable
     private $youtube_url;
     private $instagram_url;
     private $model_3d_url;
+    private $exterior_360_images;
+    private $interior_360_url;
 
     public function getId() { return $this->id; }
     public function setId($value): void { $this->id = $value; }
@@ -238,6 +240,12 @@ class CarDto implements \JsonSerializable
 
     public function getModel3dUrl() { return $this->model_3d_url; }
     public function setModel3dUrl($v) { $this->model_3d_url = $v; }
+
+    public function getExterior360Images() { return $this->exterior_360_images; }
+    public function setExterior360Images($v) { $this->exterior_360_images = $v; }
+
+    public function getInterior360Url() { return $this->interior_360_url; }
+    public function setInterior360Url($v) { $this->interior_360_url = $v; }
 
     public function jsonSerialize(): array
     {

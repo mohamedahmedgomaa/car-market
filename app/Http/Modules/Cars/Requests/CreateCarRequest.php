@@ -54,6 +54,8 @@ class CreateCarRequest extends BaseRequest
             'youtube_url' => 'nullable|string|max:2048',
             'instagram_url' => 'nullable|string|max:2048',
             'model_3d_url' => 'nullable|string|max:2048',
+            'exterior_360_images' => 'nullable',
+            'interior_360_url' => 'nullable|string|max:2048',
 
             'is_best_deal' => 'nullable|boolean',
             'is_import' => 'nullable',
