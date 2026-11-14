@@ -31,3 +31,4 @@ class Reset3DModelsAndCleanArchetypesSeeder extends Seeder
         $this->command->info('Done! 3D models will now only appear when explicitly uploaded for a specific car.');
     }
 }
+
