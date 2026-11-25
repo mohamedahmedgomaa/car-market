@@ -13,6 +13,7 @@ use App\Http\Modules\Cars\Requests\UpdateSellerCarStatusRequest;
 use App\Http\Modules\Cars\Services\CarService;
 use Gomaa\Base\Base\Controllers\BaseApiController;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CarController extends BaseApiController
 {
@@ -48,5 +49,10 @@ class CarController extends BaseApiController
     public function toggleFavoriteCar(ShowCarRequest $request, Car $car)
     {
         return $this->service->toggleFavoriteCar($request, $car);
+    }
+
+    public function compare(Request $request): JsonResponse
+    {
+        return $this->service->compare($request);
     }
 }

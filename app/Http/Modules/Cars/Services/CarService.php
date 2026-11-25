@@ -90,6 +90,75 @@ class CarService extends BaseApiService
         }, $this->checkAuth);
     }
 
+    /**
+     * Fetch up to 3 approved vehicles of the same type for side-by-side comparison
+     * without inflating view analytics.
+     */
+    public function compare(\Illuminate\Http\Request $request): JsonResponse
+    {
+        $rawIds = $request->input('ids');
+        if (is_string($rawIds)) {
+            $rawIds = explode(',', $rawIds);
+        }
+
+        $ids = collect(is_array($rawIds) ? $rawIds : [])
+            ->map(fn ($id) => (int) trim((string) $id))
+            ->filter(fn (int $id) => $id > 0)
+            ->unique()
+            ->take(3)
+            ->values()
+            ->all();
+
+        if (empty($ids)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Please provide at least one vehicle ID to compare.',
+                'data' => [],
+            ], 422);
+        }
+
+        $relations = [
+            'seller' => function ($q) {
+                $q->select('id', 'name', 'store_name', 'store_logo', 'phone', 'tier', 'is_verified', 'city_id', 'governorate_id');
+            },
+            'seller.city:id,name',
+            'seller.governorate:id,name',
+            'brand:id,name,type',
+            'model:id,name,type',
+            'city:id,name',
+            'governorate:id,name',
+            'country:id,name',
+            'images' => function ($q) {
+                $q->select('id', 'car_id', 'path', 'is_main')->orderByDesc('is_main')->orderBy('id');
+            },
+            'features:id,name',
+        ];
+
+        $cars = $this->repository->getModel()
+            ->with($relations)
+            ->whereIn('id', $ids)
+            ->where('status', 'approved')
+            ->get()
+            ->keyBy('id');
+
+        $ordered = collect($ids)
+            ->map(fn (int $id) => $cars->get($id))
+            ->filter()
+            ->values();
+
+        if ($ordered->pluck('type')->unique()->count() > 1) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Cannot compare vehicles of different types (cars vs motorcycles).',
+                'data' => [],
+            ], 422);
+        }
+
+        $dtos = $ordered->map(fn (Car $car) => $this->toDto($car))->values()->all();
+
+        return $this->responseWithData($dtos);
+    }
+
     public function store(BaseRequest|CreateCarRequest $request): JsonResponse
     {
         @ini_set('max_execution_time', 300);

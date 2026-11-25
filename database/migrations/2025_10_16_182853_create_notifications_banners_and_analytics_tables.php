@@ -8,6 +8,29 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('seller_id')->nullable()->index();
+            $table->string('type', 50)->nullable();
+            $table->json('title');
+            $table->json('body');
+            $table->json('data')->nullable();
+            $table->boolean('is_read')->default(false);
+            $table->timestamps();
+        });
+
+        Schema::create('banners', function (Blueprint $table) {
+            $table->id();
+            $table->string('image_path');
+            $table->string('type')->default('hero');
+            $table->string('link')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+
+            $table->index(['type', 'is_active'], 'idx_banners_type_active');
+        });
+
         Schema::create('analytics_events', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('seller_id')->index();
@@ -28,6 +51,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('analytics_events');
+        Schema::dropIfExists('banners');
+        Schema::dropIfExists('notifications');
     }
 };
-

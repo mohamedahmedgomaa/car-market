@@ -8,6 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('countries', function (Blueprint $table) {
+            $table->id();
+            $table->json('name');
+            $table->timestamps();
+        });
+
         Schema::create('governorates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('country_id');
@@ -17,19 +23,21 @@ return new class extends Migration
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
 
-        Schema::table('cities', function (Blueprint $table) {
-            $table->unsignedBigInteger('governorate_id')->nullable()->after('country_id');
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('governorate_id')->nullable();
+            $table->json('name');
+            $table->timestamps();
+
             $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::table('cities', function (Blueprint $table) {
-            $table->dropForeign(['governorate_id']);
-            $table->dropColumn('governorate_id');
-        });
-
+        Schema::dropIfExists('cities');
         Schema::dropIfExists('governorates');
+        Schema::dropIfExists('countries');
     }
 };

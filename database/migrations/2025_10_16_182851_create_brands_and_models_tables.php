@@ -8,10 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('brands', function (Blueprint $table) {
+            $table->id();
+            $table->json('name');
+            $table->enum('type', ['car', 'motorcycle'])->default('car');
+            $table->timestamps();
+        });
+
         Schema::create('models', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('brand_id');
             $table->json('name');
+            $table->enum('type', ['car', 'motorcycle'])->default('car');
+            $table->string('model_3d_url', 500)->nullable();
             $table->timestamps();
         });
     }
@@ -19,5 +28,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('models');
+        Schema::dropIfExists('brands');
     }
 };
