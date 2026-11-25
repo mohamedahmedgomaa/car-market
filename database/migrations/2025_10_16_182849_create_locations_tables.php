@@ -8,30 +8,36 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('countries', function (Blueprint $table) {
-            $table->id();
-            $table->json('name');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('countries')) {
+            Schema::create('countries', function (Blueprint $table) {
+                $table->id();
+                $table->json('name');
+                $table->timestamps();
+            });
+        }
 
-        Schema::create('governorates', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('country_id');
-            $table->json('name');
-            $table->timestamps();
+        if (! Schema::hasTable('governorates')) {
+            Schema::create('governorates', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('country_id');
+                $table->json('name');
+                $table->timestamps();
 
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
-        });
+                $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+            });
+        }
 
-        Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('country_id');
-            $table->unsignedBigInteger('governorate_id')->nullable();
-            $table->json('name');
-            $table->timestamps();
+        if (! Schema::hasTable('cities')) {
+            Schema::create('cities', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('country_id');
+                $table->unsignedBigInteger('governorate_id')->nullable();
+                $table->json('name');
+                $table->timestamps();
 
-            $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade');
-        });
+                $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('cascade');
+            });
+        }
     }
 
     public function down(): void
